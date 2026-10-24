@@ -1,0 +1,952 @@
+{
+  "suite": "heldout-refined-v4",
+  "seed": 92617,
+  "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614",
+  "singleEngineFingerprint": true,
+  "model": "Qwen/Qwen3-VL-Embedding-2B",
+  "modelRevision": "9f2f7e710d6d81056aa5c0a4f04764fec6bb7bda",
+  "complete": true,
+  "generatedAt": "2026-10-24T08:36:38.810719+00:00",
+  "visualOnly": false,
+  "total": 40,
+  "positiveCount": 32,
+  "negativeCount": 8,
+  "recovered": 32,
+  "abstained": 0,
+  "rejected": 8,
+  "falseMatchCases": 0,
+  "medianOffsetError": 0.046,
+  "medianSpeedError": 0.0,
+  "medianLatency": 65.2,
+  "speedUncertain": 0,
+  "semanticTop1Correct": 32,
+  "semanticTop1Total": 32,
+  "maxOffsetError": 0.322,
+  "maxSpeedError": 0.078,
+  "groups": [
+    {
+      "name": "reencode",
+      "total": 4,
+      "passed": 4
+    },
+    {
+      "name": "vertical-crop",
+      "total": 4,
+      "passed": 4
+    },
+    {
+      "name": "gray-overlay",
+      "total": 4,
+      "passed": 4
+    },
+    {
+      "name": "mirror-slow",
+      "total": 4,
+      "passed": 4
+    },
+    {
+      "name": "zoom-fast",
+      "total": 4,
+      "passed": 4
+    },
+    {
+      "name": "rotate",
+      "total": 4,
+      "passed": 4
+    },
+    {
+      "name": "letterbox",
+      "total": 4,
+      "passed": 4
+    },
+    {
+      "name": "low-quality",
+      "total": 4,
+      "passed": 4
+    },
+    {
+      "name": "unrelated-film",
+      "total": 4,
+      "passed": 4
+    },
+    {
+      "name": "unindexed-same-film",
+      "total": 4,
+      "passed": 4
+    }
+  ],
+  "cases": [
+    {
+      "id": "00-bridge-reencode",
+      "source": "bridge",
+      "offset": 12.22,
+      "speed": 1.0,
+      "transform": "reencode",
+      "found": [
+        "bridge"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 72.88,
+      "semanticTop1": "bridge",
+      "offsetError": 0.03,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "45272f5f5b3c0b78594864bbdb37f490082bb6318578ee927c6a656076bca082",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "01-laboratory-reencode",
+      "source": "laboratory",
+      "offset": 3.54,
+      "speed": 1.0,
+      "transform": "reencode",
+      "found": [
+        "laboratory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 63.89,
+      "semanticTop1": "laboratory",
+      "offsetError": 0.04,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "28f6e234b98ca5150a1d9f5f388538c498d5a69d103e2bafa12ca3db58062246",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "02-observatory-reencode",
+      "source": "observatory",
+      "offset": 23.63,
+      "speed": 1.0,
+      "transform": "reencode",
+      "found": [
+        "observatory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 62.89,
+      "semanticTop1": "observatory",
+      "offsetError": 0.12,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "96d0b10ea69dda153d9dbbe72d47bc5bd0f27e87fdcc645d725b26ab8634e633",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "03-machines-reencode",
+      "source": "machines",
+      "offset": 8.29,
+      "speed": 1.0,
+      "transform": "reencode",
+      "found": [
+        "machines"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 64.85,
+      "semanticTop1": "machines",
+      "offsetError": 0.0228,
+      "speedError": 0.0004,
+      "verifiedFrames": 14,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "ce64929e7fb6a933642eed247d0e50d79ef2de8b69ec017ce83d59d9910a0b9a",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "04-bridge-vertical-crop",
+      "source": "bridge",
+      "offset": 21.5,
+      "speed": 1.25,
+      "transform": "vertical-crop",
+      "found": [
+        "bridge"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 57.46,
+      "semanticTop1": "bridge",
+      "offsetError": 0.0532,
+      "speedError": 0.0005,
+      "verifiedFrames": 13,
+      "speedReliable": true,
+      "speedRange": [
+        1.2,
+        1.3
+      ],
+      "querySha256": "81cce46338898989294a42971aff1d37da50458edb1abb24756e6fbf7db18b82",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "05-laboratory-vertical-crop",
+      "source": "laboratory",
+      "offset": 12.35,
+      "speed": 1.25,
+      "transform": "vertical-crop",
+      "found": [
+        "laboratory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 56.65,
+      "semanticTop1": "laboratory",
+      "offsetError": 0.322,
+      "speedError": 0.078,
+      "verifiedFrames": 13,
+      "speedReliable": true,
+      "speedRange": [
+        1.275,
+        1.38
+      ],
+      "querySha256": "dc7e6ff57e4e6e6b4052974d7145069f12be3b88f93294c1d027a1604737a20e",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "06-observatory-vertical-crop",
+      "source": "observatory",
+      "offset": 19.33,
+      "speed": 1.25,
+      "transform": "vertical-crop",
+      "found": [
+        "observatory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 62.17,
+      "semanticTop1": "observatory",
+      "offsetError": 0.0227,
+      "speedError": 0.0003,
+      "verifiedFrames": 13,
+      "speedReliable": true,
+      "speedRange": [
+        1.2,
+        1.3
+      ],
+      "querySha256": "2996e91006be417ca9e6c94335e3afd054c33bd51ee5d59a8a03becbae37308d",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "07-machines-vertical-crop",
+      "source": "machines",
+      "offset": 17.72,
+      "speed": 1.25,
+      "transform": "vertical-crop",
+      "found": [
+        "machines"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 60.7,
+      "semanticTop1": "machines",
+      "offsetError": 0.0324,
+      "speedError": 0.0137,
+      "verifiedFrames": 7,
+      "speedReliable": true,
+      "speedRange": [
+        1.1833,
+        1.3
+      ],
+      "querySha256": "7aa48cc019296321393544a66afc9e52968dfe334c0ce8bc7bfdf2e6d7901659",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "08-bridge-gray-overlay",
+      "source": "bridge",
+      "offset": 6.62,
+      "speed": 1.0,
+      "transform": "gray-overlay",
+      "found": [
+        "bridge"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 68.41,
+      "semanticTop1": "bridge",
+      "offsetError": 0.1838,
+      "speedError": 0.0474,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9133,
+        1.02
+      ],
+      "querySha256": "d1f9762c1679ae3cb3a468b92cd49c4a8b41f860f605fd011a74e12748988070",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "09-laboratory-gray-overlay",
+      "source": "laboratory",
+      "offset": 10.27,
+      "speed": 1.0,
+      "transform": "gray-overlay",
+      "found": [
+        "laboratory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 71.27,
+      "semanticTop1": "laboratory",
+      "offsetError": 0.02,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "d0955979f772565765c5d460e863d34dd361db2b1884a273905cd402cc64b244",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "10-observatory-gray-overlay",
+      "source": "observatory",
+      "offset": 18.02,
+      "speed": 1.0,
+      "transform": "gray-overlay",
+      "found": [
+        "observatory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 65.17,
+      "semanticTop1": "observatory",
+      "offsetError": 0.02,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "5f59a3ec0c4f1d835eaa4648f24679c01f29e50afe689e882c626592c27a0f4c",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "11-machines-gray-overlay",
+      "source": "machines",
+      "offset": 21.17,
+      "speed": 1.0,
+      "transform": "gray-overlay",
+      "found": [
+        "machines"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 65.22,
+      "semanticTop1": "machines",
+      "offsetError": 0.08,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "7a7eda2337b40b865259e45613cc71da29c5bcd691e1a4806b6d73a9e3f54169",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "12-bridge-mirror-slow",
+      "source": "bridge",
+      "offset": 14.19,
+      "speed": 0.8,
+      "transform": "mirror-slow",
+      "found": [
+        "bridge"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 95.88,
+      "semanticTop1": "bridge",
+      "offsetError": 0.0108,
+      "speedError": 0.0001,
+      "verifiedFrames": 20,
+      "speedReliable": true,
+      "speedRange": [
+        0.7765,
+        0.8308
+      ],
+      "querySha256": "fd6744330947745d80bddb0cc9b76d20bd36dadbbe0fa32030d1eacc683278f9",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "13-laboratory-mirror-slow",
+      "source": "laboratory",
+      "offset": 15.36,
+      "speed": 0.8,
+      "transform": "mirror-slow",
+      "found": [
+        "laboratory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 117.91,
+      "semanticTop1": "laboratory",
+      "offsetError": 0.0424,
+      "speedError": 0.0044,
+      "verifiedFrames": 19,
+      "speedReliable": true,
+      "speedRange": [
+        0.7765,
+        0.8308
+      ],
+      "querySha256": "1ed5e851cf6d996b8a008a41cdfc71f51f645e28b5a926a4efbafa9f46a5f9b4",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "14-observatory-mirror-slow",
+      "source": "observatory",
+      "offset": 24.66,
+      "speed": 0.8,
+      "transform": "mirror-slow",
+      "found": [
+        "observatory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 83.59,
+      "semanticTop1": "observatory",
+      "offsetError": 0.0851,
+      "speedError": 0.0342,
+      "verifiedFrames": 20,
+      "speedReliable": true,
+      "speedRange": [
+        0.8059,
+        0.8625
+      ],
+      "querySha256": "51cbd583e12cdc132542d404c916a4c7d6ac811eb1a6dc61e5f2e5a38e417705",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "15-machines-mirror-slow",
+      "source": "machines",
+      "offset": 12.21,
+      "speed": 0.8,
+      "transform": "mirror-slow",
+      "found": [
+        "machines"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 75.65,
+      "semanticTop1": "machines",
+      "offsetError": 0.0618,
+      "speedError": 0.0035,
+      "verifiedFrames": 17,
+      "speedReliable": true,
+      "speedRange": [
+        0.7643,
+        0.8222
+      ],
+      "querySha256": "085ed550830de6dfcee6e4630763af8241ce10e94656cdca1878480abccfbeae",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "16-bridge-zoom-fast",
+      "source": "bridge",
+      "offset": 7.73,
+      "speed": 1.5,
+      "transform": "zoom-fast",
+      "found": [
+        "bridge"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 59.58,
+      "semanticTop1": "bridge",
+      "offsetError": 0.02,
+      "speedError": 0.0,
+      "verifiedFrames": 11,
+      "speedReliable": true,
+      "speedRange": [
+        1.42,
+        1.58
+      ],
+      "querySha256": "0909962ea8a2e3d123f2afebfe77fd4ce44613aaf8a861de4b5321a4ae7e2ec3",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "17-laboratory-zoom-fast",
+      "source": "laboratory",
+      "offset": 13.49,
+      "speed": 1.5,
+      "transform": "zoom-fast",
+      "found": [
+        "laboratory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 58.18,
+      "semanticTop1": "laboratory",
+      "offsetError": 0.24,
+      "speedError": 0.0,
+      "verifiedFrames": 9,
+      "speedReliable": true,
+      "speedRange": [
+        1.42,
+        1.58
+      ],
+      "querySha256": "eed1387a96579eeaa008d1829342a73308515894c6d3fc4c7be097c4d685a848",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "18-observatory-zoom-fast",
+      "source": "observatory",
+      "offset": 4.76,
+      "speed": 1.5,
+      "transform": "zoom-fast",
+      "found": [
+        "observatory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 51.2,
+      "semanticTop1": "observatory",
+      "offsetError": 0.01,
+      "speedError": 0.0,
+      "verifiedFrames": 11,
+      "speedReliable": true,
+      "speedRange": [
+        1.42,
+        1.58
+      ],
+      "querySha256": "0a60050216bc49326bf8f94e1b9b62f30e3b8d464e14278fb8587a9fc7bc1082",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "19-machines-zoom-fast",
+      "source": "machines",
+      "offset": 22.71,
+      "speed": 1.5,
+      "transform": "zoom-fast",
+      "found": [
+        "machines"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 56.88,
+      "semanticTop1": "machines",
+      "offsetError": 0.04,
+      "speedError": 0.0,
+      "verifiedFrames": 10,
+      "speedReliable": true,
+      "speedRange": [
+        1.42,
+        1.58
+      ],
+      "querySha256": "a3e222ba1ad917ceeff95d7f9ea4dfcbed3cb256ea45a4bec8455231d17bd806",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "20-bridge-rotate",
+      "source": "bridge",
+      "offset": 6.7,
+      "speed": 1.0,
+      "transform": "rotate",
+      "found": [
+        "bridge"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 69.44,
+      "semanticTop1": "bridge",
+      "offsetError": 0.05,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "8fb7c657d0aa85e43599adaf1dced167bdeb7a86a398268c1abad86ef3a4de61",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "21-laboratory-rotate",
+      "source": "laboratory",
+      "offset": 17.36,
+      "speed": 1.0,
+      "transform": "rotate",
+      "found": [
+        "laboratory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 67.9,
+      "semanticTop1": "laboratory",
+      "offsetError": 0.11,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "c4a30354faf1625b53012263c323923b2e2448d8946a7b49c2d3a125316c6114",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "22-observatory-rotate",
+      "source": "observatory",
+      "offset": 8.08,
+      "speed": 1.0,
+      "transform": "rotate",
+      "found": [
+        "observatory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 67.91,
+      "semanticTop1": "observatory",
+      "offsetError": 0.08,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "d3b8cec208bdac5488c1c5835215ad609c8bc13f1e5793a17763f955851e0003",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "23-machines-rotate",
+      "source": "machines",
+      "offset": 7.64,
+      "speed": 1.0,
+      "transform": "rotate",
+      "found": [
+        "machines"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 111.68,
+      "semanticTop1": "machines",
+      "offsetError": 0.0034,
+      "speedError": 0.0279,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        1.0182,
+        1.0571
+      ],
+      "querySha256": "04dc1e55ae31d1f8259fdf3df68865302f29a75f9e2b6298624844b06f46b4e4",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "24-bridge-letterbox",
+      "source": "bridge",
+      "offset": 21.61,
+      "speed": 1.0,
+      "transform": "letterbox",
+      "found": [
+        "bridge"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 70.6,
+      "semanticTop1": "bridge",
+      "offsetError": 0.14,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "a710a5d9dde5a0edf4bc38e7265ba0907cd4b5c3391a876ebb76b3f8abfe5dea",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "25-laboratory-letterbox",
+      "source": "laboratory",
+      "offset": 9.51,
+      "speed": 1.0,
+      "transform": "letterbox",
+      "found": [
+        "laboratory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 100.75,
+      "semanticTop1": "laboratory",
+      "offsetError": 0.01,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "6fff052e518981ac34fc93374e44fc1ef11ad8d52feb40cbd793782795099342",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "26-observatory-letterbox",
+      "source": "observatory",
+      "offset": 10.11,
+      "speed": 1.0,
+      "transform": "letterbox",
+      "found": [
+        "observatory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 107.11,
+      "semanticTop1": "observatory",
+      "offsetError": 0.11,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "58119c4a7d52e1d3009313ed4511b937e2b3d1937148e17c1d4005f409a13232",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "27-machines-letterbox",
+      "source": "machines",
+      "offset": 2.01,
+      "speed": 1.0,
+      "transform": "letterbox",
+      "found": [
+        "machines"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 99.72,
+      "semanticTop1": "machines",
+      "offsetError": 0.01,
+      "speedError": 0.0,
+      "verifiedFrames": 16,
+      "speedReliable": true,
+      "speedRange": [
+        0.9467,
+        1.0533
+      ],
+      "querySha256": "c7baeed57ea139a178b59fba2ee9cec3cedf85a08c41aabe95182e2e4ff8fdae",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "28-bridge-low-quality",
+      "source": "bridge",
+      "offset": 21.29,
+      "speed": 1.2,
+      "transform": "low-quality",
+      "found": [
+        "bridge"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 68.39,
+      "semanticTop1": "bridge",
+      "offsetError": 0.1317,
+      "speedError": 0.0099,
+      "verifiedFrames": 14,
+      "speedReliable": true,
+      "speedRange": [
+        1.17,
+        1.2538
+      ],
+      "querySha256": "937b361e5278a093c91c839f8226f9532015fcbe0acebaf2aae46d5253a44e18",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "29-laboratory-low-quality",
+      "source": "laboratory",
+      "offset": 8.6,
+      "speed": 1.2,
+      "transform": "low-quality",
+      "found": [
+        "laboratory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 63.74,
+      "semanticTop1": "laboratory",
+      "offsetError": 0.1084,
+      "speedError": 0.0012,
+      "verifiedFrames": 14,
+      "speedReliable": true,
+      "speedRange": [
+        1.1545,
+        1.2538
+      ],
+      "querySha256": "8f75c9268202f1236a5e11545d330fd691085f968385f7c8a5768e0ac9c956df",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "30-observatory-low-quality",
+      "source": "observatory",
+      "offset": 24.88,
+      "speed": 1.2,
+      "transform": "low-quality",
+      "found": [
+        "observatory"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 59.41,
+      "semanticTop1": "observatory",
+      "offsetError": 0.1224,
+      "speedError": 0.0361,
+      "verifiedFrames": 14,
+      "speedReliable": true,
+      "speedRange": [
+        1.1333,
+        1.1917
+      ],
+      "querySha256": "3e6de16edaac7006b0ebabb7cdac19907cd0054e7a0d3859b024c9d78cb46365",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "31-machines-low-quality",
+      "source": "machines",
+      "offset": 11.35,
+      "speed": 1.2,
+      "transform": "low-quality",
+      "found": [
+        "machines"
+      ],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 73.05,
+      "semanticTop1": "machines",
+      "offsetError": 0.0387,
+      "speedError": 0.0061,
+      "verifiedFrames": 11,
+      "speedReliable": true,
+      "speedRange": [
+        1.1417,
+        1.2333
+      ],
+      "querySha256": "8a99bd2559c264f1db0f6904637f9e0d316683b074aba00ac1b18f9b1c5fa19c",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "negative-0",
+      "source": null,
+      "transform": "unrelated-film",
+      "found": [],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 49.06,
+      "semanticTop1": "laboratory",
+      "querySha256": "b402c025edd4a43a2e6983c3be9a03003e981d75e57c190a371ef19241268b2a",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "negative-1",
+      "source": null,
+      "transform": "unrelated-film",
+      "found": [],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 59.53,
+      "semanticTop1": "machines",
+      "querySha256": "f65fe3158877fd6325ecf9b651b92b46ba687c2bfceb6fd1ffca12156bb6ae85",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "negative-2",
+      "source": null,
+      "transform": "unrelated-film",
+      "found": [],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 44.32,
+      "semanticTop1": "machines",
+      "querySha256": "0472ffef5838b24aa6eadbe77a77e7c3a7e7bfbbbf0bbb7cae510a5f45af2940",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "negative-3",
+      "source": null,
+      "transform": "unrelated-film",
+      "found": [],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 34.62,
+      "semanticTop1": "observatory",
+      "querySha256": "98e7f80d6bb4505eea1736195f66b2a4a7e16feefa4b81e79b6a2a853bbaad08",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "unindexed-0",
+      "source": null,
+      "transform": "unindexed-same-film",
+      "found": [],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 45.86,
+      "semanticTop1": "laboratory",
+      "querySha256": "e839bbf6051760aa68431c5e56c82135632abff1de82db279f1f20ecde6579e2",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "unindexed-1",
+      "source": null,
+      "transform": "unindexed-same-film",
+      "found": [],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 45.95,
+      "semanticTop1": "machines",
+      "querySha256": "719fea95f4a8a304fe555599d3c58eaa43f0390307d994c9f53ea6e7abf98b43",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "unindexed-2",
+      "source": null,
+      "transform": "unindexed-same-film",
+      "found": [],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 86.14,
+      "semanticTop1": "laboratory",
+      "querySha256": "836b929f9d7f0836e9309f57cab03f38e2909050d7f8109fb203a52fb0b58444",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    },
+    {
+      "id": "unindexed-3",
+      "source": null,
+      "transform": "unindexed-same-film",
+      "found": [],
+      "correct": true,
+      "falseMatches": [],
+      "elapsedSeconds": 65.79,
+      "semanticTop1": "machines",
+      "querySha256": "e0b6e0402ef080f3e03bf5bfce117668eea4729d5de7ceff7b8277690c24751d",
+      "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614"
+    }
+  ],
+  "scope": "Four indexed 40-second excerpts from Tears of Steel. Positive queries use independently chosen offsets and scripted edits. Negatives include Sintel and unindexed scenes from Tears of Steel.",
+  "limitations": [
+    "Small, synthetic-edit evaluation; not a representative production benchmark.",
+    "Development results informed thresholds. A separately seeded held-out suite is reported when complete.",
+    "Source retrieval success does not imply accurate ownership attribution or legal conclusions.",
+    "Timing errors are conditional on a recovered source; abstentions are reported separately."
+  ],
+  "hardware": "Intel Core i7-1165G7 CPU, no GPU. Local concurrent tasks affect latency."
+}

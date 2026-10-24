@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "1.1",
+  "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614",
+  "evidenceAssets": [],
+  "query": {
+    "filename": "query-unrelated.mp4",
+    "sha256": "3cfb1ca267a874c4fc5b681a2c528fb9d61e9db9070d498ea88537a55c58e99d",
+    "duration": 10.0,
+    "width": 854,
+    "height": 480,
+    "sampledFrames": 20
+  },
+  "retrieval": {
+    "engine": "Qwen/Qwen3-VL-Embedding-2B",
+    "revision": "9f2f7e710d6d81056aa5c0a4f04764fec6bb7bda",
+    "rankings": [
+      {
+        "sourceId": "machines",
+        "similarity": 0.4662,
+        "moments": [
+          20.0,
+          36.0,
+          32.0,
+          24.0
+        ]
+      },
+      {
+        "sourceId": "laboratory",
+        "similarity": 0.4375,
+        "moments": [
+          28.0,
+          24.0,
+          0.0,
+          20.0
+        ]
+      },
+      {
+        "sourceId": "observatory",
+        "similarity": 0.4218,
+        "moments": [
+          4.0,
+          0.0,
+          28.0,
+          24.0
+        ]
+      },
+      {
+        "sourceId": "bridge",
+        "similarity": 0.4141,
+        "moments": [
+          12.0,
+          0.0,
+          32.0,
+          8.0
+        ]
+      }
+    ]
+  },
+  "results": [],
+  "elapsedSeconds": 76.67,
+  "method": {
+    "visual": "ORB + unique ratio matches + RANSAC homography + aligned appearance correlation",
+    "temporal": "Weighted linear timestamp consensus",
+    "sourceSampleFps": 1,
+    "querySampleFps": 2,
+    "refinementFps": 4,
+    "toleranceSeconds": 0.65
+  },
+  "limitations": [
+    "Search is limited to the indexed source library.",
+    "A visual match is evidence of shared imagery, not proof of ownership, infringement, or first publication.",
+    "Source frames are sampled at 1 fps, then verified candidates are refined at 4 fps. Per-alignment tolerances are not guaranteed error bounds or statistical confidence intervals.",
+    "Semantic similarities are uncalibrated retrieval scores, not probabilities.",
+    "The playback speed range is a deterministic consistency interval under the timestamp tolerance, not a calibrated confidence interval."
+  ],
+  "recorded": true,
+  "fixtureId": "unrelated"
+}
