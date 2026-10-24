@@ -82,8 +82,10 @@ not eight additional “passes.”
 No browser automation surface was available in this environment, including an
 attempt to open the in-app browser. DOM accessibility tests do not validate
 visual layout or color contrast. The generated video frames and scientific plot
-were visually inspected, but they are evidence visualizations rather than app
-screenshots. HTTP workflows and static asset checks were exercised directly.
+were visually inspected. A Sites-generated 1200×750 screenshot of the earlier
+published landing view was also inspected; it showed the real application with
+no visible clipping in that viewport. This does not validate interactions or
+mobile layout. HTTP workflows and static asset checks were exercised directly.
 
 Gemini and Twinly transports are tested with explicit mocks. No live paid API
 success or sponsor eligibility is claimed without credentials and a genuine run.
@@ -135,3 +137,32 @@ abstention was a re-encoding that Qwen ranked first, but whose geometric
 candidates did not yield a temporal fit. Every case and its report hash are
 published in `public/validation/cross-work.json`. These ten cases are separate
 from the four-source 40-case evaluation.
+
+## Larger-library retrieval
+
+The pinned model ranked the correct target first for 30/32 existing positive
+queries and in the top five for 32/32 across 57 sources and 305 actual frame
+embeddings. The expanded library adds 24 disjoint same-film excerpts and 29
+Big Buck Bunny excerpts. Both top-one misses ranked second. Every rank, top-five
+list, source construction, and input hash is in
+`public/validation/retrieval-scale.json`. Targets are 40 seconds and distractors
+20 seconds; max pooling can favor longer references. These are reused queries
+and semantic ranking results, not end-to-end accuracy or a latency benchmark.
+
+## Offline distribution
+
+The compiled demo was packaged with a standard-library Python localhost
+launcher, unpacked separately, and served without the local inference backend.
+Seven HTML, caption, PDF, packet, validation, and license resources returned
+HTTP 200 with byte-identical content; captions and PDF used the expected MIME
+types. The API endpoint correctly remained absent. This supplements static
+reference checks and does not replace the unavailable visual browser review.
+
+## Expanded-library full engine
+
+The unchanged engine recovered all four selected positive sources and rejected
+both unrelated Sintel negatives across the same 57-source library: **6/6 correct
+decisions**. The plan, query hashes, report hashes, and individual runtimes
+(106–284 seconds) are in `public/validation/verification-scale.json`. This is a
+small smoke test with reused queries, not a new independent accuracy estimate.
+The summary links the exact retrieval experiment by SHA-256.

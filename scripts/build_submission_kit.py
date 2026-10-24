@@ -20,6 +20,10 @@ def main():
     args = parser.parse_args()
     if args.output.exists():
         parser.error("Choose a new output name to preserve an earlier release kit.")
+    if subprocess.check_output(
+        ["git", "status", "--porcelain"], cwd=ROOT, text=True
+    ).strip():
+        parser.error("Commit the reviewed source before packaging a release kit.")
     commit = subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
     ).strip()
@@ -34,7 +38,9 @@ Captioned walkthrough: https://enteragoodusername.github.io/traceback-gatorhack/
 This is a prepared project, not a submitted Devpost entry.
 
 1. Open the judge brief and watch the 2:15 MP4.
-2. Use SUBMISSION.md for the project description and PITCH.md to rehearse.
+2. Open Verify a packet in the demo, choose traceback-evidence.zip, then compare
+   sample-query.mp4 with the recorded query hash. Both checks stay in the browser.
+   Use SUBMISSION.md for the project description and PITCH.md to rehearse.
 3. Supply the real eligible registered team and actual contributions.
 4. Upload the MP4 to YouTube or Vimeo and use that URL in Devpost's video field.
 5. Submit before Sunday, October 25, 2026, 5:00 PM Eastern.
@@ -57,7 +63,9 @@ checksums, not signatures or proof of authorship.
         "traceback-demo.srt": "public/demo/traceback-demo.srt",
         "traceback-demo.vtt": "public/demo/traceback-demo.vtt",
         "traceback-evidence.zip": "public/downloads/traceback-evidence.zip",
+        "sample-query.mp4": "public/media/query-vertical.mp4",
         "SUBMISSION.md": "docs/SUBMISSION.md",
+        "HANDOFF.md": "docs/HANDOFF.md",
         "PITCH.md": "docs/PITCH.md",
         "TEST_REPORT.md": "docs/TEST_REPORT.md",
         "DEMO_VIDEO.md": "docs/DEMO_VIDEO.md",
@@ -65,6 +73,8 @@ checksums, not signatures or proof of authorship.
         "EXTENDED_VALIDATION.md": "docs/EXTENDED_VALIDATION.md",
         "NOTICE.md": "NOTICE.md",
         "LICENSE": "LICENSE",
+        "font-licenses/dmsans-OFL.txt": "public/fonts/dmsans-OFL.txt",
+        "font-licenses/manrope-OFL.txt": "public/fonts/manrope-OFL.txt",
         "media/evidence.png": "docs/media/evidence.png",
         "media/evaluation-timing.png": "docs/media/evaluation-timing.png",
         "media/cross-work-failure.png": "docs/media/cross-work-failure.png",

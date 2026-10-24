@@ -4082,3 +4082,7 @@ button {
 .packet-audit li {
   overflow-wrap: anywhere;
 }
+
+.extended-validation > a {
+  margin-right: 20px;
+}

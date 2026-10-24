@@ -31,6 +31,8 @@ This measures source rank from the pinned Qwen model, not end-to-end geometric
 verification or production latency. The queries are reused from the controlled
 evaluation, so this is a larger-library test, not a new held-out query study.
 Every query's rank and top five candidates are retained, including failures.
+Target clips are 40 seconds and distractors are 20 seconds; max pooling can
+favor longer references, so this is not a length-balanced comparison.
 
 ## Reproduce
 
@@ -92,3 +94,9 @@ runtime is not a controlled latency benchmark.
 .venv/bin/python scripts/verification_scale.py \
   --retrieval artifacts/my-retrieval-scale --output artifacts/my-verification-scale
 ```
+
+The completed run made **6/6 correct decisions**: four correct sources and two
+rejected negatives. Per-case runtime ranged from 106 to 284 seconds on the
+local CPU; concurrent workloads and differing clips prevent a controlled latency
+comparison. Full constructions and report hashes are published in
+`public/validation/verification-scale.json`, linked by hash to the retrieval summary.

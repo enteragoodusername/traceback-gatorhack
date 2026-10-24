@@ -20,6 +20,9 @@ your source library using visual descriptions rather than filenames.
 **A match establishes shared imagery with an indexed source. It does not
 establish ownership, infringement, intent, or first publication.**
 
+The [handoff guide](docs/HANDOFF.md) covers the release assets, offline demo,
+local workflow, presentation, and remaining event-specific submission steps.
+
 ## Run it
 
 Prerequisites: Linux, Python 3.11 (tested), Node.js 22+, FFmpeg, approximately 8 GB
@@ -162,6 +165,16 @@ The missed re-encoding was ranked first by Qwen but failed temporal verification
 No engine thresholds were changed after this test. See
 [extended validation](docs/EXTENDED_VALIDATION.md) for every construction and
 reproduction instructions.
+
+With **57 sources and 305 actual frame embeddings**, the same 32 positive
+queries ranked their source first in **30/32** cases and within the top five in
+**32/32**. This [larger-library retrieval check](public/validation/retrieval-scale.json)
+adds 53 disjoint distractor excerpts; it tests ranking, not geometric verification.
+Targets are 40 seconds and distractors 20 seconds, so max pooling can favor
+longer references. It reuses the evaluation queries and is not a new independent
+accuracy estimate. A separate [full-engine smoke test](public/validation/verification-scale.json)
+recovered all four selected positives and rejected both unrelated negatives
+against the same 57-source library. It is six reused cases, not a new accuracy estimate.
 
 Full benchmark outputs stay under `artifacts/benchmarks/` locally
 and are excluded from the repository because they contain redundant media.

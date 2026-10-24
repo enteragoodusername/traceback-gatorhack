@@ -201,6 +201,7 @@ export default function PacketReview() {
           <section
             className="packet-success panel"
             aria-label="Packet verification result"
+            aria-live="polite"
           >
             <CheckCheck size={28} />
             <div>

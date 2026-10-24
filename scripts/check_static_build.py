@@ -1,35 +1,69 @@
-"""Check that HTML/CSS build references resolve beneath a chosen hosting base."""
+"""Check HTML and CSS references, including nested demo pages, beneath a hosting base."""
 
 import argparse
 from html.parser import HTMLParser
 from pathlib import Path
 import re
+from urllib.parse import unquote, urlsplit
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("directory", type=Path)
 parser.add_argument("--base", default="/")
 args = parser.parse_args()
+root = args.directory.resolve()
+assert (root / "index.html").is_file(), "Build is missing index.html"
 references = []
 
 
-class References(HTMLParser):
-    def handle_starttag(self, tag, attrs):
-        for key, value in attrs:
-            if key in ("src", "href") and value:
-                references.append(value)
-
-
-References().feed((args.directory / "index.html").read_text())
-for path in (args.directory / "assets").glob("*.css"):
+def css_references(owner, text):
     references.extend(
-        m.strip("\"' ") for m in re.findall(r"url\(([^)]+)\)", path.read_text())
+        (owner, m.strip("\"' ")) for m in re.findall(r"url\(([^)]+)\)", text)
     )
+
+
+class References(HTMLParser):
+    def __init__(self, owner):
+        super().__init__()
+        self.owner = owner
+        self.in_style = False
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "style":
+            self.in_style = True
+        for key, value in attrs:
+            if key in ("src", "href", "poster") and value:
+                references.append((self.owner, value))
+            if key == "style" and value:
+                css_references(self.owner, value)
+
+    def handle_endtag(self, tag):
+        if tag == "style":
+            self.in_style = False
+
+    def handle_data(self, data):
+        if self.in_style:
+            css_references(self.owner, data)
+
+
+for path in root.rglob("*.html"):
+    References(path).feed(path.read_text())
+for path in root.rglob("*.css"):
+    css_references(path, path.read_text())
 checked = 0
-for ref in references:
-    if ref.startswith(("http:", "https:", "data:", "#")):
+for owner, ref in references:
+    parsed = urlsplit(ref)
+    if parsed.scheme or parsed.netloc or not parsed.path:
         continue
-    assert ref.startswith(args.base), f"Incorrect deployment base: {ref}"
-    target = args.directory / ref[len(args.base) :]
-    assert target.is_file(), f"Missing build asset: {target}"
+    path = unquote(parsed.path)
+    if path.startswith("/"):
+        assert path.startswith(args.base), f"Incorrect deployment base: {ref}"
+        target = root / path[len(args.base) :]
+    else:
+        target = owner.parent / path
+    target = target.resolve()
+    assert target.is_relative_to(root), f"Reference escapes the build: {ref}"
+    if target.is_dir():
+        target /= "index.html"
+    assert target.is_file(), f"Missing build asset from {owner.name}: {target}"
     checked += 1
-print(f"All {checked} HTML/CSS asset references resolve beneath {args.base}")
+print(f"All {checked} HTML/CSS/media references resolve beneath {args.base}")

@@ -25,7 +25,7 @@ Open **Under the hood** and cite the current complete evaluation, with its scope
 ## Answers to likely questions
 
 **Why use a new multimodal model instead of only feature matching?**
-It enables semantic search without hand-authored tags and prioritizes candidate sources from actual pixels. In this four-source prototype all sources are still geometrically checked, so we do not claim a measured large-library speedup or retrieval ablation result. Scaling retrieval is future work.
+It enables semantic search without hand-authored tags and prioritizes candidate sources from actual pixels. The production engine checks every indexed source, in semantic order. With 57 sources, the existing 32 queries placed their correct source first 30 times and in the top five 32 times. We do not claim a measured pruning speedup: top-k filtering remains future work, and these reused queries are a small, unequal-length retrieval test.
 
 **Is this searching the internet?**
 No. It searches the source library you index. The bundled library is four licensed 40-second excerpts. Users can add their own 2–60 second sources locally.

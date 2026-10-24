@@ -112,6 +112,7 @@ def audit():
     verification_path = validation / "verification-scale.json"
     if verification_path.exists():
         verification = json.loads(verification_path.read_text())
+        assert digest(scale_path) == verification["retrievalSummarySha256"]
         assert verification["complete"] and verification["total"] == len(
             verification["observations"]
         )
