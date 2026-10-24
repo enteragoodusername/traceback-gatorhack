@@ -439,14 +439,14 @@ export default function Library({
       <section className="attribution-box">
         <Info size={20} />
         <div>
-          <h3>Real media. Transparent provenance.</h3>
+          <h3>Bundled demonstration media</h3>
           <p>{manifest?.attribution}</p>
           <a
             href="https://mango.blender.org/sharing/"
             target="_blank"
             rel="noreferrer"
           >
-            Read the original license
+            Tears of Steel license
             <ArrowUpRight size={13} />
           </a>
         </div>

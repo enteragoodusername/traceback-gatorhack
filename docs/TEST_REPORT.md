@@ -64,7 +64,7 @@ not eight additional “passes.”
 - 31 Python tests cover geometric false matches and transformed positives,
   temporal degeneracies, API validation and queue handling, provider failure
   behavior with mocked transports, and ZIP integrity.
-- 15 interface tests cover recorded and live API paths, multi-source selection,
+- 17 interface tests cover recorded and live API paths, multi-source selection,
   semantic search, source attribution, export checksums, keyboard behavior,
   and accessible DOM structure.
 - Strict TypeScript compilation and the Vite production build pass.
@@ -87,3 +87,11 @@ screenshots. HTTP workflows and static asset checks were exercised directly.
 
 Gemini and Twinly transports are tested with explicit mocks. No live paid API
 success or sponsor eligibility is claimed without credentials and a genuine run.
+
+## Published artifacts
+
+The public GitHub Pages root, manifest, full evaluation, montage report, stress
+record, MP4, captions, and sample ZIP returned HTTP 200. The downloaded data and
+media matched local SHA-256 hashes. GitHub Actions completed successfully for
+the initial release. The owner-private Sites deployment also completed through
+the native publishing service.

@@ -30,7 +30,7 @@ import type { Demo, Evidence, Manifest, Match, Report, Source } from "./types";
 import Library from "./Library";
 import Evaluation from "./Evaluation";
 import Diagnostics from "./Diagnostics";
-import { createEvidencePacket } from "./evidence";
+import { createEvidencePacket, sourceAttribution } from "./evidence";
 import { asset } from "./paths";
 
 const time = (n: number) =>
@@ -284,7 +284,7 @@ function App() {
       const bytes = await createEvidencePacket(
         report,
         base,
-        manifest?.attribution || "",
+        sourceAttribution(report, manifest?.attribution),
       );
       const blob = new Blob([new Uint8Array(bytes).buffer], {
         type: "application/zip",
@@ -802,7 +802,9 @@ function App() {
                           <small>
                             {match.alignment.timingAmbiguous
                               ? "one of multiple possible intervals"
-                              : "within the indexed excerpt"}
+                              : match.alignment.speedReliable === false
+                                ? "timing is weakly constrained"
+                                : "within the indexed excerpt"}
                           </small>
                         </div>
                         <div>
@@ -1108,12 +1110,35 @@ function App() {
                   <dd>{inspectSource.work}</dd>
                 </div>
                 <div>
-                  <dt>Excerpt begins</dt>
-                  <dd>{time(inspectSource.originalOffset)} in original film</dd>
+                  <dt>
+                    {inspectSource.userProvided
+                      ? "Source duration"
+                      : "Excerpt begins"}
+                  </dt>
+                  <dd>
+                    {inspectSource.userProvided
+                      ? time(inspectSource.duration)
+                      : `${time(inspectSource.originalOffset)} in original film`}
+                  </dd>
                 </div>
                 <div>
                   <dt>Attribution</dt>
-                  <dd>(CC) Blender Foundation | mango.blender.org</dd>
+                  <dd>
+                    {inspectSource.creator}
+                    {inspectSource.sourceUrl && (
+                      <>
+                        {" "}
+                        ·{" "}
+                        <a
+                          href={inspectSource.sourceUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Source website <ExternalLink size={12} />
+                        </a>
+                      </>
+                    )}
+                  </dd>
                 </div>
                 <div>
                   <dt>License</dt>

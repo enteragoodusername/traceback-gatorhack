@@ -25,3 +25,4 @@ artifacts/montage-check/
 artifacts/live-smoke/
 artifacts/traceback-demo.*
 artifacts/stress-cases/
+artifacts/public-http-check.json

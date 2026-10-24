@@ -45,6 +45,14 @@ Evaluate on a larger, independently annotated corpus; add shot-aware alignment f
 ## Built with
 Qwen3-VL-Embedding-2B, PyTorch, Transformers, OpenCV, FFmpeg, FastAPI, Python, React, TypeScript, Vite, fflate. Optional clients: Google Gemini API and Twinly API.
 
+## Project links
+
+- Public repository: https://github.com/enteragoodusername/traceback-gatorhack
+- Interactive recorded demo: https://enteragoodusername.github.io/traceback-gatorhack/
+- Captioned 2:15 walkthrough: https://enteragoodusername.github.io/traceback-gatorhack/demo/
+- Direct MP4: https://enteragoodusername.github.io/traceback-gatorhack/demo/traceback-demo.mp4
+- Sample evidence packet: https://enteragoodusername.github.io/traceback-gatorhack/downloads/traceback-evidence.zip
+
 ## Submission operator checklist
 The project is prepared, but this file is not a submitted Devpost entry.
 

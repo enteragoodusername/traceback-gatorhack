@@ -1,7 +1,11 @@
 import { describe, it, expect, vi } from "vitest";
 import { webcrypto } from "node:crypto";
 import { unzipSync, strFromU8 } from "fflate";
-import { createEvidencePacket, digest } from "../src/evidence";
+import {
+  createEvidencePacket,
+  digest,
+  sourceAttribution,
+} from "../src/evidence";
 import actualReport from "../public/evidence/vertical/report.json";
 import type { Report } from "../src/types";
 
@@ -55,4 +59,22 @@ describe("evidence integrity", () => {
       createEvidencePacket(report, "/evidence/", ""),
     ).rejects.toThrow("invalid evidence filename");
   });
+});
+
+it("keeps user source rights distinct from bundled demo licensing", () => {
+  const report = structuredClone(actualReport) as Report;
+  report.recorded = false;
+  report.results[0].source = {
+    ...report.results[0].source,
+    creator: "Independent Archivist",
+    license: "Rights unverified",
+    licenseUrl: "",
+    sourceUrl: "",
+    userProvided: true,
+  };
+  const credit = sourceAttribution(report, "Bundled Blender demo credit");
+  expect(credit).toContain("Independent Archivist");
+  expect(credit).toContain("Rights unverified");
+  expect(credit).not.toContain("Bundled Blender demo credit");
+  expect(credit).toContain("not verified ownership records");
 });

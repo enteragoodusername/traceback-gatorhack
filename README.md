@@ -2,6 +2,8 @@
 
 **Find the source behind an edited video. Inspect the evidence.**
 
+[Interactive demo](https://enteragoodusername.github.io/traceback-gatorhack/) · [2:15 walkthrough](https://enteragoodusername.github.io/traceback-gatorhack/demo/) · [Sample evidence packet](https://enteragoodusername.github.io/traceback-gatorhack/downloads/traceback-evidence.zip)
+
 ![Actual measured correspondence between a cropped query and its indexed source](docs/media/evidence.png)
 
 *An evidence visualization from a real local run; not a simulated app screenshot.*

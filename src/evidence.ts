@@ -58,3 +58,22 @@ export async function createEvidencePacket(
   );
   return zipSync(archive, { level: 0 });
 }
+
+/** Rights labels are supplied metadata, never inferred from a visual match. */
+export function sourceAttribution(
+  report: Report,
+  bundledCredit?: string,
+): string {
+  const lines = report.results.map(
+    ({ source }) =>
+      `${source.title} — ${source.creator}. Work: ${source.work}. Rights label: ${source.license}${source.licenseUrl ? " (" + source.licenseUrl + ")" : ""}.${source.sourceUrl ? " Source: " + source.sourceUrl : ""}`,
+  );
+  return [
+    "INDEXED SOURCE METADATA",
+    ...lines,
+    "A source match does not establish rights in the query video. User-supplied rights labels are not verified ownership records.",
+    ...(report.recorded && bundledCredit
+      ? ["BUNDLED DEMO MEDIA: " + bundledCredit]
+      : []),
+  ].join("\n");
+}

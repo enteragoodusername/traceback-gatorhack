@@ -204,3 +204,55 @@ describe("multi-source evidence", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("user-provided source attribution", () => {
+  it("shows the uploaded creator instead of the bundled film credit", async () => {
+    const user = userEvent.setup();
+    const custom = {
+      ...manifest.sources[0],
+      id: "user-test",
+      title: "My original footage",
+      creator: "Test Archivist",
+      work: "My recording",
+      license: "Rights unverified",
+      licenseUrl: "",
+      sourceUrl: "",
+      userProvided: true,
+      duration: 15,
+      originalOffset: 0,
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) => {
+        if (url === "/manifest.json")
+          return { ok: true, json: async () => manifest };
+        if (url === "/api/health")
+          return {
+            ok: true,
+            json: async () => ({
+              status: "ok",
+              semantic: true,
+              gemini: false,
+              twinly: false,
+            }),
+          };
+        if (url === "/api/library")
+          return {
+            ok: true,
+            json: async () => ({ sources: [...manifest.sources, custom] }),
+          };
+        return { ok: false };
+      }),
+    );
+    render(<App />);
+    await screen.findByText("Local engine connected");
+    await user.click(screen.getByRole("button", { name: /Source library/ }));
+    await user.click(
+      await screen.findByRole("button", { name: /My original footage/ }),
+    );
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).getByText("Test Archivist")).toBeInTheDocument();
+    expect(within(dialog).getByText("Source duration")).toBeInTheDocument();
+    expect(within(dialog).queryByText(/Blender/)).not.toBeInTheDocument();
+  });
+});
