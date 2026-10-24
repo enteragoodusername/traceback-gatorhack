@@ -606,7 +606,7 @@ h1 em {
   padding-top: 15px;
   margin-top: 16px;
   border-top: 1px solid var(--line);
-  color: #6d7d62;
+  color: #5d7051;
 }
 .query-note p {
   font-size: 10px;
@@ -678,7 +678,7 @@ h1 em {
   align-items: center;
   gap: 5px;
   font-size: 9px;
-  color: #728063;
+  color: #627053;
 }
 .results-grid {
   display: grid;
@@ -748,7 +748,7 @@ h1 em {
   justify-content: space-between;
   gap: 5px;
   font-size: 8px;
-  color: #6d7c61;
+  color: #5e7053;
 }
 .candidate-meta > span:first-child {
   font-weight: 700;
@@ -773,7 +773,7 @@ h1 em {
 }
 .candidate-copy > p {
   font-size: 10px;
-  color: #75806e;
+  color: #65735e;
   margin: 5px 0 12px;
   white-space: nowrap;
   overflow: hidden;
@@ -875,7 +875,7 @@ h1 em {
   flex-direction: column;
   gap: 9px;
   font-size: 9px;
-  color: #77836b;
+  color: #637252;
   max-width: 70px;
   line-height: 1.5;
 }
@@ -963,7 +963,7 @@ h1 em {
   border-top: 1px solid var(--line);
   padding: 21px 4.5%;
   font-size: 10px;
-  color: #7a8671;
+  color: #64735c;
   margin-top: 25px;
 }
 .app-footer span,

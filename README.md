@@ -68,4 +68,4 @@ For frontend development, `npm run dev` proxies `/api` to the local server on po
 
 The previous v0.1 local-provenance experiment, media fixtures, verification engine and measurement artifacts remain in Git history and research/test files. They are not search inputs or displayed results in this application. Historical accuracy claims describe that earlier verifier, not internet-video discovery. The old PDF, pitch video and v0.1 release bundles are historical artifacts.
 
-MIT licensed application. See `THIRD_PARTY_NOTICES.md` and the bundled font notices for dependency/model/media licensing.
+MIT licensed application. See `NOTICE.md` and `web-assets/THIRD_PARTY_LICENSES.txt` and the bundled font notices for dependency/model/media licensing.

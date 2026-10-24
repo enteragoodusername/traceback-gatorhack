@@ -27,6 +27,7 @@ for file in root.rglob("*"):
             "fonts",
             "index.html",
             "favicon.svg",
+            "THIRD_PARTY_LICENSES.txt",
         }, f"Unexpected asset: {file}"
 references = []
 for file in [root / "index.html", *root.glob("assets/*.css")]:
