@@ -10,10 +10,12 @@ web demonstration. A Devpost entry has **not** been submitted.
 - [Public MIT repository](https://github.com/enteragoodusername/traceback-gatorhack)
 - [Captioned 2:15 video](https://enteragoodusername.github.io/traceback-gatorhack/demo/)
 - [One-page judge brief](https://enteragoodusername.github.io/traceback-gatorhack/downloads/traceback-brief.pdf)
-- [Release assets](https://github.com/enteragoodusername/traceback-gatorhack/releases/tag/v0.1.0)
+- [Release assets](https://github.com/enteragoodusername/traceback-gatorhack/releases/latest)
 
 The submission kit contains the MP4, captions, brief, evidence ZIP, matching
 sample query, submission draft, pitch notes, notices, and validation records.
+The supplementary diagnostics ZIP preserves mixed-edit, semantic-search, and
+queue/restart observations, including failures.
 The separate offline-demo ZIP contains the built interface and all recorded
 examples. Extract it and run `python3 START_DEMO.py` (`python` on some Windows
 installations), then open the printed localhost URL. It needs no model or Node

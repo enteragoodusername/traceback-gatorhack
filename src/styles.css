@@ -4086,3 +4086,24 @@ button {
 .extended-validation > a {
   margin-right: 20px;
 }
+
+/* Readable supporting copy on the light and dark workbench surfaces. */
+.page-heading p,
+.breadcrumb,
+.eyebrow {
+  color: #657366;
+}
+.model-chip {
+  color: #586b47;
+}
+.workspace-label,
+.sidebar-bottom small,
+.version {
+  color: #93aba0;
+}
+.semantic-search-note {
+  color: #657366;
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 0 0 14px;
+}

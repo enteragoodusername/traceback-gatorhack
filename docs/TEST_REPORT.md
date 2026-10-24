@@ -166,3 +166,34 @@ decisions**. The plan, query hashes, report hashes, and individual runtimes
 (106–284 seconds) are in `public/validation/verification-scale.json`. This is a
 small smoke test with reused queries, not a new independent accuracy estimate.
 The summary links the exact retrieval experiment by SHA-256.
+
+## Downloaded-release acceptance
+
+The published v0.1.0 offline ZIP was downloaded from GitHub, its release digest
+verified, unpacked separately, and launched without the inference backend.
+All 89 selected pages, source/query media, evidence reports, images, and handoff
+resources returned bytes identical to the archive. The 29 checksummed files
+inside the separately downloaded submission kit also verified. The v0.1.1
+interface adjusts supporting-text contrast and explains nearest-neighbor search
+limits; the matching engine and benchmark records are unchanged.
+
+Static palette calculations improved page-introduction text from 3.09:1 to
+4.65:1 against its declared background and the model chip from 3.63:1 to 5.18:1.
+These targeted calculations do not establish overall WCAG conformance or
+replace browser-based visual and contrast evaluation.
+
+## Final operational and mixed-edit review
+
+A live queue accepted two queries, rejected a third with HTTP 429, recovered
+the laboratory for the first job, and returned no source for the unrelated
+second job. Both original files and all twelve exported evidence-image hashes
+verified independently. Both completed jobs were recovered from disk after
+restarting into v0.1.1. Eighty health requests remained responsive while jobs
+ran; these observations are not a controlled latency benchmark.
+
+Six mixed-edit diagnostics and twelve qualitative semantic searches are
+reported separately in [EXTENDED_VALIDATION.md](EXTENDED_VALIDATION.md).
+The supplementary release archive preserves inputs, scripts, measured reports,
+and all retrieved frames, including the Spanish query's relevance failure and
+nearest candidates for absent concepts. These are not added to the headline
+40-case evaluation.

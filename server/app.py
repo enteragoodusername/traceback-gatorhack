@@ -21,7 +21,7 @@ from . import embedding, integrations
 
 app = FastAPI(
     title="Traceback",
-    version="0.1.0",
+    version="0.1.1",
     description="Local video provenance analysis. Search is limited to your indexed library.",
 )
 UPLOADS = ROOT / "data/uploads"
@@ -66,7 +66,7 @@ def health():
         "indexReady": (INDEX / "metadata.json").exists(),
         "gemini": bool(os.getenv("GEMINI_API_KEY")),
         "twinly": bool(os.getenv("TWINLY_API_KEY")),
-        "version": "0.1.0",
+        "version": "0.1.1",
     }
 
 

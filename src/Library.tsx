@@ -348,6 +348,10 @@ export default function Library({
                 <X size={14} />
               </button>
             </div>
+            <p className="semantic-search-note">
+              Search returns nearest indexed frames even when the described scene
+              is absent. Inspect each candidate for relevance.
+            </p>
             <div className="semantic-hits">
               {hits.slice(0, 4).map((hit, i) => {
                 const source = manifest?.sources.find(

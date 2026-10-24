@@ -100,3 +100,40 @@ rejected negatives. Per-case runtime ranged from 106 to 284 seconds on the
 local CPU; concurrent workloads and differing clips prevent a controlled latency
 comparison. Full constructions and report hashes are published in
 `public/validation/verification-scale.json`, linked by hash to the retrieval summary.
+
+## Mixed edits and semantic-search inspection
+
+Six additional constructions place known source intervals between unmatched
+footage or black frames, concatenate two sources across an unmatched gap, and
+combine a repeated still with a moving source. The unchanged engine recovered
+the moving sections, including a two-second insert; it did not report the held
+still as a moving source, and returned no source for the unrelated/black-only
+clip. Supported sample intervals end half a second before the constructed cut;
+they are evidence sample bounds, not exact editorial cut detection. The lab
+interval in the two-source case retained its uncertain-speed flag. Every result
+and construction is in [mixed-edits.json](../public/validation/mixed-edits.json).
+These are six diagnostic cases, not an additional accuracy score.
+
+```bash
+.venv/bin/python scripts/mixed_edit_diagnostic.py --root . \
+  --out artifacts/submission-kit/my-mixed-edits
+python3 scripts/search_diagnostic.py \
+  --out artifacts/submission-kit/my-search-inspection
+```
+
+The search script requires the local application to be running. It inspects
+three scene descriptions in English, Spanish, and Chinese, plus three absent
+concepts. All candidate lists are retained in
+[search-diagnostic.json](../public/validation/search-diagnostic.json).
+
+![Top retrieved frames for all twelve descriptive queries](media/search-diagnostic.png)
+
+The lab descriptions retrieved a laboratory frame from the excerpt titled
+“The machines,” while the robot descriptions retrieved a robot frame from
+“The bridge.” Source titles are not frame-level labels and are not embedded.
+The Spanish canal query instead ranked an interior frame first; this is a
+visible relevance failure. The absent dolphin, pizza, and basketball concepts
+also returned nearest candidates. No multilingual accuracy or scene-presence
+claim is made from these qualitative observations. The interface explicitly
+asks the user to inspect relevance and explains that search does not abstain
+when a requested concept is absent.
