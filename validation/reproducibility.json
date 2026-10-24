@@ -1,0 +1,15 @@
+{
+  "sourceCommit": "a25583ea4dd2185b93480128fe62380d4651e7d4",
+  "environment": "Separate clone and new virtual environment, Node dependencies, and rebuilt source indexes. Existing Hugging Face model cache reused. HF_HUB_OFFLINE=1 during inference.",
+  "identicalFields": {
+    "engineFingerprint": true,
+    "query": true,
+    "retrieval": true,
+    "results": true,
+    "evidenceAssets": true
+  },
+  "reportSchema": "1.1",
+  "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614",
+  "scope": "One cropped/graded/speed-changed query. Full geometric/temporal results, retrieval values and image hashes were identical; runtime and recorded-mode metadata are expected to differ.",
+  "packetVerified": true
+}

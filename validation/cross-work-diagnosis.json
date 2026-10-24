@@ -1,0 +1,441 @@
+{
+  "case": "bbb-1-reencode",
+  "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614",
+  "scope": "Diagnostic of the unchanged engine. Ground truth was used only to inspect this failure, not to generate its decision. Qwen ranked the correct source first. The highest-support coarse hypothesis refined to a speed below the allowed range, so temporal fitting returned no result.",
+  "construction": {
+    "speed": 1,
+    "offset": 2.35
+  },
+  "fit": {
+    "returnLine": 75,
+    "selectedSpeed": 0.30796254922783234,
+    "selectedOffset": 2.8918036575312924,
+    "support": 16,
+    "topHypotheses": [
+      [
+        16753.373151748252,
+        16,
+        0.36363636363636365,
+        2.6363636363636362
+      ],
+      [
+        15734.704181118881,
+        15,
+        0.36363636363636365,
+        2.8181818181818183
+      ],
+      [
+        15726.866050769231,
+        15,
+        0.4,
+        2.6
+      ],
+      [
+        15726.866050769231,
+        15,
+        0.4,
+        2.6
+      ],
+      [
+        15726.866050769231,
+        15,
+        0.4,
+        2.5999999999999996
+      ]
+    ]
+  },
+  "candidates": [
+    {
+      "queryTime": 0.0,
+      "sourceTime": 2.0,
+      "inliers": 286,
+      "photometricCorrelation": 0.9872,
+      "mirrored": false
+    },
+    {
+      "queryTime": 0.0,
+      "sourceTime": 3.0,
+      "inliers": 292,
+      "photometricCorrelation": 0.9827,
+      "mirrored": false
+    },
+    {
+      "queryTime": 0.5,
+      "sourceTime": 3.0,
+      "inliers": 304,
+      "photometricCorrelation": 0.996,
+      "mirrored": false
+    },
+    {
+      "queryTime": 0.5,
+      "sourceTime": 2.0,
+      "inliers": 287,
+      "photometricCorrelation": 0.9746,
+      "mirrored": false
+    },
+    {
+      "queryTime": 1.0,
+      "sourceTime": 3.0,
+      "inliers": 296,
+      "photometricCorrelation": 0.9929,
+      "mirrored": false
+    },
+    {
+      "queryTime": 1.0,
+      "sourceTime": 2.0,
+      "inliers": 296,
+      "photometricCorrelation": 0.9722,
+      "mirrored": false
+    },
+    {
+      "queryTime": 1.5,
+      "sourceTime": 3.0,
+      "inliers": 297,
+      "photometricCorrelation": 0.9864,
+      "mirrored": false
+    },
+    {
+      "queryTime": 1.5,
+      "sourceTime": 2.0,
+      "inliers": 293,
+      "photometricCorrelation": 0.9751,
+      "mirrored": false
+    },
+    {
+      "queryTime": 2.0,
+      "sourceTime": 4.0,
+      "inliers": 113,
+      "photometricCorrelation": 0.7748,
+      "mirrored": false
+    },
+    {
+      "queryTime": 2.0,
+      "sourceTime": 12.0,
+      "inliers": 65,
+      "photometricCorrelation": 0.6522,
+      "mirrored": false
+    },
+    {
+      "queryTime": 2.0,
+      "sourceTime": 5.0,
+      "inliers": 49,
+      "photometricCorrelation": 0.6628,
+      "mirrored": false
+    },
+    {
+      "queryTime": 2.0,
+      "sourceTime": 7.0,
+      "inliers": 24,
+      "photometricCorrelation": 0.5906,
+      "mirrored": false
+    },
+    {
+      "queryTime": 2.5,
+      "sourceTime": 5.0,
+      "inliers": 96,
+      "photometricCorrelation": 0.8911,
+      "mirrored": false
+    },
+    {
+      "queryTime": 2.5,
+      "sourceTime": 4.0,
+      "inliers": 63,
+      "photometricCorrelation": 0.6897,
+      "mirrored": false
+    },
+    {
+      "queryTime": 2.5,
+      "sourceTime": 12.0,
+      "inliers": 65,
+      "photometricCorrelation": 0.6362,
+      "mirrored": false
+    },
+    {
+      "queryTime": 2.5,
+      "sourceTime": 7.0,
+      "inliers": 27,
+      "photometricCorrelation": 0.68,
+      "mirrored": false
+    },
+    {
+      "queryTime": 3.0,
+      "sourceTime": 12.0,
+      "inliers": 70,
+      "photometricCorrelation": 0.6966,
+      "mirrored": false
+    },
+    {
+      "queryTime": 3.0,
+      "sourceTime": 4.0,
+      "inliers": 57,
+      "photometricCorrelation": 0.6388,
+      "mirrored": false
+    },
+    {
+      "queryTime": 3.0,
+      "sourceTime": 5.0,
+      "inliers": 40,
+      "photometricCorrelation": 0.7475,
+      "mirrored": false
+    },
+    {
+      "queryTime": 3.0,
+      "sourceTime": 11.0,
+      "inliers": 21,
+      "photometricCorrelation": 0.7138,
+      "mirrored": false
+    },
+    {
+      "queryTime": 3.5,
+      "sourceTime": 6.0,
+      "inliers": 92,
+      "photometricCorrelation": 0.7894,
+      "mirrored": false
+    },
+    {
+      "queryTime": 3.5,
+      "sourceTime": 12.0,
+      "inliers": 38,
+      "photometricCorrelation": 0.6973,
+      "mirrored": false
+    },
+    {
+      "queryTime": 3.5,
+      "sourceTime": 5.0,
+      "inliers": 29,
+      "photometricCorrelation": 0.7526,
+      "mirrored": false
+    },
+    {
+      "queryTime": 3.5,
+      "sourceTime": 4.0,
+      "inliers": 32,
+      "photometricCorrelation": 0.6231,
+      "mirrored": false
+    },
+    {
+      "queryTime": 4.0,
+      "sourceTime": 12.0,
+      "inliers": 62,
+      "photometricCorrelation": 0.7176,
+      "mirrored": false
+    },
+    {
+      "queryTime": 4.0,
+      "sourceTime": 5.0,
+      "inliers": 46,
+      "photometricCorrelation": 0.6889,
+      "mirrored": false
+    },
+    {
+      "queryTime": 4.0,
+      "sourceTime": 4.0,
+      "inliers": 52,
+      "photometricCorrelation": 0.6064,
+      "mirrored": false
+    },
+    {
+      "queryTime": 4.0,
+      "sourceTime": 8.0,
+      "inliers": 36,
+      "photometricCorrelation": 0.7394,
+      "mirrored": false
+    },
+    {
+      "queryTime": 4.5,
+      "sourceTime": 12.0,
+      "inliers": 82,
+      "photometricCorrelation": 0.7184,
+      "mirrored": false
+    },
+    {
+      "queryTime": 4.5,
+      "sourceTime": 7.0,
+      "inliers": 64,
+      "photometricCorrelation": 0.8056,
+      "mirrored": false
+    },
+    {
+      "queryTime": 4.5,
+      "sourceTime": 4.0,
+      "inliers": 77,
+      "photometricCorrelation": 0.6107,
+      "mirrored": false
+    },
+    {
+      "queryTime": 4.5,
+      "sourceTime": 5.0,
+      "inliers": 52,
+      "photometricCorrelation": 0.7029,
+      "mirrored": false
+    },
+    {
+      "queryTime": 5.0,
+      "sourceTime": 7.0,
+      "inliers": 57,
+      "photometricCorrelation": 0.9039,
+      "mirrored": false
+    },
+    {
+      "queryTime": 5.0,
+      "sourceTime": 12.0,
+      "inliers": 44,
+      "photometricCorrelation": 0.7324,
+      "mirrored": false
+    },
+    {
+      "queryTime": 5.0,
+      "sourceTime": 5.0,
+      "inliers": 47,
+      "photometricCorrelation": 0.6801,
+      "mirrored": false
+    },
+    {
+      "queryTime": 5.0,
+      "sourceTime": 8.0,
+      "inliers": 38,
+      "photometricCorrelation": 0.8192,
+      "mirrored": false
+    },
+    {
+      "queryTime": 5.5,
+      "sourceTime": 8.0,
+      "inliers": 108,
+      "photometricCorrelation": 0.9401,
+      "mirrored": false
+    },
+    {
+      "queryTime": 5.5,
+      "sourceTime": 12.0,
+      "inliers": 51,
+      "photometricCorrelation": 0.6678,
+      "mirrored": false
+    },
+    {
+      "queryTime": 5.5,
+      "sourceTime": 7.0,
+      "inliers": 37,
+      "photometricCorrelation": 0.7368,
+      "mirrored": false
+    },
+    {
+      "queryTime": 5.5,
+      "sourceTime": 4.0,
+      "inliers": 53,
+      "photometricCorrelation": 0.514,
+      "mirrored": false
+    },
+    {
+      "queryTime": 6.0,
+      "sourceTime": 8.0,
+      "inliers": 88,
+      "photometricCorrelation": 0.8288,
+      "mirrored": false
+    },
+    {
+      "queryTime": 6.0,
+      "sourceTime": 12.0,
+      "inliers": 52,
+      "photometricCorrelation": 0.6624,
+      "mirrored": false
+    },
+    {
+      "queryTime": 6.0,
+      "sourceTime": 7.0,
+      "inliers": 41,
+      "photometricCorrelation": 0.7829,
+      "mirrored": false
+    },
+    {
+      "queryTime": 6.0,
+      "sourceTime": 5.0,
+      "inliers": 48,
+      "photometricCorrelation": 0.6106,
+      "mirrored": false
+    },
+    {
+      "queryTime": 6.5,
+      "sourceTime": 9.0,
+      "inliers": 171,
+      "photometricCorrelation": 0.9223,
+      "mirrored": false
+    },
+    {
+      "queryTime": 6.5,
+      "sourceTime": 5.0,
+      "inliers": 40,
+      "photometricCorrelation": 0.6984,
+      "mirrored": false
+    },
+    {
+      "queryTime": 6.5,
+      "sourceTime": 12.0,
+      "inliers": 41,
+      "photometricCorrelation": 0.6697,
+      "mirrored": false
+    },
+    {
+      "queryTime": 6.5,
+      "sourceTime": 4.0,
+      "inliers": 38,
+      "photometricCorrelation": 0.5778,
+      "mirrored": false
+    },
+    {
+      "queryTime": 7.0,
+      "sourceTime": 9.0,
+      "inliers": 131,
+      "photometricCorrelation": 0.8923,
+      "mirrored": false
+    },
+    {
+      "queryTime": 7.0,
+      "sourceTime": 10.0,
+      "inliers": 80,
+      "photometricCorrelation": 0.6918,
+      "mirrored": false
+    },
+    {
+      "queryTime": 7.0,
+      "sourceTime": 12.0,
+      "inliers": 39,
+      "photometricCorrelation": 0.6035,
+      "mirrored": false
+    },
+    {
+      "queryTime": 7.0,
+      "sourceTime": 5.0,
+      "inliers": 36,
+      "photometricCorrelation": 0.6403,
+      "mirrored": false
+    },
+    {
+      "queryTime": 7.5,
+      "sourceTime": 12.0,
+      "inliers": 63,
+      "photometricCorrelation": 0.7244,
+      "mirrored": false
+    },
+    {
+      "queryTime": 7.5,
+      "sourceTime": 4.0,
+      "inliers": 53,
+      "photometricCorrelation": 0.5964,
+      "mirrored": false
+    },
+    {
+      "queryTime": 7.5,
+      "sourceTime": 5.0,
+      "inliers": 44,
+      "photometricCorrelation": 0.7072,
+      "mirrored": false
+    },
+    {
+      "queryTime": 7.5,
+      "sourceTime": 7.0,
+      "inliers": 32,
+      "photometricCorrelation": 0.8355,
+      "mirrored": false
+    }
+  ]
+}
