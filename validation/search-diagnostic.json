@@ -1,0 +1,644 @@
+{
+  "scope": "Qualitative free-text search inspection. Three scene descriptions in three languages, plus three absent-concept queries. No labeled relevance score or multilingual generalization claim. Search always returns nearest candidates; a similarity score is not proof that the requested concept is present.",
+  "queries": [
+    {
+      "language": "en",
+      "query": "A man and a woman talking on a bridge over a canal"
+    },
+    {
+      "language": "es",
+      "query": "Un hombre y una mujer hablan en un puente sobre un canal"
+    },
+    {
+      "language": "zh",
+      "query": "一名男子和一名女子在运河上的桥上交谈"
+    },
+    {
+      "language": "en",
+      "query": "Scientists surrounded by laboratory equipment"
+    },
+    {
+      "language": "es",
+      "query": "Científicos rodeados de equipos de laboratorio"
+    },
+    {
+      "language": "zh",
+      "query": "科学家被实验室设备包围"
+    },
+    {
+      "language": "en",
+      "query": "Giant robots walking through a city"
+    },
+    {
+      "language": "es",
+      "query": "Robots gigantes caminando por una ciudad"
+    },
+    {
+      "language": "zh",
+      "query": "巨型机器人走过城市"
+    },
+    {
+      "language": "en",
+      "query": "Dolphins swimming in the ocean"
+    },
+    {
+      "language": "en",
+      "query": "A chef baking a pizza in a restaurant"
+    },
+    {
+      "language": "en",
+      "query": "A basketball game in a stadium"
+    }
+  ],
+  "complete": true,
+  "observations": [
+    {
+      "language": "en",
+      "query": "A man and a woman talking on a bridge over a canal",
+      "engine": "Qwen/Qwen3-VL-Embedding-2B",
+      "results": [
+        {
+          "sourceId": "bridge",
+          "time": 36.0,
+          "similarity": 0.3647
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 16.0,
+          "similarity": 0.3333
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 12.0,
+          "similarity": 0.3261
+        },
+        {
+          "sourceId": "bridge",
+          "time": 12.0,
+          "similarity": 0.3149
+        },
+        {
+          "sourceId": "bridge",
+          "time": 0.0,
+          "similarity": 0.2977
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 20.0,
+          "similarity": 0.2854
+        },
+        {
+          "sourceId": "observatory",
+          "time": 0.0,
+          "similarity": 0.2778
+        },
+        {
+          "sourceId": "observatory",
+          "time": 24.0,
+          "similarity": 0.2711
+        }
+      ],
+      "topFrame": "00-en.jpg",
+      "topFrameSha256": "50c12be44764a5d646b59d279082f5509b94b2e55c6dbc7f1a24ec36e6518f52"
+    },
+    {
+      "language": "es",
+      "query": "Un hombre y una mujer hablan en un puente sobre un canal",
+      "engine": "Qwen/Qwen3-VL-Embedding-2B",
+      "results": [
+        {
+          "sourceId": "laboratory",
+          "time": 16.0,
+          "similarity": 0.3368
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 12.0,
+          "similarity": 0.3291
+        },
+        {
+          "sourceId": "bridge",
+          "time": 36.0,
+          "similarity": 0.3151
+        },
+        {
+          "sourceId": "observatory",
+          "time": 4.0,
+          "similarity": 0.307
+        },
+        {
+          "sourceId": "bridge",
+          "time": 12.0,
+          "similarity": 0.2924
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 28.0,
+          "similarity": 0.2823
+        },
+        {
+          "sourceId": "observatory",
+          "time": 0.0,
+          "similarity": 0.2823
+        },
+        {
+          "sourceId": "observatory",
+          "time": 12.0,
+          "similarity": 0.2792
+        }
+      ],
+      "topFrame": "01-es.jpg",
+      "topFrameSha256": "65ad3edde108f4e45657799af24a99a9b69340ce10cd9ef3f4263955343e63ec"
+    },
+    {
+      "language": "zh",
+      "query": "一名男子和一名女子在运河上的桥上交谈",
+      "engine": "Qwen/Qwen3-VL-Embedding-2B",
+      "results": [
+        {
+          "sourceId": "bridge",
+          "time": 36.0,
+          "similarity": 0.3531
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 16.0,
+          "similarity": 0.3469
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 12.0,
+          "similarity": 0.3385
+        },
+        {
+          "sourceId": "observatory",
+          "time": 4.0,
+          "similarity": 0.3187
+        },
+        {
+          "sourceId": "observatory",
+          "time": 24.0,
+          "similarity": 0.3179
+        },
+        {
+          "sourceId": "bridge",
+          "time": 12.0,
+          "similarity": 0.316
+        },
+        {
+          "sourceId": "observatory",
+          "time": 0.0,
+          "similarity": 0.3072
+        },
+        {
+          "sourceId": "bridge",
+          "time": 0.0,
+          "similarity": 0.3016
+        }
+      ],
+      "topFrame": "02-zh.jpg",
+      "topFrameSha256": "50c12be44764a5d646b59d279082f5509b94b2e55c6dbc7f1a24ec36e6518f52"
+    },
+    {
+      "language": "en",
+      "query": "Scientists surrounded by laboratory equipment",
+      "engine": "Qwen/Qwen3-VL-Embedding-2B",
+      "results": [
+        {
+          "sourceId": "machines",
+          "time": 12.0,
+          "similarity": 0.4813
+        },
+        {
+          "sourceId": "machines",
+          "time": 24.0,
+          "similarity": 0.4539
+        },
+        {
+          "sourceId": "machines",
+          "time": 28.0,
+          "similarity": 0.4424
+        },
+        {
+          "sourceId": "observatory",
+          "time": 12.0,
+          "similarity": 0.4347
+        },
+        {
+          "sourceId": "observatory",
+          "time": 4.0,
+          "similarity": 0.4091
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 32.0,
+          "similarity": 0.3707
+        },
+        {
+          "sourceId": "bridge",
+          "time": 12.0,
+          "similarity": 0.3627
+        },
+        {
+          "sourceId": "bridge",
+          "time": 8.0,
+          "similarity": 0.351
+        }
+      ],
+      "topFrame": "03-en.jpg",
+      "topFrameSha256": "895360cd4c28dbaedeb64b268c407a3b08b5b6ad9347d1a2ddd51343d095e5b6"
+    },
+    {
+      "language": "es",
+      "query": "Científicos rodeados de equipos de laboratorio",
+      "engine": "Qwen/Qwen3-VL-Embedding-2B",
+      "results": [
+        {
+          "sourceId": "machines",
+          "time": 12.0,
+          "similarity": 0.4682
+        },
+        {
+          "sourceId": "machines",
+          "time": 24.0,
+          "similarity": 0.4379
+        },
+        {
+          "sourceId": "observatory",
+          "time": 12.0,
+          "similarity": 0.4365
+        },
+        {
+          "sourceId": "machines",
+          "time": 28.0,
+          "similarity": 0.4286
+        },
+        {
+          "sourceId": "observatory",
+          "time": 4.0,
+          "similarity": 0.4189
+        },
+        {
+          "sourceId": "bridge",
+          "time": 12.0,
+          "similarity": 0.3558
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 32.0,
+          "similarity": 0.3539
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 28.0,
+          "similarity": 0.35
+        }
+      ],
+      "topFrame": "04-es.jpg",
+      "topFrameSha256": "895360cd4c28dbaedeb64b268c407a3b08b5b6ad9347d1a2ddd51343d095e5b6"
+    },
+    {
+      "language": "zh",
+      "query": "科学家被实验室设备包围",
+      "engine": "Qwen/Qwen3-VL-Embedding-2B",
+      "results": [
+        {
+          "sourceId": "machines",
+          "time": 12.0,
+          "similarity": 0.4755
+        },
+        {
+          "sourceId": "observatory",
+          "time": 12.0,
+          "similarity": 0.4593
+        },
+        {
+          "sourceId": "machines",
+          "time": 24.0,
+          "similarity": 0.4535
+        },
+        {
+          "sourceId": "machines",
+          "time": 28.0,
+          "similarity": 0.4392
+        },
+        {
+          "sourceId": "observatory",
+          "time": 4.0,
+          "similarity": 0.4311
+        },
+        {
+          "sourceId": "observatory",
+          "time": 36.0,
+          "similarity": 0.3848
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 0.0,
+          "similarity": 0.3809
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 32.0,
+          "similarity": 0.3716
+        }
+      ],
+      "topFrame": "05-zh.jpg",
+      "topFrameSha256": "895360cd4c28dbaedeb64b268c407a3b08b5b6ad9347d1a2ddd51343d095e5b6"
+    },
+    {
+      "language": "en",
+      "query": "Giant robots walking through a city",
+      "engine": "Qwen/Qwen3-VL-Embedding-2B",
+      "results": [
+        {
+          "sourceId": "bridge",
+          "time": 0.0,
+          "similarity": 0.6068
+        },
+        {
+          "sourceId": "machines",
+          "time": 20.0,
+          "similarity": 0.5701
+        },
+        {
+          "sourceId": "machines",
+          "time": 16.0,
+          "similarity": 0.5482
+        },
+        {
+          "sourceId": "machines",
+          "time": 28.0,
+          "similarity": 0.5049
+        },
+        {
+          "sourceId": "observatory",
+          "time": 16.0,
+          "similarity": 0.4834
+        },
+        {
+          "sourceId": "observatory",
+          "time": 32.0,
+          "similarity": 0.4673
+        },
+        {
+          "sourceId": "observatory",
+          "time": 28.0,
+          "similarity": 0.4643
+        },
+        {
+          "sourceId": "bridge",
+          "time": 32.0,
+          "similarity": 0.4576
+        }
+      ],
+      "topFrame": "06-en.jpg",
+      "topFrameSha256": "83e924e171662822d548c31791e52f247265e4a00ce2c4f364b3077528f67fca"
+    },
+    {
+      "language": "es",
+      "query": "Robots gigantes caminando por una ciudad",
+      "engine": "Qwen/Qwen3-VL-Embedding-2B",
+      "results": [
+        {
+          "sourceId": "bridge",
+          "time": 0.0,
+          "similarity": 0.551
+        },
+        {
+          "sourceId": "machines",
+          "time": 16.0,
+          "similarity": 0.5195
+        },
+        {
+          "sourceId": "machines",
+          "time": 20.0,
+          "similarity": 0.4999
+        },
+        {
+          "sourceId": "machines",
+          "time": 28.0,
+          "similarity": 0.4918
+        },
+        {
+          "sourceId": "bridge",
+          "time": 32.0,
+          "similarity": 0.4613
+        },
+        {
+          "sourceId": "observatory",
+          "time": 16.0,
+          "similarity": 0.4526
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 28.0,
+          "similarity": 0.4439
+        },
+        {
+          "sourceId": "observatory",
+          "time": 32.0,
+          "similarity": 0.4408
+        }
+      ],
+      "topFrame": "07-es.jpg",
+      "topFrameSha256": "83e924e171662822d548c31791e52f247265e4a00ce2c4f364b3077528f67fca"
+    },
+    {
+      "language": "zh",
+      "query": "巨型机器人走过城市",
+      "engine": "Qwen/Qwen3-VL-Embedding-2B",
+      "results": [
+        {
+          "sourceId": "bridge",
+          "time": 0.0,
+          "similarity": 0.6167
+        },
+        {
+          "sourceId": "machines",
+          "time": 20.0,
+          "similarity": 0.5063
+        },
+        {
+          "sourceId": "machines",
+          "time": 16.0,
+          "similarity": 0.5037
+        },
+        {
+          "sourceId": "machines",
+          "time": 28.0,
+          "similarity": 0.4889
+        },
+        {
+          "sourceId": "bridge",
+          "time": 32.0,
+          "similarity": 0.4841
+        },
+        {
+          "sourceId": "observatory",
+          "time": 16.0,
+          "similarity": 0.4831
+        },
+        {
+          "sourceId": "observatory",
+          "time": 32.0,
+          "similarity": 0.4732
+        },
+        {
+          "sourceId": "observatory",
+          "time": 28.0,
+          "similarity": 0.4721
+        }
+      ],
+      "topFrame": "08-zh.jpg",
+      "topFrameSha256": "83e924e171662822d548c31791e52f247265e4a00ce2c4f364b3077528f67fca"
+    },
+    {
+      "language": "en",
+      "query": "Dolphins swimming in the ocean",
+      "engine": "Qwen/Qwen3-VL-Embedding-2B",
+      "results": [
+        {
+          "sourceId": "observatory",
+          "time": 0.0,
+          "similarity": 0.2751
+        },
+        {
+          "sourceId": "observatory",
+          "time": 36.0,
+          "similarity": 0.2747
+        },
+        {
+          "sourceId": "observatory",
+          "time": 4.0,
+          "similarity": 0.2556
+        },
+        {
+          "sourceId": "machines",
+          "time": 28.0,
+          "similarity": 0.2303
+        },
+        {
+          "sourceId": "machines",
+          "time": 24.0,
+          "similarity": 0.2251
+        },
+        {
+          "sourceId": "machines",
+          "time": 16.0,
+          "similarity": 0.2245
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 28.0,
+          "similarity": 0.2079
+        },
+        {
+          "sourceId": "bridge",
+          "time": 0.0,
+          "similarity": 0.1663
+        }
+      ],
+      "topFrame": "09-en.jpg",
+      "topFrameSha256": "715a95cf20a292edf240bfe5da44dcfb6775f4602eff3255c80fd6591e26b497"
+    },
+    {
+      "language": "en",
+      "query": "A chef baking a pizza in a restaurant",
+      "engine": "Qwen/Qwen3-VL-Embedding-2B",
+      "results": [
+        {
+          "sourceId": "laboratory",
+          "time": 20.0,
+          "similarity": 0.2551
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 0.0,
+          "similarity": 0.2512
+        },
+        {
+          "sourceId": "machines",
+          "time": 36.0,
+          "similarity": 0.2471
+        },
+        {
+          "sourceId": "machines",
+          "time": 12.0,
+          "similarity": 0.2307
+        },
+        {
+          "sourceId": "observatory",
+          "time": 4.0,
+          "similarity": 0.2294
+        },
+        {
+          "sourceId": "observatory",
+          "time": 12.0,
+          "similarity": 0.2266
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 4.0,
+          "similarity": 0.2214
+        },
+        {
+          "sourceId": "observatory",
+          "time": 32.0,
+          "similarity": 0.2176
+        }
+      ],
+      "topFrame": "10-en.jpg",
+      "topFrameSha256": "dbe9ca686839a902a5427bc0911f02fdabe0fd77337fdbaf039404e2938ed4db"
+    },
+    {
+      "language": "en",
+      "query": "A basketball game in a stadium",
+      "engine": "Qwen/Qwen3-VL-Embedding-2B",
+      "results": [
+        {
+          "sourceId": "machines",
+          "time": 12.0,
+          "similarity": 0.3075
+        },
+        {
+          "sourceId": "machines",
+          "time": 24.0,
+          "similarity": 0.2952
+        },
+        {
+          "sourceId": "observatory",
+          "time": 12.0,
+          "similarity": 0.2829
+        },
+        {
+          "sourceId": "machines",
+          "time": 36.0,
+          "similarity": 0.2809
+        },
+        {
+          "sourceId": "observatory",
+          "time": 4.0,
+          "similarity": 0.2755
+        },
+        {
+          "sourceId": "observatory",
+          "time": 0.0,
+          "similarity": 0.2677
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 0.0,
+          "similarity": 0.2417
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 28.0,
+          "similarity": 0.2272
+        }
+      ],
+      "topFrame": "11-en.jpg",
+      "topFrameSha256": "895360cd4c28dbaedeb64b268c407a3b08b5b6ad9347d1a2ddd51343d095e5b6"
+    }
+  ]
+}

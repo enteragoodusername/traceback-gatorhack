@@ -1,0 +1,844 @@
+{
+  "scope": "Six predefined mixed edits from bundled material. Diagnostic observations only, no accuracy score. Known sources describe construction, not guaranteed recoverability. Unchanged production engine and four-source library.",
+  "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614",
+  "model": "Qwen/Qwen3-VL-Embedding-2B",
+  "modelRevision": "9f2f7e710d6d81056aa5c0a4f04764fec6bb7bda",
+  "sourceCommit": "c1f2fbbf7041aad079c1e90ea421d605f816c0cd",
+  "inputHashes": {
+    "bridge": "5604595ebc020df75e5b800731598dc3f551d80a3fa83c01e0ea301e2156323f",
+    "laboratory": "84b26d384af6e8ef6947edc4dce624c6d84a5141f5db79125733a8b73a5090f5",
+    "observatory": "8a2d6e09c1b0596a28c9ba50fc212a2ed7935ac9c6480139bd2e075e44800a09",
+    "machines": "77c2c3406417db1482e812fc78742ea810fab6ae43d153b508802da42e32b6ec",
+    "query-unrelated": "3cfb1ca267a874c4fc5b681a2c528fb9d61e9db9070d498ea88537a55c58e99d"
+  },
+  "cases": [
+    {
+      "id": "unmatched-bookends",
+      "segments": [
+        {
+          "file": "query-unrelated",
+          "start": 0,
+          "duration": 3,
+          "queryStart": 0,
+          "queryEnd": 3
+        },
+        {
+          "file": "bridge",
+          "start": 8,
+          "duration": 4,
+          "queryStart": 3,
+          "queryEnd": 7
+        },
+        {
+          "file": "query-unrelated",
+          "start": 3,
+          "duration": 3,
+          "queryStart": 7,
+          "queryEnd": 10
+        }
+      ],
+      "knownSources": [
+        "bridge"
+      ],
+      "querySha256": "7c9f1d0b1ab73ec8647643b916dde0a84c1d68d3578d92bcfbd0d5eb10a1c404"
+    },
+    {
+      "id": "unmatched-middle",
+      "segments": [
+        {
+          "file": "bridge",
+          "start": 8,
+          "duration": 4,
+          "queryStart": 0,
+          "queryEnd": 4
+        },
+        {
+          "file": "query-unrelated",
+          "start": 0,
+          "duration": 4,
+          "queryStart": 4,
+          "queryEnd": 8
+        },
+        {
+          "file": "laboratory",
+          "start": 9,
+          "duration": 4,
+          "queryStart": 8,
+          "queryEnd": 12
+        }
+      ],
+      "knownSources": [
+        "bridge",
+        "laboratory"
+      ],
+      "querySha256": "c336db78c05f4d9cf9325fca1ee3fa83b73611c663c508c0b262f69107ceb7f3"
+    },
+    {
+      "id": "still-then-motion",
+      "segments": [
+        {
+          "file": "bridge",
+          "start": 12,
+          "duration": 4,
+          "freeze": true,
+          "queryStart": 0,
+          "queryEnd": 4
+        },
+        {
+          "file": "laboratory",
+          "start": 9,
+          "duration": 6,
+          "queryStart": 4,
+          "queryEnd": 10
+        }
+      ],
+      "knownSources": [
+        "bridge",
+        "laboratory"
+      ],
+      "note": "Bridge appears as a still; its playback speed is not identifiable. A lab match does not validate the still.",
+      "querySha256": "2eb862f0e5dd7657f92588c8f5b0829e422816c7e97e4bee0502286362580554"
+    },
+    {
+      "id": "black-bookends",
+      "segments": [
+        {
+          "color": "black",
+          "duration": 3,
+          "queryStart": 0,
+          "queryEnd": 3
+        },
+        {
+          "file": "machines",
+          "start": 7,
+          "duration": 4,
+          "queryStart": 3,
+          "queryEnd": 7
+        },
+        {
+          "color": "black",
+          "duration": 3,
+          "queryStart": 7,
+          "queryEnd": 10
+        }
+      ],
+      "knownSources": [
+        "machines"
+      ],
+      "querySha256": "7c25bd678ff96de4139b8c9c09858c61b28aafb80cd32ffbfccdc3eb56805858"
+    },
+    {
+      "id": "two-second-insert",
+      "segments": [
+        {
+          "file": "query-unrelated",
+          "start": 0,
+          "duration": 4,
+          "queryStart": 0,
+          "queryEnd": 4
+        },
+        {
+          "file": "observatory",
+          "start": 5,
+          "duration": 2,
+          "queryStart": 4,
+          "queryEnd": 6
+        },
+        {
+          "file": "query-unrelated",
+          "start": 4,
+          "duration": 4,
+          "queryStart": 6,
+          "queryEnd": 10
+        }
+      ],
+      "knownSources": [
+        "observatory"
+      ],
+      "note": "Very short source interval; abstention is an acceptable diagnostic outcome.",
+      "querySha256": "a04a41c4077e502402880bee327175d07d27b591efb62e80b05212b0431c48ab"
+    },
+    {
+      "id": "unrelated-and-black",
+      "segments": [
+        {
+          "file": "query-unrelated",
+          "start": 0,
+          "duration": 5,
+          "queryStart": 0,
+          "queryEnd": 5
+        },
+        {
+          "color": "black",
+          "duration": 5,
+          "queryStart": 5,
+          "queryEnd": 10
+        }
+      ],
+      "knownSources": [],
+      "querySha256": "9240bd1d3811b1b4c6a4e2ec429810933cc96e5bd539c4bc6abf5a450d1967bf"
+    }
+  ],
+  "complete": true,
+  "observations": [
+    {
+      "id": "unmatched-bookends",
+      "elapsedSeconds": 83.82,
+      "reportSha256": "09b337217c07a58693c69c408bfb45a9357fa7f1f767e75faeb8a292a1d4f99e",
+      "results": [
+        {
+          "sourceId": "bridge",
+          "coverage": 0.4,
+          "alignment": {
+            "speed": 1.0,
+            "speedRange": [
+              0.8857,
+              1.1143
+            ],
+            "speedReliable": true,
+            "timingAmbiguous": false,
+            "toleranceSeconds": 0.2,
+            "offset": 5.0,
+            "queryStart": 3.0,
+            "queryEnd": 6.5,
+            "sourceStart": 8.0,
+            "sourceEnd": 11.5,
+            "support": 8,
+            "residual": 0.0,
+            "matches": [
+              {
+                "queryTime": 3.0,
+                "sourceTime": 8.0,
+                "inliers": 628,
+                "tentative": 633,
+                "inlierRatio": 0.9921,
+                "coverage": 0.4169,
+                "photometricCorrelation": 0.9994,
+                "mirrored": false
+              },
+              {
+                "queryTime": 3.5,
+                "sourceTime": 8.5,
+                "inliers": 613,
+                "tentative": 616,
+                "inlierRatio": 0.9951,
+                "coverage": 0.4247,
+                "photometricCorrelation": 0.998,
+                "mirrored": false
+              },
+              {
+                "queryTime": 4.0,
+                "sourceTime": 9.0,
+                "inliers": 633,
+                "tentative": 637,
+                "inlierRatio": 0.9937,
+                "coverage": 0.4267,
+                "photometricCorrelation": 0.9991,
+                "mirrored": false
+              },
+              {
+                "queryTime": 4.5,
+                "sourceTime": 9.5,
+                "inliers": 634,
+                "tentative": 636,
+                "inlierRatio": 0.9969,
+                "coverage": 0.423,
+                "photometricCorrelation": 0.9974,
+                "mirrored": false
+              },
+              {
+                "queryTime": 5.0,
+                "sourceTime": 10.0,
+                "inliers": 589,
+                "tentative": 594,
+                "inlierRatio": 0.9916,
+                "coverage": 0.3554,
+                "photometricCorrelation": 0.9993,
+                "mirrored": false
+              },
+              {
+                "queryTime": 5.5,
+                "sourceTime": 10.5,
+                "inliers": 574,
+                "tentative": 577,
+                "inlierRatio": 0.9948,
+                "coverage": 0.3775,
+                "photometricCorrelation": 0.9993,
+                "mirrored": false
+              },
+              {
+                "queryTime": 6.0,
+                "sourceTime": 11.0,
+                "inliers": 609,
+                "tentative": 611,
+                "inlierRatio": 0.9967,
+                "coverage": 0.378,
+                "photometricCorrelation": 0.9988,
+                "mirrored": false
+              },
+              {
+                "queryTime": 6.5,
+                "sourceTime": 11.5,
+                "inliers": 546,
+                "tentative": 547,
+                "inlierRatio": 0.9982,
+                "coverage": 0.4372,
+                "photometricCorrelation": 0.999,
+                "mirrored": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "unmatched-middle",
+      "elapsedSeconds": 120.05,
+      "reportSha256": "ecf9c7d605f81364e45b2930394298b348d1da4ed89c2fe3c8f0509736835771",
+      "results": [
+        {
+          "sourceId": "laboratory",
+          "coverage": 0.3333,
+          "alignment": {
+            "speed": 1.0,
+            "speedRange": [
+              0.8857,
+              1.1143
+            ],
+            "speedReliable": false,
+            "timingAmbiguous": true,
+            "toleranceSeconds": 0.2,
+            "offset": 1.0,
+            "queryStart": 8.0,
+            "queryEnd": 11.5,
+            "sourceStart": 9.0,
+            "sourceEnd": 12.5,
+            "support": 8,
+            "residual": 0.0,
+            "matches": [
+              {
+                "queryTime": 8.0,
+                "sourceTime": 9.0,
+                "inliers": 568,
+                "tentative": 570,
+                "inlierRatio": 0.9965,
+                "coverage": 0.3059,
+                "photometricCorrelation": 0.9997,
+                "mirrored": false
+              },
+              {
+                "queryTime": 8.5,
+                "sourceTime": 9.5,
+                "inliers": 564,
+                "tentative": 567,
+                "inlierRatio": 0.9947,
+                "coverage": 0.3309,
+                "photometricCorrelation": 0.9973,
+                "mirrored": false
+              },
+              {
+                "queryTime": 9.0,
+                "sourceTime": 10.0,
+                "inliers": 626,
+                "tentative": 631,
+                "inlierRatio": 0.9921,
+                "coverage": 0.2742,
+                "photometricCorrelation": 0.9995,
+                "mirrored": false
+              },
+              {
+                "queryTime": 9.5,
+                "sourceTime": 10.5,
+                "inliers": 625,
+                "tentative": 632,
+                "inlierRatio": 0.9889,
+                "coverage": 0.2822,
+                "photometricCorrelation": 0.9996,
+                "mirrored": false
+              },
+              {
+                "queryTime": 10.0,
+                "sourceTime": 11.0,
+                "inliers": 637,
+                "tentative": 639,
+                "inlierRatio": 0.9969,
+                "coverage": 0.347,
+                "photometricCorrelation": 0.9995,
+                "mirrored": false
+              },
+              {
+                "queryTime": 10.5,
+                "sourceTime": 11.5,
+                "inliers": 645,
+                "tentative": 647,
+                "inlierRatio": 0.9969,
+                "coverage": 0.394,
+                "photometricCorrelation": 0.9993,
+                "mirrored": false
+              },
+              {
+                "queryTime": 11.0,
+                "sourceTime": 12.0,
+                "inliers": 646,
+                "tentative": 649,
+                "inlierRatio": 0.9954,
+                "coverage": 0.433,
+                "photometricCorrelation": 0.9994,
+                "mirrored": false
+              },
+              {
+                "queryTime": 11.5,
+                "sourceTime": 12.5,
+                "inliers": 618,
+                "tentative": 621,
+                "inlierRatio": 0.9952,
+                "coverage": 0.4479,
+                "photometricCorrelation": 0.9987,
+                "mirrored": false
+              }
+            ]
+          }
+        },
+        {
+          "sourceId": "bridge",
+          "coverage": 0.3333,
+          "alignment": {
+            "speed": 1.0,
+            "speedRange": [
+              0.8857,
+              1.1143
+            ],
+            "speedReliable": true,
+            "timingAmbiguous": false,
+            "toleranceSeconds": 0.2,
+            "offset": 8.0,
+            "queryStart": 0.0,
+            "queryEnd": 3.5,
+            "sourceStart": 8.0,
+            "sourceEnd": 11.5,
+            "support": 8,
+            "residual": 0.0,
+            "matches": [
+              {
+                "queryTime": 0.0,
+                "sourceTime": 8.0,
+                "inliers": 628,
+                "tentative": 633,
+                "inlierRatio": 0.9921,
+                "coverage": 0.4169,
+                "photometricCorrelation": 0.9994,
+                "mirrored": false
+              },
+              {
+                "queryTime": 0.5,
+                "sourceTime": 8.5,
+                "inliers": 613,
+                "tentative": 616,
+                "inlierRatio": 0.9951,
+                "coverage": 0.4247,
+                "photometricCorrelation": 0.998,
+                "mirrored": false
+              },
+              {
+                "queryTime": 1.0,
+                "sourceTime": 9.0,
+                "inliers": 633,
+                "tentative": 637,
+                "inlierRatio": 0.9937,
+                "coverage": 0.4267,
+                "photometricCorrelation": 0.9991,
+                "mirrored": false
+              },
+              {
+                "queryTime": 1.5,
+                "sourceTime": 9.5,
+                "inliers": 634,
+                "tentative": 636,
+                "inlierRatio": 0.9969,
+                "coverage": 0.423,
+                "photometricCorrelation": 0.9974,
+                "mirrored": false
+              },
+              {
+                "queryTime": 2.0,
+                "sourceTime": 10.0,
+                "inliers": 589,
+                "tentative": 594,
+                "inlierRatio": 0.9916,
+                "coverage": 0.3554,
+                "photometricCorrelation": 0.9993,
+                "mirrored": false
+              },
+              {
+                "queryTime": 2.5,
+                "sourceTime": 10.5,
+                "inliers": 574,
+                "tentative": 577,
+                "inlierRatio": 0.9948,
+                "coverage": 0.3775,
+                "photometricCorrelation": 0.9993,
+                "mirrored": false
+              },
+              {
+                "queryTime": 3.0,
+                "sourceTime": 11.0,
+                "inliers": 609,
+                "tentative": 611,
+                "inlierRatio": 0.9967,
+                "coverage": 0.378,
+                "photometricCorrelation": 0.9988,
+                "mirrored": false
+              },
+              {
+                "queryTime": 3.5,
+                "sourceTime": 11.5,
+                "inliers": 546,
+                "tentative": 547,
+                "inlierRatio": 0.9982,
+                "coverage": 0.4372,
+                "photometricCorrelation": 0.999,
+                "mirrored": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "still-then-motion",
+      "elapsedSeconds": 76.42,
+      "reportSha256": "26ebaa8d43392596dd8efea32ee142f21088719bb2194c0c05e44ad16e0085d3",
+      "results": [
+        {
+          "sourceId": "laboratory",
+          "coverage": 0.6,
+          "alignment": {
+            "speed": 1.0,
+            "speedRange": [
+              0.9273,
+              1.0727
+            ],
+            "speedReliable": true,
+            "timingAmbiguous": false,
+            "toleranceSeconds": 0.2,
+            "offset": 5.0,
+            "queryStart": 4.0,
+            "queryEnd": 9.5,
+            "sourceStart": 9.0,
+            "sourceEnd": 14.5,
+            "support": 12,
+            "residual": 0.0,
+            "matches": [
+              {
+                "queryTime": 4.0,
+                "sourceTime": 9.0,
+                "inliers": 572,
+                "tentative": 574,
+                "inlierRatio": 0.9965,
+                "coverage": 0.3454,
+                "photometricCorrelation": 0.9969,
+                "mirrored": false
+              },
+              {
+                "queryTime": 4.5,
+                "sourceTime": 9.5,
+                "inliers": 563,
+                "tentative": 568,
+                "inlierRatio": 0.9912,
+                "coverage": 0.3299,
+                "photometricCorrelation": 0.9946,
+                "mirrored": false
+              },
+              {
+                "queryTime": 5.0,
+                "sourceTime": 10.0,
+                "inliers": 628,
+                "tentative": 633,
+                "inlierRatio": 0.9921,
+                "coverage": 0.2742,
+                "photometricCorrelation": 0.9995,
+                "mirrored": false
+              },
+              {
+                "queryTime": 5.5,
+                "sourceTime": 10.5,
+                "inliers": 631,
+                "tentative": 638,
+                "inlierRatio": 0.989,
+                "coverage": 0.2824,
+                "photometricCorrelation": 0.9991,
+                "mirrored": false
+              },
+              {
+                "queryTime": 6.0,
+                "sourceTime": 11.0,
+                "inliers": 636,
+                "tentative": 637,
+                "inlierRatio": 0.9984,
+                "coverage": 0.3468,
+                "photometricCorrelation": 0.9996,
+                "mirrored": false
+              },
+              {
+                "queryTime": 6.5,
+                "sourceTime": 11.5,
+                "inliers": 654,
+                "tentative": 655,
+                "inlierRatio": 0.9985,
+                "coverage": 0.3939,
+                "photometricCorrelation": 0.9994,
+                "mirrored": false
+              },
+              {
+                "queryTime": 7.0,
+                "sourceTime": 12.0,
+                "inliers": 626,
+                "tentative": 628,
+                "inlierRatio": 0.9968,
+                "coverage": 0.4458,
+                "photometricCorrelation": 0.9991,
+                "mirrored": false
+              },
+              {
+                "queryTime": 7.5,
+                "sourceTime": 12.5,
+                "inliers": 633,
+                "tentative": 636,
+                "inlierRatio": 0.9953,
+                "coverage": 0.4467,
+                "photometricCorrelation": 0.9988,
+                "mirrored": false
+              },
+              {
+                "queryTime": 8.0,
+                "sourceTime": 13.0,
+                "inliers": 653,
+                "tentative": 654,
+                "inlierRatio": 0.9985,
+                "coverage": 0.4078,
+                "photometricCorrelation": 0.9995,
+                "mirrored": false
+              },
+              {
+                "queryTime": 8.5,
+                "sourceTime": 13.5,
+                "inliers": 679,
+                "tentative": 681,
+                "inlierRatio": 0.9971,
+                "coverage": 0.4254,
+                "photometricCorrelation": 0.9996,
+                "mirrored": false
+              },
+              {
+                "queryTime": 9.0,
+                "sourceTime": 14.0,
+                "inliers": 637,
+                "tentative": 641,
+                "inlierRatio": 0.9938,
+                "coverage": 0.4162,
+                "photometricCorrelation": 0.9993,
+                "mirrored": false
+              },
+              {
+                "queryTime": 9.5,
+                "sourceTime": 14.5,
+                "inliers": 649,
+                "tentative": 654,
+                "inlierRatio": 0.9924,
+                "coverage": 0.3616,
+                "photometricCorrelation": 0.9992,
+                "mirrored": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "black-bookends",
+      "elapsedSeconds": 82.61,
+      "reportSha256": "1a932fcf91d75a781a79cf9fe683416d5f3b741ea189a44449985adf4b259190",
+      "results": [
+        {
+          "sourceId": "machines",
+          "coverage": 0.4,
+          "alignment": {
+            "speed": 1.0,
+            "speedRange": [
+              0.8857,
+              1.1143
+            ],
+            "speedReliable": true,
+            "timingAmbiguous": false,
+            "toleranceSeconds": 0.2,
+            "offset": 4.0,
+            "queryStart": 3.0,
+            "queryEnd": 6.5,
+            "sourceStart": 7.0,
+            "sourceEnd": 10.5,
+            "support": 8,
+            "residual": 0.0,
+            "matches": [
+              {
+                "queryTime": 3.0,
+                "sourceTime": 7.0,
+                "inliers": 522,
+                "tentative": 527,
+                "inlierRatio": 0.9905,
+                "coverage": 0.2549,
+                "photometricCorrelation": 0.9994,
+                "mirrored": false
+              },
+              {
+                "queryTime": 3.5,
+                "sourceTime": 7.5,
+                "inliers": 510,
+                "tentative": 513,
+                "inlierRatio": 0.9942,
+                "coverage": 0.2866,
+                "photometricCorrelation": 0.9979,
+                "mirrored": false
+              },
+              {
+                "queryTime": 4.0,
+                "sourceTime": 8.0,
+                "inliers": 561,
+                "tentative": 575,
+                "inlierRatio": 0.9757,
+                "coverage": 0.3163,
+                "photometricCorrelation": 0.9887,
+                "mirrored": false
+              },
+              {
+                "queryTime": 4.5,
+                "sourceTime": 8.5,
+                "inliers": 599,
+                "tentative": 604,
+                "inlierRatio": 0.9917,
+                "coverage": 0.2616,
+                "photometricCorrelation": 0.9964,
+                "mirrored": false
+              },
+              {
+                "queryTime": 5.0,
+                "sourceTime": 9.0,
+                "inliers": 547,
+                "tentative": 552,
+                "inlierRatio": 0.9909,
+                "coverage": 0.1653,
+                "photometricCorrelation": 0.9815,
+                "mirrored": false
+              },
+              {
+                "queryTime": 5.5,
+                "sourceTime": 9.5,
+                "inliers": 548,
+                "tentative": 551,
+                "inlierRatio": 0.9946,
+                "coverage": 0.2764,
+                "photometricCorrelation": 0.9977,
+                "mirrored": false
+              },
+              {
+                "queryTime": 6.0,
+                "sourceTime": 10.0,
+                "inliers": 530,
+                "tentative": 535,
+                "inlierRatio": 0.9907,
+                "coverage": 0.3512,
+                "photometricCorrelation": 0.9987,
+                "mirrored": false
+              },
+              {
+                "queryTime": 6.5,
+                "sourceTime": 10.5,
+                "inliers": 510,
+                "tentative": 513,
+                "inlierRatio": 0.9942,
+                "coverage": 0.3821,
+                "photometricCorrelation": 0.9988,
+                "mirrored": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "two-second-insert",
+      "elapsedSeconds": 114.39,
+      "reportSha256": "d50644542e3388448fdee1b777199c17532204c231dbe9b6025f20a45a2bcf0a",
+      "results": [
+        {
+          "sourceId": "observatory",
+          "coverage": 0.2,
+          "alignment": {
+            "speed": 1.0,
+            "speedRange": [
+              0.7333,
+              1.2667
+            ],
+            "speedReliable": false,
+            "timingAmbiguous": false,
+            "toleranceSeconds": 0.2,
+            "offset": 1.0,
+            "queryStart": 4.0,
+            "queryEnd": 5.5,
+            "sourceStart": 5.0,
+            "sourceEnd": 6.5,
+            "support": 4,
+            "residual": 0.0,
+            "matches": [
+              {
+                "queryTime": 4.0,
+                "sourceTime": 5.0,
+                "inliers": 584,
+                "tentative": 588,
+                "inlierRatio": 0.9932,
+                "coverage": 0.4182,
+                "photometricCorrelation": 0.9994,
+                "mirrored": false
+              },
+              {
+                "queryTime": 4.5,
+                "sourceTime": 5.5,
+                "inliers": 589,
+                "tentative": 596,
+                "inlierRatio": 0.9883,
+                "coverage": 0.41,
+                "photometricCorrelation": 0.9996,
+                "mirrored": false
+              },
+              {
+                "queryTime": 5.0,
+                "sourceTime": 6.0,
+                "inliers": 581,
+                "tentative": 584,
+                "inlierRatio": 0.9949,
+                "coverage": 0.4264,
+                "photometricCorrelation": 0.9993,
+                "mirrored": false
+              },
+              {
+                "queryTime": 5.5,
+                "sourceTime": 6.5,
+                "inliers": 573,
+                "tentative": 577,
+                "inlierRatio": 0.9931,
+                "coverage": 0.4488,
+                "photometricCorrelation": 0.9987,
+                "mirrored": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "unrelated-and-black",
+      "elapsedSeconds": 50.16,
+      "reportSha256": "f7421dc4b8fb6d20fe8e98b329a459ca746b777b5777c93685b00173060ba5ac",
+      "results": []
+    }
+  ]
+}
