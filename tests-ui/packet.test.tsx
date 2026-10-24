@@ -5,7 +5,9 @@ import { strToU8, unzipSync, zipSync } from "fflate";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { verifyEvidencePacket } from "../src/packet";
-import { digest } from "../src/evidence";
+import { digest, createEvidencePacket } from "../src/evidence";
+import unrelated from "../public/evidence/unrelated/report.json";
+import type { Report } from "../src/types";
 import PacketReview from "../src/PacketReview";
 import axe from "axe-core";
 
@@ -90,6 +92,83 @@ describe("independent packet verification", () => {
     expect((await verifyEvidencePacket(changed)).filename).toBe(
       "renamed-by-someone.mp4",
     );
+  });
+  it("verifies an abstention packet without inventing evidence images", async () => {
+    const loader = vi.fn();
+    const bytes = await createEvidencePacket(
+      unrelated as Report,
+      "/evidence/",
+      "",
+      loader,
+    );
+    const result = await verifyEvidencePacket(bytes);
+    expect(result.matches).toEqual([]);
+    expect(result.imageCount).toBe(0);
+    expect(loader).not.toHaveBeenCalled();
+  });
+  it("rejects duplicate ZIP names before decoding either copy", async () => {
+    const bytes = new Uint8Array(actual);
+    const oldName = new TextEncoder().encode("frames/bridge-0-query.jpg");
+    const newName = new TextEncoder().encode("frames/bridge-1-query.jpg");
+    let changed = 0;
+    for (let i = 0; i <= bytes.length - oldName.length; i++) {
+      if (oldName.every((b, j) => bytes[i + j] === b)) {
+        bytes.set(newName, i);
+        changed++;
+      }
+    }
+    expect(changed).toBe(2);
+    await expect(verifyEvidencePacket(bytes)).rejects.toThrow(
+      "duplicate ZIP entries",
+    );
+  });
+  it("compares original query bytes locally and distinguishes a different file", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({ ok: true, arrayBuffer: async () => actual.buffer })),
+    );
+    vi.stubGlobal(
+      "URL",
+      class extends URL {
+        static createObjectURL() {
+          return "blob:test-frame";
+        }
+        static revokeObjectURL() {}
+      },
+    );
+    const user = userEvent.setup();
+    render(<PacketReview />);
+    await user.click(
+      screen.getByRole("button", { name: "Verify sample packet" }),
+    );
+    await screen.findByText("Report + 12 frame checksums match.");
+    const input = screen.getByLabelText("Compare original query file");
+    const original = new Uint8Array(
+      readFileSync("public/media/query-vertical.mp4"),
+    );
+    const file = new File([original.buffer], "original.mp4", {
+      type: "video/mp4",
+    });
+    Object.defineProperty(file, "arrayBuffer", {
+      value: async () => original.buffer,
+    });
+    await user.upload(input, file);
+    expect(
+      await screen.findByText(
+        "Query bytes match the SHA-256 recorded in this packet.",
+      ),
+    ).toBeInTheDocument();
+    const other = new File(["different bytes"], "different.mp4", {
+      type: "video/mp4",
+    });
+    Object.defineProperty(other, "arrayBuffer", {
+      value: async () => new TextEncoder().encode("different bytes").buffer,
+    });
+    await user.upload(input, other);
+    expect(
+      await screen.findByText(/This file has a different SHA-256/),
+    ).toBeInTheDocument();
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
   it("shows a local verification result and lets readers inspect frame pairs", async () => {
     vi.stubGlobal(

@@ -64,7 +64,7 @@ not eight additional “passes.”
 - 33 Python tests cover geometric false matches and transformed positives,
   temporal degeneracies, API validation and queue handling, provider failure
   behavior with mocked transports, and ZIP integrity.
-- 29 interface tests cover recorded and live API paths, multi-source selection,
+- 32 interface tests cover recorded and live API paths, multi-source selection,
   semantic search, source attribution, export checksums, keyboard behavior,
   and accessible DOM structure.
 - Strict TypeScript compilation and the Vite production build pass.
@@ -125,3 +125,13 @@ After restarting the actual local server, the earlier completed HTTP job was
 restored from disk. Its served original query bytes matched the SHA-256 in the
 report. Interface checks cover reopening that original query, clearing stale
 job IDs, and discarding delayed explanations after the selected clip changes.
+
+## Additional-film verification
+
+The unchanged engine verified 7 of 8 transformed Big Buck Bunny clips after two
+new excerpts were indexed in an isolated six-source library. It rejected both
+unindexed same-film negatives and produced no false source matches. The one
+abstention was a re-encoding that Qwen ranked first, but whose geometric
+candidates did not yield a temporal fit. Every case and its report hash are
+published in `public/validation/cross-work.json`. These ten cases are separate
+from the four-source 40-case evaluation.

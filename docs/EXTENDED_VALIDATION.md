@@ -61,3 +61,34 @@ Attribution: **(c) copyright 2008, Blender Foundation / www.bigbuckbunny.org**.
 Edits crop, resize, mute, mirror, recolor, caption, or change playback speed.
 Original footage and intermediate videos remain local; summary measurements
 and reproducible constructions are published.
+
+## Observed abstention
+
+The first re-encoded Big Buck Bunny query was ranked first by Qwen but returned
+no verified source. The retained coarse correspondences produced a 16-frame
+hypothesis whose weighted fit refined to 0.308x, below the permitted 0.35x
+minimum. The temporal function therefore abstained before dense refinement.
+This is a concrete failure, not a successful match with a hidden warning.
+
+![Retained coarse correspondences and rejected temporal fit](media/cross-work-failure.png)
+
+The dashed construction line is diagnostic ground truth; it never enters the
+matching engine. The plotted points and fit are preserved in
+`public/validation/cross-work-diagnosis.json`. Repeated candidate moments can
+outvote the desired timing explanation; handling alternative fits without
+accepting frozen-image false matches remains future work.
+
+## Full verification in the expanded library
+
+`scripts/verification_scale.py` follows the completed retrieval experiment with
+four existing positive queries (one per target source, with different edits)
+and two unrelated Sintel negatives. It reuses the exact source embedding
+matrices and constructs the same visual descriptors as the production indexer
+in an isolated workspace. The full unchanged engine then examines the expanded
+library. This is a small six-case smoke test; the queries are reused and the
+runtime is not a controlled latency benchmark.
+
+```bash
+.venv/bin/python scripts/verification_scale.py \
+  --retrieval artifacts/my-retrieval-scale --output artifacts/my-verification-scale
+```

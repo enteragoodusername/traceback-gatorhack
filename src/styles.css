@@ -4009,3 +4009,76 @@ button {
     height: 220px;
   }
 }
+.extended-validation {
+  margin: 22px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 19px 0;
+}
+.extended-validation summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.7;
+}
+.extended-validation p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.extended-validation > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 15px;
+  color: var(--green);
+}
+.packet-query-check {
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.packet-query-check > span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.query-check-result {
+  flex-basis: 100%;
+  border-radius: 7px;
+  background: #f4f5f0;
+  padding: 13px 15px;
+}
+.query-check-result.match {
+  background: #eff6e9;
+}
+.query-check-result.different,
+.query-check-result.error {
+  background: #fff3e8;
+}
+.query-check-result strong {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.query-check-result p {
+  margin-top: 5px;
+}
+.packet-match-tabs button,
+.packet-match-summary strong {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.packet-success > div {
+  min-width: 0;
+}
+.packet-success p,
+.packet-attribution,
+.packet-audit li {
+  overflow-wrap: anywhere;
+}

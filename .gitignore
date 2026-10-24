@@ -29,3 +29,7 @@ artifacts/public-http-check.json
 artifacts/performance/
 artifacts/cross-work-*/
 artifacts/retrieval-scale-*/
+tmp/pdfs/
+output/pdf/
+artifacts/submission-kit/
+artifacts/verification-scale-*/

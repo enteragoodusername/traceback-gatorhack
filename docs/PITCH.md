@@ -9,7 +9,7 @@ Show the cropped query immediately. Keep the problem concrete: a filmmaker or re
 1. Select **The cropped repost**, then **Find the source**. In the hosted demo, explicitly say this is a saved result from an actual pipeline run. For a live demonstration, start the local analysis before the introduction so the CPU can work while you speak.
 2. Show the recovered source. Select two frame pairs. Point to the corresponding green features and the projected crop region.
 3. Show the estimated source interval and playback change. Explain that timing has sampling uncertainty; the displayed range is not a calibrated probability.
-4. Export the packet. Its JSON, inspected images, media hashes, pinned model revision, and engine fingerprint let another person review what was measured.
+4. Export the packet. Open **Verify a packet** and check its included report and images locally. A recipient can also compare their original query file against the recorded hash.
 5. Select the unrelated example. Show that a clip outside this small library does not receive a forced match.
 
 ## Technical explanation: 35 seconds
@@ -53,3 +53,16 @@ The Traceback pipeline, interface, API, evaluation tooling, and handoff material
 - If internet access fails, `./start.sh` serves the built application on localhost and the bundled examples remain available. Download the model and build the index before arriving.
 - If optional APIs fail, show the measured evidence; no sponsor explanation is needed for the core workflow.
 - Keep the demo video locally available as a final fallback.
+
+## Positioning among existing tools
+
+| Existing approach | Documented role | Traceback's focus |
+| --- | --- | --- |
+| [YouTube Content ID](https://support.google.com/youtube/answer/2797370?hl=en) | Automated identification and rights-management workflows on YouTube using reference files | A local, inspectable investigation within a library the user indexes; no claims or takedowns |
+| [InVID verification plugin](https://www.invid-project.eu/tools-and-services/invid-verification-plugin/) | Journalist-oriented video analysis, keyframes, metadata, and reverse-image-search tools | Measured local frame correspondence, time mapping, recent multimodal retrieval, and portable evidence |
+| [C2PA Content Credentials](https://c2pa.org/faqs/) | Cryptographically signed provenance structures, with durable binding mechanisms | Inferred visual relationships between supplied clips; packet hashes provide no signature or authenticated history |
+
+These are workflow distinctions, not comparative accuracy results. No
+head-to-head evaluation against those systems was performed. Traceback's
+hackathon contribution is the implemented combination and review experience,
+not a claim to have invented video matching or signed provenance.

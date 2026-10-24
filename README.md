@@ -2,7 +2,7 @@
 
 **Find the source behind an edited video. Inspect the evidence.**
 
-[Interactive demo](https://enteragoodusername.github.io/traceback-gatorhack/) · [2:15 walkthrough](https://enteragoodusername.github.io/traceback-gatorhack/demo/) · [Sample evidence packet](https://enteragoodusername.github.io/traceback-gatorhack/downloads/traceback-evidence.zip)
+[Interactive demo](https://enteragoodusername.github.io/traceback-gatorhack/) · [2:15 walkthrough](https://enteragoodusername.github.io/traceback-gatorhack/demo/) · [Sample evidence packet](https://enteragoodusername.github.io/traceback-gatorhack/downloads/traceback-evidence.zip) · [One-page brief](https://enteragoodusername.github.io/traceback-gatorhack/downloads/traceback-brief.pdf)
 
 ![Actual measured correspondence between a cropped query and its indexed source](docs/media/evidence.png)
 
@@ -155,6 +155,14 @@ uploaded a new Sintel source, indexed it, searched it, and recovered a cropped,
 mirrored, speed-changed query over the actual HTTP API. This one additional
 workflow test is reported separately from the four-source evaluation.
 
+An [additional-film test](public/validation/cross-work.json) added two Big Buck
+Bunny excerpts to an isolated six-source library. It recovered **7/8 positive
+edits**, rejected **2/2 same-film negatives**, and returned **no false sources**.
+The missed re-encoding was ranked first by Qwen but failed temporal verification.
+No engine thresholds were changed after this test. See
+[extended validation](docs/EXTENDED_VALIDATION.md) for every construction and
+reproduction instructions.
+
 Full benchmark outputs stay under `artifacts/benchmarks/` locally
 and are excluded from the repository because they contain redundant media.
 
@@ -191,7 +199,8 @@ working demonstration of the relevant API.
 
 Choose **Verify a packet** in the app and drop an exported ZIP, or use
 **Verify sample packet**. The browser checks the report and all included image
-checksums before showing the evidence. It does not upload the packet or rerun
+checksums before showing the evidence. You can also compare an original query
+file against its recorded SHA-256 without uploading it. It does not upload the packet or rerun
 the model. The browser viewer accepts schema 1.1 packets up to 32 MB compressed
 and 64 MB expanded.
 

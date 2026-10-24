@@ -63,3 +63,8 @@ upload. Altered files, missing images, duplicate entries, and unknown files stop
 verification. A packet with data and checksums consistently replaced can still
 pass; integrity is not authentication. Original source/query videos are not in
 the packet and are not verified by this operation.
+
+After a packet passes, the browser can optionally hash an original query file
+and compare it with the reported query SHA-256. This verifies exact byte
+identity against the report, not semantic equivalence: any re-encoding changes
+the hash. The original file stays in the browser.

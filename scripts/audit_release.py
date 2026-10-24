@@ -69,12 +69,62 @@ def audit():
     assert evaluation["engineFingerprint"] == fingerprint
     assert evaluation["singleEngineFingerprint"] is True
     assert evaluation["total"] == len(evaluation["cases"])
+    validation = PUBLIC / "validation"
+    for name in (
+        "live-ingestion",
+        "reproducibility",
+        "cross-work",
+        "cross-work-diagnosis",
+        "retrieval-scale",
+        "verification-scale",
+    ):
+        path = validation / (name + ".json")
+        if path.exists():
+            record = json.loads(path.read_text())
+            assert record["engineFingerprint"] == fingerprint, (
+                f"Stale validation: {name}"
+            )
+    stress = json.loads((validation / "stress-cases.json").read_text())
+    assert stress["complete"] and all(
+        row["engineFingerprint"] == fingerprint for row in stress["cases"]
+    )
+    cross = json.loads((validation / "cross-work.json").read_text())
+    assert cross["complete"] and len(cross["observations"]) == len(cross["cases"])
+    assert cross["recovered"] == sum(
+        bool(row["expectedSourceId"]) and row["correct"]
+        for row in cross["observations"]
+    )
+    assert cross["rejected"] == sum(
+        not row["expectedSourceId"] and row["correct"] for row in cross["observations"]
+    )
+    for row in cross["observations"]:
+        expected = [row["expectedSourceId"]] if row["expectedSourceId"] else []
+        assert row["correct"] == (row["returnedSourceIds"] == expected)
+    scale_path = validation / "retrieval-scale.json"
+    if scale_path.exists():
+        scale = json.loads(scale_path.read_text())
+        assert scale["complete"] and scale["total"] == len(scale["observations"])
+        assert scale["sourceCount"] == len(scale["bundledSources"]) + len(
+            scale["distractors"]
+        )
+        assert scale["top1"] == sum(row["rank"] == 1 for row in scale["observations"])
+        assert scale["top5"] == sum(row["rank"] <= 5 for row in scale["observations"])
+    verification_path = validation / "verification-scale.json"
+    if verification_path.exists():
+        verification = json.loads(verification_path.read_text())
+        assert verification["complete"] and verification["total"] == len(
+            verification["observations"]
+        )
+        assert verification["correct"] == sum(
+            row["correct"] for row in verification["observations"]
+        )
     return dict(
         sources=len(manifest["sources"]),
         recordedRuns=len(manifest["demos"]),
         evidenceImages=checked,
         semanticQueries=len(saved["searches"]),
         evaluationCases=evaluation["total"],
+        additionalFilmCases=len(cross["cases"]),
         engineFingerprint=fingerprint,
     )
 

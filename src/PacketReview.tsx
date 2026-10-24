@@ -9,6 +9,7 @@ import {
   Upload,
 } from "lucide-react";
 import { asset } from "./paths";
+import { digest } from "./evidence";
 import { verifyEvidencePacket, type PacketReview as Review } from "./packet";
 
 export default function PacketReview() {
@@ -20,6 +21,12 @@ export default function PacketReview() {
   const [selected, setSelected] = useState(0);
   const [pairIndex, setPairIndex] = useState(0);
   const input = useRef<HTMLInputElement>(null);
+  const originalInput = useRef<HTMLInputElement>(null);
+  const [queryCheck, setQueryCheck] = useState<{
+    status: "checking" | "match" | "different" | "error";
+    filename: string;
+    message: string;
+  } | null>(null);
   const request = useRef(0);
   useEffect(
     () => () => {
@@ -47,6 +54,7 @@ export default function PacketReview() {
     setReview(null);
     setSelected(0);
     setPairIndex(0);
+    setQueryCheck(null);
     const filename = file?.name || "traceback-evidence.zip";
     setLabel(filename);
     try {
@@ -72,6 +80,37 @@ export default function PacketReview() {
         );
     } finally {
       if (id === request.current) setBusy(false);
+    }
+  }
+  async function compareQuery(file: File) {
+    if (!review || queryCheck?.status === "checking") return;
+    const id = request.current;
+    setQueryCheck({
+      status: "checking",
+      filename: file.name,
+      message: "Comparing the original query bytes…",
+    });
+    try {
+      if (file.size > 100 * 1024 * 1024)
+        throw Error("Choose a query file smaller than 100 MB.");
+      const actual = await digest(new Uint8Array(await file.arrayBuffer()));
+      if (id === request.current)
+        setQueryCheck({
+          status: actual === review.queryHash ? "match" : "different",
+          filename: file.name,
+          message:
+            actual === review.queryHash
+              ? "Query bytes match the SHA-256 recorded in this packet."
+              : "This file has a different SHA-256. It is not the exact query file identified in this packet; a re-encoding also changes the hash.",
+        });
+    } catch (e) {
+      if (id === request.current)
+        setQueryCheck({
+          status: "error",
+          filename: file.name,
+          message:
+            e instanceof Error ? e.message : "Could not compare this file.",
+        });
     }
   }
   const match = review?.matches[selected];
@@ -204,6 +243,36 @@ export default function PacketReview() {
               identify the analyzed inputs; this check covers the report and
               included images.
             </p>
+            <div className="packet-query-check">
+              <button
+                className="button secondary small"
+                disabled={queryCheck?.status === "checking"}
+                onClick={() => originalInput.current?.click()}
+              >
+                <Fingerprint size={15} /> Compare original query file
+              </button>
+              <span>Optional · up to 100 MB · stays in your browser</span>
+              <input
+                ref={originalInput}
+                type="file"
+                hidden
+                aria-label="Compare original query file"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) void compareQuery(file);
+                  e.target.value = "";
+                }}
+              />
+              {queryCheck && (
+                <div
+                  className={`query-check-result ${queryCheck.status}`}
+                  role="status"
+                >
+                  <strong>{queryCheck.filename}</strong>
+                  <p>{queryCheck.message}</p>
+                </div>
+              )}
+            </div>
           </section>
           {review.matches.length > 0 && (
             <section className="packet-evidence panel">

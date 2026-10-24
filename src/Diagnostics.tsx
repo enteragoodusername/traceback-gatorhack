@@ -28,11 +28,28 @@ type Ingestion = {
   speedError: number;
   offsetError: number;
 };
+type CrossWork = {
+  complete: boolean;
+  recovered: number;
+  positiveCount: number;
+  rejected: number;
+  negativeCount: number;
+  falseMatchCases: number;
+  failureNote: string;
+  observations: {
+    id: string;
+    correct: boolean;
+    expectedSourceId: string | null;
+    returnedSourceIds: string[];
+    retrievalRank: number | null;
+  }[];
+};
 
 export default function Diagnostics() {
   const [stress, setStress] = useState<Stress | null>(null);
   const [ingestion, setIngestion] = useState<Ingestion | null>(null);
   const [open, setOpen] = useState(false);
+  const [crossWork, setCrossWork] = useState<CrossWork | null>(null);
   useEffect(() => {
     let active = true;
     const read = async (path: string) => {
@@ -46,17 +63,19 @@ export default function Diagnostics() {
     void Promise.all([
       read("/validation/live-ingestion.json"),
       read("/validation/stress-cases.json"),
-    ]).then(([live, difficult]) => {
+      read("/validation/cross-work.json"),
+    ]).then(([live, difficult, additional]) => {
       if (active) {
         setIngestion(live);
         setStress(difficult);
+        setCrossWork(additional?.complete ? additional : null);
       }
     });
     return () => {
       active = false;
     };
   }, []);
-  if (!stress && !ingestion) return null;
+  if (!stress && !ingestion && !crossWork) return null;
   return (
     <section className="diagnostics panel">
       <header>
@@ -85,6 +104,53 @@ export default function Diagnostics() {
             </a>
           </div>
         </div>
+      )}
+      {crossWork && (
+        <details className="extended-validation">
+          <summary>
+            Additional-film test: {crossWork.recovered}/
+            {crossWork.positiveCount} edits verified, {crossWork.rejected}/
+            {crossWork.negativeCount} negatives rejected
+          </summary>
+          <p>
+            Two new Big Buck Bunny excerpts joined the four bundled sources in
+            an isolated library. The engine was unchanged.{" "}
+            {crossWork.falseMatchCases} false source matches were returned.
+            These cases are separate from the main evaluation.
+          </p>
+          <p>{crossWork.failureNote}</p>
+          <div className="evaluation-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Case</th>
+                  <th>Observed decision</th>
+                  <th>Expected source rank</th>
+                </tr>
+              </thead>
+              <tbody>
+                {crossWork.observations.map((row) => (
+                  <tr key={row.id}>
+                    <td>{row.id}</td>
+                    <td>
+                      {row.correct
+                        ? row.expectedSourceId
+                          ? "Correct source verified"
+                          : "Correctly rejected"
+                        : row.returnedSourceIds.length
+                          ? "Incorrect source decision"
+                          : "Abstained on a matching clip"}
+                    </td>
+                    <td>{row.retrievalRank ?? "No indexed source expected"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <a href={asset("/validation/cross-work.json")} download>
+            <ArrowDownToLine size={13} /> Download all additional-film results
+          </a>
+        </details>
       )}
       {stress && (
         <>
