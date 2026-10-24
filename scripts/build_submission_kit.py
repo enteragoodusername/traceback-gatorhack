@@ -78,10 +78,18 @@ checksums, not signatures or proof of authorship.
         "media/evidence.png": "docs/media/evidence.png",
         "media/evaluation-timing.png": "docs/media/evaluation-timing.png",
         "media/cross-work-failure.png": "docs/media/cross-work-failure.png",
+        "media/search-diagnostic.png": "docs/media/search-diagnostic.png",
         "evaluation.json": "public/evaluation.json",
     }
     for target, source in mapping.items():
-        files[target] = (ROOT / source).read_bytes()
+        data = (ROOT / source).read_bytes()
+        if target.endswith(".md"):
+            data = (
+                data.decode()
+                .replace("](../public/validation/", "](validation/")
+                .encode()
+            )
+        files[target] = data
     for path in (ROOT / "public/validation").glob("*.json"):
         files["validation/" + path.name] = path.read_bytes()
     files["SHA256SUMS.json"] = json.dumps(
