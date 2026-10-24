@@ -1,3 +1,17 @@
+# v0.2 live internet search verification
+
+The current application accepts one video file and makes fresh online searches. It does not ship prerecorded answers or demo footage.
+
+- Automated checks: 43 backend tests and 28 UI/utility tests passed. Coverage includes upload-triggered submission, drag/drop, invalid files, duplicate submission prevention, provider filtering, saved links, optional description refinement, result recovery, trusted embed URLs, keyboard dismissal, and DOM accessibility. Backend checks cover live-provider parsing, provider failures, thumbnail host restrictions, real-pixel ranking data flow, honest score failure, upload validation, queue limits, refinement and asset scoping.
+- Production build: TypeScript/Vite build and `scripts/check_internet_build.py` confirm working asset references and no bundled videos, reports, demo ZIPs or stored-answer paths.
+- Actual live smoke test, October 24, 2026: newly downloaded NASA TROPICS launch footage, submitted through the HTTP upload endpoint with no precomputed answers. An 8-second excerpt containing a NASA title card produced logo and aerial-scene queries and 12 live candidates in 131.2 seconds. A separate 8-second launch excerpt produced rocket-launch queries and 12 live candidates in 87.0 seconds, with successful responses from both YouTube and Internet Archive and visual scores from the local Qwen model. These observations demonstrate operation, not a relevance or retrieval-accuracy benchmark.
+- The second run's highest-ranked candidates included actual rocket launch videos. Captions and thumbnails can still be wrong or incomplete; results are similar-video leads, not source verification.
+- Native browser automation was unavailable in this session. DOM interaction and accessibility checks passed; actual responsive rendering, playback permissions and third-party embedded-player behavior were not browser-verified. No claim of a contrast audit is made.
+
+The prior v0.1 measurements below describe a different, local source-verification workflow. They do not measure this internet-search version and are retained only as historical engineering evidence.
+
+---
+
 # Verification record
 
 Build date: October 24, 2026. Hardware: Intel Core i7-1165G7 CPU, no GPU.

@@ -1,4 +1,4 @@
-"""Local-only API for real uploads, model retrieval and evidence exports."""
+"""Local API for live internet video discovery and retained research tools."""
 
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -21,8 +21,8 @@ from . import embedding, integrations
 
 app = FastAPI(
     title="Traceback",
-    version="0.1.1",
-    description="Local video provenance analysis. Search is limited to your indexed library.",
+    version="0.2.0",
+    description="Upload one clip to search YouTube and Internet Archive, with local scene descriptions and visual thumbnail ranking.",
 )
 UPLOADS = ROOT / "data/uploads"
 UPLOADS.mkdir(parents=True, exist_ok=True)
@@ -66,7 +66,8 @@ def health():
         "indexReady": (INDEX / "metadata.json").exists(),
         "gemini": bool(os.getenv("GEMINI_API_KEY")),
         "twinly": bool(os.getenv("TWINLY_API_KEY")),
-        "version": "0.1.1",
+        "version": "0.2.0",
+        "mode": "internet-search",
     }
 
 
@@ -287,8 +288,52 @@ def work(job_id: str, path: Path):
         traceback.print_exc()
 
 
+def internet_work(job_id: str, path: Path, query_override=None):
+    from .internet import search_video
+
+    def progress(stage, message):
+        with jobs_lock:
+            jobs[job_id].update(stage=stage, message=message)
+
+    try:
+        result = search_video(path, UPLOADS / job_id / "web", progress, query_override)
+        result["query"]["filename"] = jobs[job_id]["filename"]
+        completed = {
+            "id": job_id,
+            "status": "complete",
+            "stage": "complete",
+            "message": "Internet search complete",
+            "result": result,
+        }
+        target = UPLOADS / job_id / "search-result.json"
+        temporary = target.with_suffix(".tmp")
+        temporary.write_text(json.dumps(completed, indent=2))
+        temporary.replace(target)
+        with jobs_lock:
+            jobs[job_id].update(completed)
+    except Exception:
+        import traceback
+
+        traceback.print_exc()
+        with jobs_lock:
+            jobs[job_id].update(
+                status="failed",
+                stage="failed",
+                error="The video search could not finish. Check your connection and local server log, then retry. The first run needs to download the caption model.",
+            )
+
+
 @app.post("/api/analyze", status_code=202)
 async def start_analysis(file: UploadFile = File(...)):
+    return await receive_video(file, internet=False)
+
+
+@app.post("/api/search-video", status_code=202)
+async def search_video_upload(file: UploadFile = File(...)):
+    return await receive_video(file, internet=True)
+
+
+async def receive_video(file: UploadFile, internet: bool):
     suffix = Path(file.filename or "").suffix.lower()
     if suffix not in {".mp4", ".mov", ".webm", ".mkv", ".m4v"}:
         raise HTTPException(400, "Use an MP4, MOV, WebM, or MKV file.")
@@ -347,7 +392,10 @@ async def start_analysis(file: UploadFile = File(...)):
     def task():
         with jobs_lock:
             jobs[job_id]["status"] = "running"
-        work(job_id, path)
+        if internet:
+            internet_work(job_id, path)
+        else:
+            work(job_id, path)
 
     pool.submit(task)
     return {"id": job_id, "status": "queued"}
@@ -358,6 +406,9 @@ def job(job_id: str):
     with jobs_lock:
         if job_id not in jobs:
             if len(job_id) == 32 and all(c in "0123456789abcdef" for c in job_id):
+                search_result = UPLOADS / job_id / "search-result.json"
+                if search_result.is_file():
+                    return json.loads(search_result.read_text())
                 stored = UPLOADS / job_id / "evidence/report.json"
                 if stored.is_file():
                     report = json.loads(stored.read_text())
@@ -397,6 +448,89 @@ def evidence(job_id: str, filename: str):
     if not path.is_file():
         raise HTTPException(404)
     return FileResponse(path)
+
+
+@app.get("/api/search-assets/{job_id}/{filename}")
+def search_asset(job_id: str, filename: str):
+    import re
+
+    if not re.fullmatch(r"[a-f0-9]{32}", job_id) or not re.fullmatch(
+        r"[A-Za-z0-9_.-]+\.jpg", filename
+    ):
+        raise HTTPException(404)
+    path = UPLOADS / job_id / "web" / filename
+    if not path.is_file():
+        raise HTTPException(404)
+    return FileResponse(path)
+
+
+class RefineRequest(BaseModel):
+    query: str = Field(min_length=2, max_length=200)
+
+
+@app.post("/api/refine/{previous_id}", status_code=202)
+def refine_video(previous_id: str, request: RefineRequest):
+    import re
+
+    if not re.fullmatch(r"[a-f0-9]{32}", previous_id):
+        raise HTTPException(404, "Previous search not found.")
+    # Only completed video searches can be refined. No URLs or arbitrary paths accepted.
+    if len(request.query.strip()) < 2:
+        raise HTTPException(400, "Use at least two non-space characters.")
+    previous_result = UPLOADS / previous_id / "search-result.json"
+    if not previous_result.is_file():
+        raise HTTPException(404, "Finish a video search before refining it.")
+    previous_path = next(
+        (
+            p
+            for p in (UPLOADS / previous_id).glob("query.*")
+            if p.suffix in {".mp4", ".mov", ".webm", ".mkv", ".m4v"}
+        ),
+        None,
+    )
+    if not previous_path:
+        raise HTTPException(404, "Original video is unavailable.")
+    job_id = uuid.uuid4().hex
+    with jobs_lock:
+        if (
+            sum(
+                j["status"] in ("uploading", "queued", "running") for j in jobs.values()
+            )
+            >= 2
+        ):
+            raise HTTPException(
+                429, "Two searches are already queued. Wait for one to finish."
+            )
+        previous = json.loads(previous_result.read_text())
+        jobs[job_id] = {
+            "id": job_id,
+            "status": "queued",
+            "message": "Preparing your refined search",
+            "filename": previous["result"]["query"]["filename"],
+            "createdAt": time.time(),
+        }
+    directory = UPLOADS / job_id
+    directory.mkdir()
+    path = directory / previous_path.name
+    try:
+        # Both files are on the local uploads volume; avoid copying a large video.
+        os.link(previous_path, path)
+    except OSError:
+        try:
+            shutil.copy2(previous_path, path)
+        except Exception:
+            shutil.rmtree(directory, ignore_errors=True)
+            with jobs_lock:
+                jobs.pop(job_id, None)
+            raise HTTPException(500, "Could not prepare the previous video.")
+
+    def task():
+        with jobs_lock:
+            jobs[job_id]["status"] = "running"
+        internet_work(job_id, path, request.query.strip())
+
+    pool.submit(task)
+    return {"id": job_id, "status": "queued"}
 
 
 class SearchRequest(BaseModel):

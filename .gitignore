@@ -33,3 +33,5 @@ tmp/pdfs/
 output/pdf/
 artifacts/submission-kit/
 artifacts/verification-scale-*/
+
+artifacts/internet-smoke/

@@ -17,8 +17,5 @@ else
 fi
 npm ci
 npm run build
-if [[ ! -f data/index/metadata.json ]]; then
-  echo 'Building the source index. The first run downloads the 2B model (~4.4 GB).'
-  .venv/bin/python -m server.index
-fi
+echo 'The first search downloads missing local models (~1 GB BLIP + ~4.4 GB Qwen). No demo library is indexed.'
 echo 'Ready. Run ./start.sh and open http://127.0.0.1:8000'

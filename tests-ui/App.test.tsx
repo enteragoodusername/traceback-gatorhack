@@ -1,407 +1,249 @@
-import { act, render, screen, waitFor, within } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, it, expect, vi } from "vitest";
 import App from "../src/App";
-import manifest from "../public/manifest.json";
-import actualReport from "../public/evidence/vertical/report.json";
-import montageReport from "../public/evidence/montage/report.json";
+import { search, jobId } from "./internet-fixture";
 
 beforeEach(() => {
   vi.stubGlobal(
     "fetch",
     vi.fn(async (url: string) => {
-      if (url === "/manifest.json")
-        return { ok: true, json: async () => manifest };
-      if (url === "/api/health") return { ok: false };
-      if (url.includes("/report.json"))
-        return { ok: true, json: async () => actualReport };
-      throw Error(`Unexpected fetch ${url}`);
+      if (url === "/api/health")
+        return { ok: true, json: async () => ({ mode: "internet-search" }) };
+      if (url === "/api/search-video" || url.startsWith("/api/refine/"))
+        return { ok: true, json: async () => ({ id: jobId }) };
+      if (url === `/api/jobs/${jobId}`)
+        return {
+          ok: true,
+          json: async () => ({ status: "complete", result: search }),
+        };
+      throw Error(`Unexpected fetch: ${url}`);
     }),
   );
+  URL.createObjectURL = vi.fn(() => "blob:clip-preview");
+  URL.revokeObjectURL = vi.fn();
 });
+async function upload() {
+  const user = userEvent.setup();
+  render(<App />);
+  await screen.findByText("Live engine connected");
+  await user.upload(
+    screen.getByLabelText("Choose a video file"),
+    new File(["video"], "my-clip.mp4", { type: "video/mp4" }),
+  );
+  await screen.findByText("Similar videos to explore");
+  return user;
+}
 
-describe("judge demo workflow", () => {
-  it("discards a delayed explanation after the selected query changes", async () => {
-    const user = userEvent.setup();
-    let finish!: (value: Response) => void;
-    const pending = new Promise<Response>((resolve) => {
-      finish = resolve;
+describe("single-input live internet search", () => {
+  it("starts immediately on file selection, sends only the file, and never requests a fixture", async () => {
+    await upload();
+    const call = vi
+      .mocked(fetch)
+      .mock.calls.find(([url]) => url === "/api/search-video")!;
+    const form = call[1]?.body as FormData;
+    expect([...form.keys()]).toEqual(["file"]);
+    expect((form.get("file") as File).name).toBe("my-clip.mp4");
+    expect(
+      screen.queryByRole("button", { name: "Submit" }),
+    ).not.toBeInTheDocument();
+    expect(fetch).not.toHaveBeenCalledWith(
+      expect.stringMatching(/manifest|evidence|semantic-searches|report\.json/),
+    );
+    expect(
+      screen.getByRole("link", { name: "Rocket launch from the coast" }),
+    ).toHaveAttribute("href", search.results[0].url);
+    expect(
+      screen.getByText(/Searched for.*a rocket launching into the sky/),
+    ).toBeInTheDocument();
+  });
+  it("supports dropping one video and rejects invalid files before sending anything", async () => {
+    render(<App />);
+    await screen.findByText("Live engine connected");
+    const drop = screen.getByRole("region", { name: "Submit a video" });
+    fireEvent.drop(drop, {
+      dataTransfer: { files: [new File(["text"], "notes.txt")] },
     });
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async (url: string) => {
-        if (url === "/manifest.json")
-          return { ok: true, json: async () => manifest };
-        if (url === "/api/health")
-          return {
-            ok: true,
-            json: async () => ({ status: "ok", gemini: true }),
-          };
-        if (url === "/api/library")
-          return {
-            ok: true,
-            json: async () => ({ sources: manifest.sources }),
-          };
-        if (url.includes("/report.json"))
-          return { ok: true, json: async () => actualReport };
-        if (url === "/api/explain") return pending;
-        throw Error(`Unexpected fetch ${url}`);
+    expect(screen.getByRole("alert")).toHaveTextContent("Choose an MP4");
+    expect(
+      vi.mocked(fetch).mock.calls.some(([url]) => url === "/api/search-video"),
+    ).toBe(false);
+    fireEvent.drop(drop, {
+      dataTransfer: {
+        files: [new File(["video"], "dropped.mp4", { type: "video/mp4" })],
+      },
+    });
+    await screen.findByText("Similar videos to explore");
+    expect(
+      screen.getByRole("heading", { name: "dropped.mp4" }),
+    ).toBeInTheDocument();
+  });
+  it("filters candidates, saves a shortlist, and removes a saved video", async () => {
+    const user = await upload();
+    await user.click(
+      screen.getByRole("button", { name: "YouTube", exact: true }),
+    );
+    expect(
+      screen.queryByRole("link", { name: "Historic space flight" }),
+    ).not.toBeInTheDocument();
+    await user.click(
+      screen.getByRole("button", { name: "Save Rocket launch from the coast" }),
+    );
+    await user.click(screen.getByRole("button", { name: /Saved videos/ }));
+    expect(
+      screen.getByRole("link", { name: "Rocket launch from the coast" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Export links" })).toBeEnabled();
+    await user.click(
+      screen.getByRole("button", {
+        name: "Unsave Rocket launch from the coast",
       }),
     );
-    render(<App />);
-    await user.click(
-      await screen.findByRole("button", { name: "Find the source" }),
-    );
-    const explain = await screen.findByRole("button", {
-      name: "Explain with Gemini",
-    });
-    await user.click(explain);
-    expect(explain).toBeDisabled();
-    await user.click(screen.getByRole("button", { name: /A different look/ }));
-    await act(async () => {
-      finish({
-        ok: true,
-        json: async () => ({ text: "Explanation of the old clip" }),
-      } as Response);
-      await pending;
-    });
     expect(
-      screen.queryByText("Explanation of the old clip"),
-    ).not.toBeInTheDocument();
-  });
-  it("loads real fixture analysis, exposes uncertainty, and changes evidence frames", async () => {
-    const user = userEvent.setup();
-    render(<App />);
-    await screen.findByText("The cropped repost", { selector: "h3" });
-    await user.click(screen.getByRole("button", { name: "Find the source" }));
-    await screen.findByText("Match verified");
-    expect(
-      screen.getByText("This does not establish ownership or infringement."),
+      screen.getByText("Your next reference starts with a clip."),
     ).toBeInTheDocument();
-    expect(screen.getByText("RECORDED RUN")).toBeInTheDocument();
-    const frames = screen.getAllByRole("button", {
-      name: /Inspect frame pair/,
+  });
+  it("compares a real candidate beside the uploaded clip with keyboard dismissal", async () => {
+    const user = await upload();
+    const trigger = screen.getAllByRole("button", {
+      name: "Compare",
+      exact: true,
+    })[0];
+    await user.click(trigger);
+    const dialog = screen.getByRole("dialog", {
+      name: "Compare video candidate",
     });
-    await user.click(frames[1]);
-    expect(screen.getByText(/Frame pair 2/)).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Feature matches" }));
     expect(
-      screen.getByRole("button", { name: "Feature matches" }),
-    ).toHaveAttribute("aria-pressed", "false");
-  });
-  it("clears a previous result when changing the query", async () => {
-    const user = userEvent.setup();
-    render(<App />);
-    await screen.findByText("The cropped repost", { selector: "h3" });
-    await user.click(screen.getByRole("button", { name: "Find the source" }));
-    await screen.findByText("Match verified");
-    await user.click(screen.getByRole("button", { name: /A different look/ }));
-    expect(screen.queryByText("Match verified")).not.toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Find the source" }),
-    ).toBeEnabled();
-  });
-  it("opens an attributed source and exposes the content hash", async () => {
-    const user = userEvent.setup();
-    render(<App />);
-    await screen.findByText("The cropped repost", { selector: "h3" });
-    await user.click(screen.getByRole("button", { name: /Source library/ }));
-    await user.click(screen.getByRole("button", { name: /The bridge/ }));
-    const dialog = screen.getByRole("dialog");
-    expect(
-      within(dialog).getByText(manifest.sources[0].sha256),
-    ).toBeInTheDocument();
-    expect(
-      within(dialog).getByRole("link", { name: "CC BY 3.0" }),
-    ).toHaveAttribute("href", "https://creativecommons.org/licenses/by/3.0/");
-    await user.click(
-      screen.getByRole("button", { name: "Close source preview" }),
+      within(dialog).getByTitle("Watch Rocket launch from the coast"),
+    ).toHaveAttribute(
+      "src",
+      "https://www.youtube-nocookie.com/embed/abcdefghijk",
     );
+    expect(dialog.querySelector("video")).toHaveAttribute(
+      "src",
+      "blob:clip-preview",
+    );
+    await user.keyboard("{Escape}");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
   });
-  it("describes unavailable sponsor integrations honestly", async () => {
-    const user = userEvent.setup();
-    render(<App />);
-    await user.click(screen.getByRole("button", { name: "Under the hood" }));
-    expect(screen.getAllByText("API key required")).toHaveLength(2);
-    expect(screen.getByText("Hosted recorded demo")).toBeInTheDocument();
-  });
-  it("handles missing recorded data with a recoverable error", async () => {
-    const user = userEvent.setup();
-    render(<App />);
-    await screen.findByText("The cropped repost", { selector: "h3" });
-    vi.mocked(fetch).mockImplementationOnce(
-      async () => ({ ok: false }) as Response,
-    );
-    await user.click(screen.getByRole("button", { name: "Find the source" }));
-    await waitFor(() =>
-      expect(screen.getByRole("alert")).toHaveTextContent("not available"),
-    );
-    expect(
-      screen.getByRole("button", { name: "Find the source" }),
-    ).toBeEnabled();
-  });
-});
-
-describe("live and negative analysis paths", () => {
-  it("uploads a demo to the real API contract and marks the response as live", async () => {
-    const user = userEvent.setup();
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async (url: string) => {
-        if (url === "/manifest.json")
-          return { ok: true, json: async () => manifest };
-        if (url === "/api/health")
-          return {
-            ok: true,
-            json: async () => ({
-              status: "ok",
-              semantic: true,
-              gemini: false,
-              twinly: false,
-            }),
-          };
-        if (url === "/api/library")
-          return {
-            ok: true,
-            json: async () => ({ sources: manifest.sources }),
-          };
-        if (url === manifest.demos[0].url)
-          return {
-            ok: true,
-            blob: async () => new Blob(["video"], { type: "video/mp4" }),
-          };
-        if (url === "/api/analyze")
-          return { ok: true, json: async () => ({ id: "live-test" }) };
-        if (url === "/api/jobs/live-test")
-          return {
-            ok: true,
-            json: async () => ({
-              status: "complete",
-              report: { ...actualReport, recorded: false },
-            }),
-          };
-        throw Error(`Unexpected fetch ${url}`);
-      }),
-    );
-    render(<App />);
-    await user.click(
-      await screen.findByRole("checkbox", {
-        name: "Run this demo live on my computer",
-      }),
-    );
-    await user.click(screen.getByRole("button", { name: "Find the source" }));
-    expect(
-      await screen.findByText("Match verified", {}, { timeout: 4000 }),
-    ).toBeInTheDocument();
-    expect(screen.queryByText("RECORDED RUN")).not.toBeInTheDocument();
+  it("lets the user refine a generated description without uploading the file again", async () => {
+    const user = await upload();
+    await user.click(screen.getByText("Refine the description"));
+    const box = screen.getByLabelText("Search description");
+    await user.clear(box);
+    await user.type(box, "rocket launch at night");
+    await user.click(screen.getByRole("button", { name: "Search again" }));
+    await screen.findByText("Similar videos to explore");
     expect(fetch).toHaveBeenCalledWith(
-      "/api/analyze",
-      expect.objectContaining({ method: "POST", body: expect.any(FormData) }),
+      `/api/refine/${jobId}`,
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({ query: "rocket launch at night" }),
+      }),
     );
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.filter(([url]) => url === "/api/search-video"),
+    ).toHaveLength(1);
   });
-
-  it("renders an abstention without a fabricated source", async () => {
+  it("shows provider failure without inserting saved candidates", async () => {
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (url === "/api/health")
+        return {
+          ok: true,
+          json: async () => ({ mode: "internet-search" }),
+        } as Response;
+      if (url === "/api/search-video")
+        return { ok: true, json: async () => ({ id: jobId }) } as Response;
+      return {
+        ok: true,
+        json: async () => ({
+          status: "complete",
+          result: {
+            ...search,
+            results: [],
+            warnings: [
+              "Live search unavailable. No saved results substituted.",
+            ],
+          },
+        }),
+      } as Response;
+    });
     const user = userEvent.setup();
     render(<App />);
-    await screen.findByText("The cropped repost", { selector: "h3" });
-    vi.mocked(fetch).mockImplementationOnce(
-      async () =>
-        ({
-          ok: true,
-          json: async () => ({ ...actualReport, results: [] }),
-        }) as Response,
+    await screen.findByText("Live engine connected");
+    await user.upload(
+      screen.getByLabelText("Choose a video file"),
+      new File(["x"], "clip.mp4", { type: "video/mp4" }),
     );
-    await user.click(screen.getByRole("button", { name: "Find the source" }));
-    expect(await screen.findByText("No verified match")).toBeInTheDocument();
+    await screen.findByText("No video candidates found");
+    expect(screen.getByText(/Live search unavailable/)).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: "Inspect source video" }),
+      screen.queryByText("Rocket launch from the coast"),
     ).not.toBeInTheDocument();
   });
-});
-
-describe("multi-source evidence", () => {
-  it("maps both query intervals and switches the inspected source", async () => {
-    const user = userEvent.setup();
+  it("disables upload when the live service is unavailable, without a demo fallback", async () => {
+    vi.mocked(fetch).mockResolvedValue({ ok: false } as Response);
     render(<App />);
-    await user.click(
-      await screen.findByRole("button", { name: /Two stories, one edit/ }),
+    await screen.findByText("Connect your local search engine");
+    expect(
+      screen.getByRole("button", { name: "Choose a video" }),
+    ).toBeDisabled();
+    expect(screen.queryByText(/try a sample/i)).not.toBeInTheDocument();
+  });
+  it("prevents a second submission while the first request is pending", async () => {
+    let resolve!: (r: Response) => void;
+    const pending = new Promise<Response>((r) => {
+      resolve = r;
+    });
+    const original = vi.mocked(fetch).getMockImplementation()!;
+    vi.mocked(fetch).mockImplementation((url, init) =>
+      url === "/api/search-video" ? pending : original(url, init),
     );
-    vi.mocked(fetch).mockImplementationOnce(
-      async () => ({ ok: true, json: async () => montageReport }) as Response,
-    );
-    await user.click(screen.getByRole("button", { name: "Find the source" }));
-    const map = await screen.findByRole("region", {
-      name: "Verified source map",
+    render(<App />);
+    await screen.findByText("Live engine connected");
+    const drop = screen.getByRole("region", { name: "Submit a video" });
+    fireEvent.drop(drop, {
+      dataTransfer: { files: [new File(["x"], "one.mp4")] },
+    });
+    fireEvent.drop(drop, {
+      dataTransfer: { files: [new File(["x"], "two.mp4")] },
     });
     expect(
-      within(map).getByText("2 sources, mapped to your edit."),
-    ).toBeInTheDocument();
-    await user.click(within(map).getByRole("button", { name: /^The bridge/ }));
-    expect(
-      screen.getByRole("heading", { name: /The bridge/ }),
-    ).toBeInTheDocument();
-    expect(
-      within(map).getByRole("button", { name: /^The bridge/ }),
-    ).toHaveAttribute("aria-pressed", "true");
-    await user.click(
-      within(map).getByRole("button", { name: /^The laboratory/ }),
+      vi
+        .mocked(fetch)
+        .mock.calls.filter(([url]) => url === "/api/search-video"),
+    ).toHaveLength(1);
+    await act(async () =>
+      resolve({ ok: true, json: async () => ({ id: jobId }) } as Response),
     );
-    expect(
-      screen.getByRole("heading", { name: /The laboratory/ }),
-    ).toBeInTheDocument();
+    await screen.findByText("Similar videos to explore");
   });
-});
-
-describe("user-provided source attribution", () => {
-  it("shows the uploaded creator instead of the bundled film credit", async () => {
+  it("reopens a previous user search after a reload", async () => {
+    localStorage.setItem("traceback:internet:last-search", jobId);
     const user = userEvent.setup();
-    const custom = {
-      ...manifest.sources[0],
-      id: "user-test",
-      title: "My original footage",
-      creator: "Test Archivist",
-      work: "My recording",
-      license: "Rights unverified",
-      licenseUrl: "",
-      sourceUrl: "",
-      userProvided: true,
-      duration: 15,
-      originalOffset: 0,
-    };
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async (url: string) => {
-        if (url === "/manifest.json")
-          return { ok: true, json: async () => manifest };
-        if (url === "/api/health")
-          return {
-            ok: true,
-            json: async () => ({
-              status: "ok",
-              semantic: true,
-              gemini: false,
-              twinly: false,
-            }),
-          };
-        if (url === "/api/library")
-          return {
-            ok: true,
-            json: async () => ({ sources: [...manifest.sources, custom] }),
-          };
-        return { ok: false };
-      }),
-    );
-    render(<App />);
-    await screen.findByText("Local engine connected");
-    await user.click(screen.getByRole("button", { name: /Source library/ }));
-    await user.click(
-      await screen.findByRole("button", { name: /My original footage/ }),
-    );
-    const dialog = screen.getByRole("dialog");
-    expect(within(dialog).getByText("Test Archivist")).toBeInTheDocument();
-    expect(within(dialog).getByText("Source duration")).toBeInTheDocument();
-    expect(within(dialog).queryByText(/Blender/)).not.toBeInTheDocument();
-  });
-});
-
-describe("saved local analysis recovery", () => {
-  it("reopens the measured report with its original query video after a refresh", async () => {
-    const user = userEvent.setup();
-    const id = "a".repeat(32);
-    localStorage.setItem("traceback:last-analysis", id);
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async (url: string) => {
-        if (url === "/manifest.json")
-          return { ok: true, json: async () => manifest };
-        if (url === "/api/health")
-          return {
-            ok: true,
-            json: async () => ({
-              status: "ok",
-              semantic: true,
-              gemini: false,
-              twinly: false,
-            }),
-          };
-        if (url === "/api/library")
-          return {
-            ok: true,
-            json: async () => ({ sources: manifest.sources }),
-          };
-        if (url === `/api/jobs/${id}`)
-          return {
-            ok: true,
-            json: async () => ({
-              status: "complete",
-              report: {
-                ...actualReport,
-                recorded: false,
-                query: { ...actualReport.query, filename: "my-saved-clip.mp4" },
-              },
-            }),
-          };
-        return { ok: false };
-      }),
-    );
     const { container } = render(<App />);
     await user.click(
-      await screen.findByRole("button", { name: "Reopen analysis" }),
+      await screen.findByRole("button", { name: /Reopen latest search/ }),
     );
-    expect(await screen.findByText("Match verified")).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "my-saved-clip.mp4" }),
-    ).toBeInTheDocument();
-    expect(container.querySelector(".query-video-wrap video")).toHaveAttribute(
+    await screen.findByText("Similar videos to explore");
+    expect(container.querySelector("video")).toHaveAttribute(
       "src",
-      `/api/query/${id}`,
+      `/api/query/${jobId}`,
     );
-    expect(screen.getByText("SAVED LOCAL RUN")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: /A different look/ }));
-    expect(container.querySelector(".query-video-wrap video")).toHaveAttribute(
-      "src",
-      manifest.demos[1].url,
-    );
-    expect(screen.queryByText("Match verified")).not.toBeInTheDocument();
-  });
-
-  it("clears a stale saved ID without blocking the recorded examples", async () => {
-    const id = "b".repeat(32);
-    localStorage.setItem("traceback:last-analysis", id);
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async (url: string) => {
-        if (url === "/manifest.json")
-          return { ok: true, json: async () => manifest };
-        if (url === "/api/health")
-          return {
-            ok: true,
-            json: async () => ({
-              status: "ok",
-              semantic: true,
-              gemini: false,
-              twinly: false,
-            }),
-          };
-        if (url === `/api/jobs/${id}`) return { ok: false, status: 404 };
-        if (url === "/api/library")
-          return {
-            ok: true,
-            json: async () => ({ sources: manifest.sources }),
-          };
-        return { ok: false };
-      }),
-    );
-    render(<App />);
     await waitFor(() =>
-      expect(localStorage.getItem("traceback:last-analysis")).toBeNull(),
+      expect(
+        screen.getByRole("button", { name: "Choose a video" }),
+      ).toBeEnabled(),
     );
-    expect(
-      screen.queryByRole("button", { name: "Reopen analysis" }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Find the source" }),
-    ).toBeEnabled();
   });
 });

@@ -3,1653 +3,1002 @@ import {
   ArrowDownToLine,
   ArrowRight,
   ArrowUpRight,
+  Bookmark,
   Check,
-  CheckCheck,
-  ChevronRight,
+  ChevronDown,
   Clock3,
-  ExternalLink,
-  FileVideo,
+  Copy,
   Film,
-  FlaskConical,
-  Focus,
-  FolderOpen,
-  GitBranch,
+  Globe2,
   Info,
-  Layers3,
   LoaderCircle,
-  Pause,
   Play,
   ScanLine,
   Search,
   ShieldCheck,
+  SlidersHorizontal,
   Sparkles,
   Upload,
   X,
 } from "lucide-react";
-import type { Demo, Evidence, Manifest, Match, Report, Source } from "./types";
-import Library from "./Library";
-import Evaluation from "./Evaluation";
-import Diagnostics from "./Diagnostics";
-import PacketReview from "./PacketReview";
-import { createEvidencePacket, sourceAttribution } from "./evidence";
-import { asset } from "./paths";
+import {
+  embedUrl,
+  timestamp,
+  watchUrl,
+  type SavedVideo,
+  type VideoCandidate,
+  type VideoSearch,
+} from "./internet";
 
-const time = (n: number) =>
-  `${Math.floor(Math.max(0, n) / 60)
-    .toString()
-    .padStart(2, "0")}:${(Math.max(0, n) % 60).toFixed(1).padStart(4, "0")}`;
-const shortTime = (n: number) =>
-  `${Math.floor(Math.max(0, n) / 60)
-    .toString()
-    .padStart(2, "0")}:${Math.floor(Math.max(0, n) % 60)
-    .toString()
-    .padStart(2, "0")}`;
-type Page = "trace" | "library" | "packet" | "method";
-type Health = {
-  status: string;
-  semantic: boolean;
-  gemini: boolean;
-  twinly: boolean;
-};
+type Connection = "checking" | "ready" | "offline";
+const LAST_SEARCH = "traceback:internet:last-search";
+const SAVED_VIDEOS = "traceback:internet:saved-videos";
+const STAGES = ["frames", "describe", "search", "thumbnails", "rank"];
+const STAGE_NAMES = [
+  "Read clip",
+  "Describe scenes",
+  "Search the web",
+  "Get previews",
+  "Compare visuals",
+];
+function readSaved(): SavedVideo[] {
+  try {
+    const value = JSON.parse(localStorage.getItem(SAVED_VIDEOS) || "[]");
+    return Array.isArray(value)
+      ? value
+          .filter(
+            (v) =>
+              v &&
+              typeof v.id === "string" &&
+              typeof v.title === "string" &&
+              watchUrl(v.url),
+          )
+          .slice(0, 100)
+      : [];
+  } catch {
+    return [];
+  }
+}
 
-function App() {
-  const [manifest, setManifest] = useState<Manifest | null>(null);
-  const [page, setPage] = useState<Page>("trace");
-  const [demo, setDemo] = useState<Demo | null>(null);
-  const [upload, setUpload] = useState<File | null>(null);
-  const [uploadUrl, setUploadUrl] = useState("");
-  const [report, setReport] = useState<Report | null>(null);
-  const [base, setBase] = useState("");
+export default function App() {
+  const [connection, setConnection] = useState<Connection>("checking");
+  const [view, setView] = useState<"search" | "saved">("search");
   const [busy, setBusy] = useState(false);
-  const [stage, setStage] = useState("");
+  const [stage, setStage] = useState("frames");
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [health, setHealth] = useState<Health | null>(null);
-  const [activeMatch, setActiveMatch] = useState(0);
-  const [activeEvidence, setActiveEvidence] = useState(0);
-  const [showFeatures, setShowFeatures] = useState(true);
+  const [dragging, setDragging] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [queryUrl, setQueryUrl] = useState("");
+  const [jobId, setJobId] = useState("");
+  const [result, setResult] = useState<VideoSearch | null>(null);
+  const [recent, setRecent] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [refine, setRefine] = useState("");
+  const [saved, setSaved] = useState<SavedVideo[]>(readSaved);
+  const [compare, setCompare] = useState<VideoCandidate | null>(null);
   const [toast, setToast] = useState("");
-  const [exporting, setExporting] = useState(false);
-  const [liveRun, setLiveRun] = useState(false);
-  const [savedResult, setSavedResult] = useState(false);
-  const [recentJob, setRecentJob] = useState<{
-    id: string;
-    filename: string;
-    status: string;
-  } | null>(null);
-  const [restoredQuery, setRestoredQuery] = useState<{
-    url: string;
-    filename: string;
-  } | null>(null);
-  const [inspectSource, setInspectSource] = useState<Source | null>(null);
-  const [inspectTime, setInspectTime] = useState(0);
-  const modal = useRef<HTMLElement>(null);
-  const returnFocus = useRef<HTMLElement | null>(null);
-  const [explanation, setExplanation] = useState("");
-  const [explaining, setExplaining] = useState(false);
-  const explanationId = useRef(0);
   const input = useRef<HTMLInputElement>(null);
-  const queryVideo = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(false);
+  const video = useRef<HTMLVideoElement>(null);
   const requestId = useRef(0);
-  useEffect(() => {
-    let active = true;
-    async function init() {
-      try {
-        const response = await fetch(asset("/manifest.json"));
-        if (!response.ok) throw Error("Could not load the source library.");
-        const raw: Manifest = await response.json();
-        const m: Manifest = {
-          ...raw,
-          sources: raw.sources.map((s) => ({
-            ...s,
-            url: asset(s.url),
-            thumbnail: asset(s.thumbnail),
-          })),
-          demos: raw.demos.map((d) => ({
-            ...d,
-            url: asset(d.url),
-            thumbnail: asset(d.thumbnail),
-          })),
-        };
-        if (!active) return;
-        setManifest(m);
-        setDemo(m.demos[0]);
-        try {
-          const r = await fetch("/api/health", {
-            signal: AbortSignal.timeout(3000),
-          });
-          const h = r.ok ? await r.json() : null;
-          if (active && h?.status === "ok") {
-            setHealth(h);
-            try {
-              const saved = localStorage.getItem("traceback:last-analysis");
-              if (saved && /^[a-f0-9]{32}$/.test(saved)) {
-                const previous = await fetch(`/api/jobs/${saved}`, {
-                  signal: AbortSignal.timeout(3000),
-                });
-                if (previous.ok) {
-                  const job = await previous.json();
-                  if (active)
-                    setRecentJob({
-                      id: saved,
-                      filename:
-                        job.filename ||
-                        job.report?.query.filename ||
-                        "Previous clip",
-                      status: job.status,
-                    });
-                } else if (previous.status === 404)
-                  localStorage.removeItem("traceback:last-analysis");
-              }
-            } catch {
-              /* A blocked browser store never prevents analysis. */
-            }
-            const lib = await fetch("/api/library");
-            if (lib.ok) {
-              const data = await lib.json();
-              if (active) setManifest({ ...m, sources: data.sources });
-            }
-          }
-        } catch {
-          /* Hosted demo works without a local server. */
-        }
-      } catch (e) {
-        if (active)
-          setError(
-            e instanceof Error ? e.message : "Could not load the library.",
-          );
-      }
+  const inFlight = useRef(false);
+  const controller = useRef<AbortController | null>(null);
+  const modal = useRef<HTMLDivElement>(null);
+  const returnFocus = useRef<HTMLElement | null>(null);
+
+  async function checkConnection() {
+    setConnection("checking");
+    try {
+      const r = await fetch("/api/health", {
+        signal: AbortSignal.timeout(3000),
+      });
+      const health = r.ok ? await r.json() : null;
+      setConnection(health?.mode === "internet-search" ? "ready" : "offline");
+    } catch {
+      setConnection("offline");
     }
-    void init();
+  }
+  useEffect(() => {
+    void checkConnection();
+    try {
+      const id = localStorage.getItem(LAST_SEARCH);
+      if (id && /^[a-f0-9]{32}$/.test(id)) setRecent(id);
+    } catch {
+      /* Browser storage is optional. */
+    }
     return () => {
-      active = false;
+      requestId.current++;
+      controller.current?.abort();
     };
   }, []);
   useEffect(() => {
-    if (!inspectSource) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setInspectSource(null);
-        returnFocus.current?.focus();
-      }
-      if (event.key === "Tab" && modal.current) {
-        const controls = modal.current.querySelectorAll<HTMLElement>(
-          "button,a[href],video[controls]",
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setQueryUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(""), 3500);
+    return () => clearTimeout(timer);
+  }, [toast]);
+  useEffect(() => {
+    try {
+      localStorage.setItem(SAVED_VIDEOS, JSON.stringify(saved));
+    } catch {
+      /* Saving links never blocks search. */
+    }
+  }, [saved]);
+  useEffect(() => {
+    if (!compare) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    modal.current?.querySelector<HTMLElement>("button")?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeCompare();
+      if (e.key === "Tab") {
+        const controls = modal.current?.querySelectorAll<HTMLElement>(
+          "button,a[href],video[controls],iframe",
         );
+        if (!controls?.length) return;
         const first = controls[0],
           last = controls[controls.length - 1];
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault();
-          last?.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          first?.focus();
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+        if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
         }
       }
     };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [inspectSource]);
-  function openSource(source: Source, start = 0) {
-    returnFocus.current = document.activeElement as HTMLElement;
-    setInspectTime(start);
-    setInspectSource(source);
-  }
-  function closeSource() {
-    setInspectSource(null);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [compare]);
+
+  function closeCompare() {
+    setCompare(null);
     returnFocus.current?.focus();
   }
-  useEffect(() => {
-    if (!upload) return;
-    const url = URL.createObjectURL(upload);
-    setUploadUrl(url);
-    return () => URL.revokeObjectURL(url);
-  }, [upload]);
-  useEffect(() => {
-    if (!toast) return;
-    const t = setTimeout(() => setToast(""), 4000);
-    return () => clearTimeout(t);
-  }, [toast]);
-  const clear = () => {
-    requestId.current++;
-    explanationId.current++;
-    setExplaining(false);
-    setRestoredQuery(null);
-    setSavedResult(false);
-    setReport(null);
-    setActiveMatch(0);
-    setActiveEvidence(0);
+  function openCompare(candidate: VideoCandidate) {
+    returnFocus.current = document.activeElement as HTMLElement;
+    setCompare(candidate);
+  }
+  function begin() {
+    if (inFlight.current) return null;
+    inFlight.current = true;
+    const id = ++requestId.current;
+    controller.current?.abort();
+    controller.current = new AbortController();
+    setBusy(true);
     setError("");
-    setExplanation("");
-    setPlaying(false);
-  };
-  const chooseDemo = (d: Demo) => {
-    clear();
-    setUpload(null);
-    setDemo(d);
-  };
-  const chooseFile = (file?: File) => {
-    if (!file) return;
-    if (file.size > 100 * 1024 * 1024) {
+    setResult(null);
+    setCompare(null);
+    setFilter("All");
+    setView("search");
+    setStage("frames");
+    setMessage("Uploading your video to the local engine");
+    return id;
+  }
+  async function poll(id: number, job: string) {
+    setJobId(job);
+    setRecent(job);
+    try {
+      localStorage.setItem(LAST_SEARCH, job);
+    } catch {
+      /* Optional recovery. */
+    }
+    for (;;) {
+      if (id !== requestId.current) return;
+      const response = await fetch(`/api/jobs/${job}`, {
+        signal: AbortSignal.any([
+          controller.current!.signal,
+          AbortSignal.timeout(15000),
+        ]),
+      });
+      if (!response.ok)
+        throw Error(
+          response.status === 404
+            ? "This search is no longer available. Choose your video to start a fresh search."
+            : "Could not read search progress. Reopen the latest search to reconnect.",
+        );
+      const data = await response.json();
+      if (id !== requestId.current) return;
+      setStage(data.stage || "frames");
+      setMessage(data.message || "Searching…");
+      if (data.status === "failed")
+        throw Error(data.error || "Search failed. Try again.");
+      if (data.status === "complete") {
+        if (!data.result || data.result.schemaVersion !== "internet-1")
+          throw Error(
+            "This is not an internet video search. Choose a video to start a fresh search.",
+          );
+        setResult(data.result);
+        setRefine(data.result.queries[0] || "");
+        return;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+  function finish(id: number, problem?: unknown) {
+    if (id !== requestId.current) return;
+    if (problem)
+      setError(
+        problem instanceof Error ? problem.message : "Search could not finish.",
+      );
+    inFlight.current = false;
+    setBusy(false);
+  }
+  async function chooseFile(next?: File) {
+    if (!next || inFlight.current) return;
+    if (connection !== "ready") {
+      setError(
+        "Open the local app to analyze a video. The website has no cloud video engine or prerecorded answers.",
+      );
+      return;
+    }
+    if (next.size > 100 * 1024 * 1024) {
       setError("Choose a video smaller than 100 MB.");
       return;
     }
-    if (
-      !file.type.startsWith("video/") &&
-      !/\.(mp4|mov|webm|mkv)$/i.test(file.name)
-    ) {
-      setError("Choose an MP4, MOV, WebM, or MKV video.");
+    if (!/\.(mp4|mov|webm|mkv|m4v)$/i.test(next.name)) {
+      setError("Choose an MP4, MOV, WebM, MKV or M4V video.");
       return;
     }
-    clear();
-    setUpload(file);
-  };
-  async function runTrace() {
-    if (!demo && !upload) return;
-    const id = ++requestId.current;
-    explanationId.current++;
-    setExplaining(false);
-    setSavedResult(false);
-    setBusy(true);
-    setError("");
-    setExplanation("");
-    setReport(null);
+    const id = begin();
+    if (id === null) return;
+    setFile(next);
+    setJobId("");
     try {
-      if (upload || restoredQuery || (liveRun && health && demo)) {
-        if (!health)
-          throw Error(
-            "New uploads need the local analysis server. Run ./start.sh in the project, then open its local URL. The hosted demo contains recorded, reproducible analyses.",
-          );
-        setStage("Uploading your clip");
-        const form = new FormData();
-        if (upload) form.append("file", upload);
-        else if (demo || restoredQuery) {
-          const response = await fetch(restoredQuery?.url || demo!.url);
-          if (!response.ok)
-            throw Error("Could not load the demo video for a live run.");
-          form.append(
-            "file",
-            new File(
-              [await response.blob()],
-              restoredQuery?.filename || demo!.id + ".mp4",
-              {
-                type: "video/mp4",
-              },
-            ),
-          );
-        }
-        const res = await fetch("/api/analyze", { method: "POST", body: form });
-        const data = await res.json();
-        if (!res.ok) throw Error(data.detail || "Could not start analysis.");
-        try {
-          localStorage.setItem("traceback:last-analysis", data.id);
-        } catch {
-          /* Storage is optional. */
-        }
-        setRecentJob({
-          id: data.id,
-          filename:
-            upload?.name ||
-            restoredQuery?.filename ||
-            demo?.title ||
-            "Your clip",
-          status: "running",
-        });
-        while (id === requestId.current) {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          const poll = await fetch(`/api/jobs/${data.id}`, {
-            signal: AbortSignal.timeout(15000),
-          });
-          if (!poll.ok) throw Error("Analysis session could not be read.");
-          const job = await poll.json();
-          setStage(job.message || "Analyzing your clip");
-          if (job.status === "failed")
-            throw Error(job.error || "Analysis failed.");
-          if (job.status === "complete") {
-            setReport(job.report);
-            setBase(`/api/evidence/${data.id}/`);
-            setRecentJob((j) =>
-              j && j.id === data.id ? { ...j, status: "complete" } : j,
-            );
-            break;
-          }
-        }
-      } else if (demo) {
-        setStage("Loading a recorded model run");
-        const res = await fetch(asset(`/evidence/${demo.id}/report.json`));
-        if (!res.ok) throw Error("This demo analysis is not available yet.");
-        const data: Report = await res.json();
-        if (id === requestId.current) {
-          setReport({
-            ...data,
-            results: data.results.map((result) => ({
-              ...result,
-              source: {
-                ...result.source,
-                url: asset(result.source.url),
-                thumbnail: asset(result.source.thumbnail),
-              },
-            })),
-          });
-          setBase(asset(`/evidence/${demo.id}/`));
-        }
-      }
-      setActiveEvidence(0);
-      setActiveMatch(0);
-    } catch (e) {
-      if (id === requestId.current)
-        setError(e instanceof Error ? e.message : "Something went wrong.");
-    } finally {
-      if (id === requestId.current) setBusy(false);
-    }
-  }
-  async function reopenRecent() {
-    if (!recentJob || !health) return;
-    const id = ++requestId.current;
-    explanationId.current++;
-    setExplaining(false);
-    setSavedResult(false);
-    setBusy(true);
-    setReport(null);
-    setError("");
-    setExplanation("");
-    setUpload(null);
-    setRestoredQuery({
-      url: `/api/query/${recentJob.id}`,
-      filename: recentJob.filename,
-    });
-    setStage("Reopening the previous analysis");
-    try {
-      while (id === requestId.current) {
-        const response = await fetch(`/api/jobs/${recentJob.id}`, {
-          signal: AbortSignal.timeout(15000),
-        });
-        const job = await response.json();
-        if (!response.ok)
-          throw Error(
-            job.detail || "The previous analysis could not be reopened.",
-          );
-        if (job.status === "failed")
-          throw Error(job.error || "The previous analysis failed.");
-        setStage(job.message || "Waiting for the local engine");
-        if (job.status === "complete") {
-          setReport(job.report);
-          setSavedResult(true);
-          setBase(`/api/evidence/${recentJob.id}/`);
-          setActiveMatch(0);
-          setActiveEvidence(0);
-          setRestoredQuery({
-            url: `/api/query/${recentJob.id}`,
-            filename: job.report.query.filename,
-          });
-          setRecentJob((j) => (j ? { ...j, status: "complete" } : j));
-          break;
-        }
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
-    } catch (e) {
-      if (id === requestId.current)
-        setError(
-          e instanceof Error
-            ? e.message
-            : "The previous analysis could not be reopened.",
-        );
-    } finally {
-      if (id === requestId.current) setBusy(false);
-    }
-  }
-  async function exportReport() {
-    if (!report || exporting) return;
-    setExporting(true);
-    try {
-      const bytes = await createEvidencePacket(
-        report,
-        base,
-        sourceAttribution(report, manifest?.attribution),
-      );
-      const blob = new Blob([new Uint8Array(bytes).buffer], {
-        type: "application/zip",
+      const form = new FormData();
+      form.append("file", next);
+      const response = await fetch("/api/search-video", {
+        method: "POST",
+        body: form,
+        signal: AbortSignal.any([
+          controller.current!.signal,
+          AbortSignal.timeout(120000),
+        ]),
       });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = `traceback-${report.fixtureId || "analysis"}-evidence.zip`;
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-      setToast("Evidence packet downloaded with frame checksums");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Evidence export failed.");
-    } finally {
-      setExporting(false);
+      const data = await response.json();
+      if (!response.ok)
+        throw Error(data.detail || "Could not start the video search.");
+      if (id !== requestId.current) return;
+      await poll(id, data.id);
+      finish(id);
+    } catch (problem) {
+      finish(id, problem);
     }
   }
-  async function explain() {
-    if (!report || !health?.gemini || explaining) return;
-    const id = ++explanationId.current;
-    setExplaining(true);
-    setExplanation("Preparing a grounded explanation…");
+  async function reopen() {
+    if (!recent || connection !== "ready") return;
+    const id = begin();
+    if (id === null) return;
+    setFile(null);
+    setQueryUrl(`/api/query/${recent}`);
     try {
-      const r = await fetch("/api/explain", {
+      await poll(id, recent);
+      finish(id);
+    } catch (problem) {
+      finish(id, problem);
+    }
+  }
+  async function refineSearch(e: React.FormEvent) {
+    e.preventDefault();
+    if (!jobId || refine.trim().length < 2) return;
+    const id = begin();
+    if (id === null) return;
+    try {
+      const response = await fetch(`/api/refine/${jobId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ report }),
-        signal: AbortSignal.timeout(45000),
+        body: JSON.stringify({ query: refine.trim() }),
+        signal: controller.current!.signal,
       });
-      const data = await r.json();
-      if (!r.ok) throw Error(data.detail || "Explanation unavailable.");
-      if (id === explanationId.current) setExplanation(data.text);
-    } catch (e) {
-      if (id === explanationId.current)
-        setExplanation(
-          e instanceof Error ? e.message : "Explanation unavailable.",
-        );
-    } finally {
-      if (id === explanationId.current) setExplaining(false);
+      const data = await response.json();
+      if (!response.ok)
+        throw Error(data.detail || "Could not refine this search.");
+      if (id !== requestId.current) return;
+      await poll(id, data.id);
+      finish(id);
+    } catch (problem) {
+      finish(id, problem);
     }
   }
-  const match = report?.results[activeMatch];
-  const evidence = match?.evidence[activeEvidence];
-  const queryUrl = restoredQuery?.url || (upload ? uploadUrl : demo?.url);
+  function toggleSaved(candidate: VideoCandidate, imageUrl?: string) {
+    setSaved((previous) =>
+      previous.some((v) => v.id === candidate.id)
+        ? previous.filter((v) => v.id !== candidate.id)
+        : [{ ...candidate, imageUrl }, ...previous].slice(0, 100),
+    );
+  }
+  async function copyLink(url: string) {
+    try {
+      await navigator.clipboard.writeText(url);
+      setToast("Video link copied");
+    } catch {
+      setToast(
+        "Use the video title link to copy its address from your browser.",
+      );
+    }
+  }
+  function exportSaved() {
+    const text = saved
+      .map(
+        (v) =>
+          `${v.title}\n${v.creator ? v.creator + " · " : ""}${v.provider}\n${v.url}`,
+      )
+      .join("\n\n");
+    const url = URL.createObjectURL(
+      new Blob(
+        [
+          `Traceback · saved video links\n\n${text}\n\nThese are search candidates, not verified sources.\n`,
+        ],
+        { type: "text/plain" },
+      ),
+    );
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "traceback-video-links.txt";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  const assetBase = `/api/search-assets/${jobId}/`;
+  const visible = (result?.results || []).filter(
+    (v) => filter === "All" || v.provider === filter,
+  );
+  const name = file?.name || result?.query.filename || "Your clip";
+  const providers = Array.from(
+    new Set(result?.results.map((v) => v.provider) || []),
+  );
+  const activeStage = STAGES.indexOf(stage);
+
+  function card(
+    candidate: VideoCandidate,
+    imageUrl?: string,
+    savedView = false,
+  ) {
+    const isSaved = saved.some((v) => v.id === candidate.id);
+    return (
+      <article className="video-card" key={candidate.id}>
+        <a
+          className="candidate-image"
+          href={watchUrl(candidate.url)}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`Watch ${candidate.title}`}
+        >
+          {imageUrl ? (
+            <img
+              loading="lazy"
+              src={imageUrl}
+              alt=""
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          ) : (
+            <Film size={35} />
+          )}
+          <span className="watch-overlay">
+            <Play size={23} fill="currentColor" />
+          </span>
+          {candidate.duration && (
+            <span className="duration">{candidate.duration}</span>
+          )}
+        </a>
+        <div className="candidate-copy">
+          <div className="candidate-meta">
+            <span>{candidate.provider}</span>
+            <span>
+              {candidate.similarity !== undefined
+                ? "Visually ranked"
+                : "Search result"}
+            </span>
+          </div>
+          <h3>
+            <a href={watchUrl(candidate.url)} target="_blank" rel="noreferrer">
+              {candidate.title}
+            </a>
+          </h3>
+          <p>{candidate.creator || "Creator not listed"}</p>
+          <div className="candidate-actions">
+            {!savedView && (
+              <button onClick={() => openCompare(candidate)}>
+                <SlidersHorizontal size={14} /> Compare
+              </button>
+            )}
+            <button
+              aria-label={`${isSaved ? "Unsave" : "Save"} ${candidate.title}`}
+              aria-pressed={isSaved}
+              onClick={() => toggleSaved(candidate, imageUrl)}
+            >
+              <Bookmark size={15} fill={isSaved ? "currentColor" : "none"} />
+              {isSaved ? "Saved" : "Save"}
+            </button>
+            <button
+              className="copy-action"
+              aria-label={`Copy link to ${candidate.title}`}
+              onClick={() => void copyLink(candidate.url)}
+            >
+              <Copy size={15} />
+            </button>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   return (
-    <div className="app-shell">
-      <a href="#main-content" className="skip-link">
-        Skip to workspace
+    <div className="internet-app">
+      <a className="skip-link" href="#main-content">
+        Skip to video search
       </a>
-      <aside className="sidebar">
+      <header className="app-header">
         <a
           className="brand"
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            setPage("trace");
+            setView("search");
           }}
           aria-label="Traceback home"
         >
           <span className="brand-icon">
-            <ScanLine size={24} />
+            <ScanLine size={23} />
           </span>
           traceback<span className="brand-dot">.</span>
         </a>
-        <div className="workspace-label">YOUR WORKSPACE</div>
         <nav aria-label="Main navigation">
           <button
-            className={page === "trace" ? "nav-item active" : "nav-item"}
-            aria-current={page === "trace" ? "page" : undefined}
-            onClick={() => setPage("trace")}
+            className={view === "search" ? "active" : ""}
+            aria-current={view === "search" ? "page" : undefined}
+            onClick={() => setView("search")}
           >
-            <ScanLine size={18} />
-            Trace a clip<span className="nav-key">↗</span>
+            <Search size={16} /> Video search
           </button>
           <button
-            className={page === "library" ? "nav-item active" : "nav-item"}
-            aria-current={page === "library" ? "page" : undefined}
-            onClick={() => setPage("library")}
+            className={view === "saved" ? "active" : ""}
+            aria-current={view === "saved" ? "page" : undefined}
+            onClick={() => setView("saved")}
           >
-            <FolderOpen size={18} />
-            Source library
-            <span className="nav-count">{manifest?.sources.length || 0}</span>
+            <Bookmark size={16} /> Saved videos <span>{saved.length}</span>
           </button>
-          <button
-            className={page === "packet" ? "nav-item active" : "nav-item"}
-            aria-current={page === "packet" ? "page" : undefined}
-            onClick={() => setPage("packet")}
-          >
-            <ShieldCheck size={18} />
-            Verify a packet
-          </button>
-          <button
-            className={page === "method" ? "nav-item active" : "nav-item"}
-            aria-current={page === "method" ? "page" : undefined}
-            onClick={() => setPage("method")}
-          >
-            <FlaskConical size={18} />
-            Under the hood
-          </button>
-          <a
-            className="nav-item"
-            href="https://github.com/enteragoodusername/traceback-gatorhack"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Traceback source code on GitHub"
-            title="Open the source code on GitHub"
-          >
-            <GitBranch size={18} /> Source code
-            <ArrowUpRight size={13} className="nav-key" />
-          </a>
         </nav>
-        <div className="sidebar-note">
-          <div className="orbit-mark">
-            <GitBranch size={25} />
-          </div>
-          <h3>A source. Not a guess.</h3>
-          <p>Follow the visual evidence back to where a clip began.</p>
-          <button onClick={() => setPage("method")}>
-            How tracing works <ArrowUpRight size={14} />
-          </button>
-          <a
-            className="watch-demo-link"
-            href={asset("/demo/")}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Watch the walkthrough <Play size={13} />
-          </a>
-        </div>
-        <div className="sidebar-bottom">
-          <span className="live-dot" />
-          <div>
-            <strong>
-              {health ? "Local engine connected" : "Interactive demo"}
-            </strong>
-            <small>
-              {health
-                ? "Private, on-device retrieval"
-                : "Recorded runs · real evidence"}
-            </small>
-          </div>
-          <span className="version">v0.1</span>
-        </div>
-      </aside>
-      <main className="main" id="main-content" tabIndex={-1}>
-        <header className="topbar">
-          <div className="breadcrumb">
-            Workspace <ChevronRight size={14} />
-            <span>
-              {page === "trace"
-                ? "Trace a clip"
-                : page === "library"
-                  ? "Source library"
-                  : page === "packet"
-                    ? "Verify a packet"
-                    : "Under the hood"}
-            </span>
-          </div>
-          <div className="topbar-right">
-            <span className="event-badge">
-              <span />
-              GATOR HACK V
-            </span>
-            <a
-              href="https://arxiv.org/abs/2601.04720"
-              target="_blank"
-              rel="noreferrer"
-              className="model-chip"
-            >
-              <Sparkles size={14} />
-              Built on the frontier
-              <ArrowUpRight size={12} />
-            </a>
-          </div>
-        </header>
-        <div className="page-content">
-          {page === "trace" && (
-            <>
-              <section className="page-heading">
+        <span className={`connection ${connection}`}>
+          <i />
+          {connection === "ready"
+            ? "Live engine connected"
+            : connection === "checking"
+              ? "Connecting…"
+              : "Local engine needed"}
+        </span>
+      </header>
+      <main id="main-content" tabIndex={-1}>
+        {view === "search" ? (
+          <>
+            <section className={`search-heading ${queryUrl ? "compact" : ""}`}>
+              <div className="eyebrow">
+                <Globe2 size={14} /> A CLIP IS ALL YOU NEED
+              </div>
+              <h1>
+                Find videos like <em>this one.</em>
+              </h1>
+              <p>
+                Drop a clip. Search the internet. Discover footage worth
+                watching.
+              </p>
+            </section>
+            {connection === "offline" && (
+              <section className="connection-panel">
                 <div>
-                  <div className="eyebrow">
-                    <span className="tiny-line" />
-                    VIDEO PROVENANCE, MADE VISIBLE
-                  </div>
-                  <h1>Every frame has a story.</h1>
+                  <Globe2 size={22} />
+                  <h2>Connect your local search engine</h2>
                   <p>
-                    Find the source behind the edit. Follow the evidence, frame
-                    by frame.
+                    Video understanding runs on your computer. Scene
+                    descriptions are sent to YouTube and Internet Archive; your
+                    video stays local.
                   </p>
+                  <details>
+                    <summary>
+                      Start the app <ChevronDown size={14} />
+                    </summary>
+                    <p>
+                      In the project folder, run <code>./setup.sh</code> once,
+                      then <code>./start.sh</code>. The first search downloads
+                      the caption and ranking models if needed.
+                    </p>
+                  </details>
                 </div>
-                <button
-                  className="button secondary export-top"
-                  disabled={!report || exporting}
-                  onClick={exportReport}
-                >
-                  {exporting ? (
-                    <LoaderCircle size={16} className="spin" />
-                  ) : (
-                    <ArrowDownToLine size={16} />
-                  )}
-                  <span>{exporting ? "Packaging…" : "Export evidence"}</span>
-                </button>
-              </section>
-              {health && recentJob && !busy && (
-                <div className="recent-analysis">
-                  <Clock3 size={16} />
-                  <div>
-                    <strong>Latest local analysis</strong>
-                    <span>
-                      {recentJob.filename} ·{" "}
-                      {recentJob.status === "complete"
-                        ? "saved on this computer"
-                        : "reopen to check progress"}
-                    </span>
-                  </div>
-                  <button onClick={reopenRecent}>
-                    Reopen analysis <ArrowUpRight size={14} />
-                  </button>
+                <div className="connection-actions">
+                  <a
+                    className="button primary"
+                    href="http://127.0.0.1:8000"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open local app <ArrowUpRight size={16} />
+                  </a>
                   <button
-                    aria-label="Dismiss recent analysis"
-                    onClick={() => {
-                      setRecentJob(null);
-                      try {
-                        localStorage.removeItem("traceback:last-analysis");
-                      } catch {
-                        /* Optional browser storage. */
-                      }
-                    }}
+                    className="button secondary"
+                    onClick={() => void checkConnection()}
                   >
-                    <X size={15} />
+                    Check connection
                   </button>
                 </div>
-              )}
-              <div className="workbench">
-                <section className="query-panel panel">
-                  <div className="panel-heading">
-                    <div>
-                      <span className="step-number">01</span>
-                      <h2>Your clip</h2>
-                    </div>
-                    <span className="micro-label">THE QUESTION</span>
-                  </div>
-                  <div
-                    className="query-video-wrap"
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      if (!busy) chooseFile(e.dataTransfer.files[0]);
-                    }}
-                  >
-                    {queryUrl && (
-                      <video
-                        ref={queryVideo}
-                        key={queryUrl}
-                        src={queryUrl}
-                        poster={
-                          !upload && !restoredQuery
-                            ? demo?.thumbnail
-                            : undefined
-                        }
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        onPlay={() => setPlaying(true)}
-                        onPause={() => setPlaying(false)}
-                      />
-                    )}
-                    <span className="video-badge">
-                      <FileVideo size={12} />
-                      {restoredQuery
-                        ? "SAVED LOCAL CLIP"
-                        : upload
-                          ? "YOUR UPLOAD"
-                          : "EDITED EXCERPT"}
-                    </span>
-                    <button
-                      className="play-button"
-                      aria-label={
-                        playing ? "Pause query clip" : "Play query clip"
-                      }
-                      onClick={() => {
-                        const v = queryVideo.current;
-                        if (v) {
-                          if (v.paused)
-                            void v
-                              .play()
-                              .catch(() =>
-                                setError(
-                                  "Your browser could not play this video.",
-                                ),
-                              );
-                          else v.pause();
-                        }
-                      }}
-                    >
-                      {playing ? (
-                        <Pause size={20} fill="currentColor" />
-                      ) : (
-                        <Play size={20} fill="currentColor" />
-                      )}
-                    </button>
-                    <span className="video-duration">
-                      {restoredQuery
-                        ? report
-                          ? `${report.query.duration.toFixed(1)}s`
-                          : "Saved clip"
-                        : upload
-                          ? "New clip"
-                          : demo
-                            ? `${(demo.length / demo.speed).toFixed(1)}s`
-                            : ""}
-                    </span>
-                  </div>
-                  <div className="query-details">
-                    <div className="file-icon">
-                      <Film size={19} />
-                    </div>
-                    <div>
-                      <h3>
-                        {restoredQuery?.filename ||
-                          (upload
-                            ? upload.name
-                            : demo?.title || "Loading demo…")}
-                      </h3>
-                      <p>
-                        {restoredQuery
-                          ? "Original upload and measured report restored locally"
-                          : upload
-                            ? `${(upload.size / 1024 / 1024).toFixed(1)} MB · Ready to analyze`
-                            : demo?.subtitle}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="query-actions">
-                    {health && !upload && !restoredQuery && (
-                      <label className="live-run-toggle">
-                        <input
-                          type="checkbox"
-                          checked={liveRun}
-                          disabled={busy}
-                          onChange={(e) => setLiveRun(e.target.checked)}
-                        />
-                        <span>Run this demo live on my computer</span>
-                      </label>
-                    )}
-                    <button
-                      className="button primary"
-                      onClick={runTrace}
-                      disabled={busy || !demo}
-                    >
-                      {busy ? (
-                        <LoaderCircle size={17} className="spin" />
-                      ) : (
-                        <ScanLine size={17} />
-                      )}
-                      <span>
-                        {busy
-                          ? "Tracing your clip…"
-                          : report
-                            ? "Run trace again"
-                            : "Find the source"}
-                      </span>
-                      {!busy && <ArrowRight size={17} />}
-                    </button>
-                    <button
-                      className="upload-button"
-                      disabled={busy}
-                      onClick={() => input.current?.click()}
-                    >
-                      <Upload size={15} />
-                      Upload your own clip<span>60s max</span>
-                    </button>
-                    <input
-                      ref={input}
-                      hidden
-                      type="file"
-                      accept="video/*,.mkv"
-                      onChange={(e) => {
-                        chooseFile(e.target.files?.[0]);
-                        e.target.value = "";
-                      }}
-                    />
-                  </div>
-                  <div className="divider-label">OR TRY ANOTHER EDIT</div>
-                  <div className="demo-options">
-                    {manifest?.demos.map((d, i) => (
-                      <button
-                        disabled={busy}
-                        key={d.id}
-                        className={`demo-option ${!upload && !restoredQuery && demo?.id === d.id ? "selected" : ""}`}
-                        onClick={() => chooseDemo(d)}
-                      >
-                        <img src={d.thumbnail} alt="" />
-                        <div>
-                          <strong>{d.title}</strong>
-                          <small>
-                            {
-                              [
-                                "Crop + speed change",
-                                "Grade + text overlay",
-                                "Flip + slow motion",
-                                "An honest no-match",
-                                "Two sources in one clip",
-                              ][i]
-                            }
-                          </small>
-                        </div>
-                        {!upload && !restoredQuery && demo?.id === d.id ? (
-                          <span className="selected-check">
-                            <Check size={12} />
-                          </span>
-                        ) : (
-                          <ChevronRight size={14} />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="privacy-note">
-                    <ShieldCheck size={14} />
-                    <span>
-                      {health
-                        ? "Video analysis stays on this computer."
-                        : "Demo footage is openly licensed and attributed."}
-                    </span>
-                  </div>
-                </section>
-                <section
-                  className={`results-panel panel ${report ? "has-results" : ""}`}
-                  aria-live="polite"
-                >
-                  <div className="panel-heading">
-                    <div>
-                      <span className="step-number">02</span>
-                      <h2>The source, revealed</h2>
-                    </div>
-                    {report ? (
-                      <span className="result-status">
-                        <span />
-                        {match ? "Match verified" : "No verified match"}
-                      </span>
-                    ) : (
-                      <span className="micro-label">THE EVIDENCE</span>
-                    )}
-                  </div>
-                  {error && (
-                    <div className="error-message" role="alert">
-                      <Info size={18} />
-                      <p>{error}</p>
-                      <button
-                        aria-label="Dismiss error"
-                        onClick={() => setError("")}
-                      >
-                        <X size={15} />
-                      </button>
-                    </div>
+              </section>
+            )}
+            <section
+              className={`clip-input ${dragging ? "dragging" : ""} ${queryUrl ? "compact" : ""}`}
+              aria-label="Submit a video"
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (!busy) setDragging(true);
+              }}
+              onDragLeave={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node))
+                  setDragging(false);
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                setDragging(false);
+                void chooseFile(e.dataTransfer.files[0]);
+              }}
+            >
+              <div className="upload-mark">
+                <Upload size={queryUrl ? 22 : 29} />
+              </div>
+              <div className="drop-copy">
+                <h2>
+                  {busy
+                    ? "Searching with your clip…"
+                    : queryUrl
+                      ? "Try another video"
+                      : "Drop your video here"}
+                </h2>
+                <p>
+                  {busy
+                    ? "You can leave this tab open while the engine works."
+                    : "Choose one file. The search starts automatically."}
+                </p>
+                <small>MP4, MOV, WebM, MKV · 2–60 seconds · up to 100 MB</small>
+              </div>
+              <button
+                className="button primary"
+                onClick={() => input.current?.click()}
+                disabled={busy || connection !== "ready"}
+              >
+                {busy ? (
+                  <LoaderCircle size={17} className="spin" />
+                ) : (
+                  <Film size={17} />
+                )}
+                {busy ? "Searching…" : "Choose a video"}
+              </button>
+              <input
+                ref={input}
+                type="file"
+                className="visually-hidden"
+                aria-label="Choose a video file"
+                disabled={busy || connection !== "ready"}
+                accept="video/*,.mkv,.m4v"
+                onChange={(e) => {
+                  void chooseFile(e.target.files?.[0]);
+                  e.target.value = "";
+                }}
+              />
+            </section>
+            {!queryUrl && (
+              <p className="privacy-note">
+                <ShieldCheck size={14} /> Your file stays on this computer. Only
+                generated search text goes online.
+              </p>
+            )}
+            {recent && !busy && !result && connection === "ready" && (
+              <button className="reopen-button" onClick={() => void reopen()}>
+                <Clock3 size={15} /> Reopen latest search{" "}
+                <ArrowRight size={14} />
+              </button>
+            )}
+            {error && (
+              <div className="error-message" role="alert">
+                <Info size={19} />
+                <p>{error}</p>
+                {file && connection === "ready" && (
+                  <button onClick={() => void chooseFile(file)}>Retry</button>
+                )}
+                <button aria-label="Dismiss error" onClick={() => setError("")}>
+                  <X size={17} />
+                </button>
+              </div>
+            )}
+            {queryUrl && (
+              <div className="search-workspace">
+                <aside className="query-panel">
+                  <div className="section-label">YOUR CLIP</div>
+                  <video
+                    ref={video}
+                    key={queryUrl}
+                    src={queryUrl}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    aria-label="Your uploaded clip"
+                  />
+                  <h2>{name}</h2>
+                  {result && (
+                    <p>
+                      {result.query.duration.toFixed(1)} seconds · searched{" "}
+                      {new Date(result.searchedAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
                   )}
-                  {busy ? (
-                    <div className="working-state">
-                      <div className="scan-animation">
-                        <ScanLine size={45} />
-                      </div>
-                      <h3>{stage}</h3>
-                      <p>
-                        {upload || restoredQuery || (liveRun && health)
-                          ? "Reading actual pixels, retrieving candidates, and checking visual correspondence."
-                          : "This is an actual saved pipeline output, not a simulated live inference."}
-                      </p>
-                      <div className="working-steps">
-                        <span>
-                          <Film size={15} />
-                          Extract frames
-                        </span>
-                        <ChevronRight size={14} />
-                        <span>
-                          <Sparkles size={15} />
-                          Retrieve
-                        </span>
-                        <ChevronRight size={14} />
-                        <span>
-                          <Focus size={15} />
-                          Verify
-                        </span>
-                      </div>
-                    </div>
-                  ) : !report ? (
-                    <div className="empty-state">
-                      <div className="source-collage">
-                        {manifest?.sources.slice(0, 3).map((s, i) => (
-                          <div className={`collage-card card-${i}`} key={s.id}>
-                            <img src={s.thumbnail} alt={s.title} />
-                            <span>
-                              <Film size={12} />
-                              {s.title}
-                            </span>
-                          </div>
-                        ))}
-                        <div className="collage-focus">
-                          <ScanLine size={27} />
-                        </div>
-                      </div>
-                      <div className="empty-copy">
-                        <span className="pill neutral">
-                          FROM EDIT TO ORIGIN
-                        </span>
-                        <h2>
-                          Different cut.
-                          <br />
-                          Same story.
-                        </h2>
-                        <p>
-                          A crop, a filter, a faster playback.
-                          <br />
-                          Traceback looks beneath the edit to find what
-                          connects.
-                        </p>
-                      </div>
-                      <div className="empty-pipeline">
-                        <div>
-                          <span>1</span>
-                          <strong>Understand</strong>
-                          <small>Multimodal retrieval</small>
-                        </div>
-                        <i />
-                        <div>
-                          <span>2</span>
-                          <strong>Verify</strong>
-                          <small>Visual correspondence</small>
-                        </div>
-                        <i />
-                        <div>
-                          <span>3</span>
-                          <strong>Trace</strong>
-                          <small>Source timestamps</small>
-                        </div>
-                      </div>
-                      <div className="library-summary">
-                        <Layers3 size={15} />
-                        <span>
-                          Searching {manifest?.sources.length || 0} indexed
-                          excerpts
-                        </span>
-                        <button onClick={() => setPage("library")}>
-                          View library
-                          <ArrowUpRight size={13} />
-                        </button>
-                      </div>
-                    </div>
-                  ) : match && evidence ? (
+                  {result && (
                     <>
-                      <div className="match-summary">
-                        <div className="match-check">
-                          <CheckCheck size={23} />
-                        </div>
-                        <div>
-                          <h3>
-                            {match.source.title}
-                            <span className="pill green">
-                              {match.verdict === "strong"
-                                ? "Strong visual evidence"
-                                : "Partial visual evidence"}
-                            </span>
-                          </h3>
-                          <p>
-                            {match.source.work}
-                            <span>·</span>
-                            {match.source.creator}
-                            <span>·</span>
-                            {match.source.license}
-                          </p>
-                        </div>
-                        <button
-                          className="icon-button"
-                          aria-label="Inspect source video"
-                          onClick={() =>
-                            openSource(match.source, evidence.sourceTime)
-                          }
-                        >
-                          <ArrowUpRight size={19} />
-                        </button>
-                      </div>
-                      <div className="metrics">
-                        <div>
-                          <span>Source interval</span>
-                          <strong>
-                            {shortTime(Math.round(match.alignment.sourceStart))}
-                            <ArrowRight size={14} />
-                            {shortTime(Math.round(match.alignment.sourceEnd))}
-                          </strong>
-                          <small>
-                            {match.alignment.timingAmbiguous
-                              ? "one of multiple possible intervals"
-                              : match.alignment.speedReliable === false
-                                ? "timing is weakly constrained"
-                                : "within the indexed excerpt"}
-                          </small>
-                        </div>
-                        <div>
-                          <span>Matched playback change</span>
-                          <strong>
-                            {match.alignment.speedReliable === false
-                              ? "Uncertain"
-                              : match.alignment.speed.toFixed(2)}
-                            <em>
-                              {match.alignment.speedReliable === false
-                                ? ""
-                                : "×"}
-                            </em>
-                            {evidence.mirrored && (
-                              <span className="mini-tag">flipped</span>
-                            )}
-                          </strong>
-                          <small>
-                            {match.alignment.speedRange
-                              ? `${match.alignment.speedRange[0].toFixed(2)}–${match.alignment.speedRange[1].toFixed(2)}× consistent range`
-                              : "source seconds / clip second"}
-                          </small>
-                        </div>
-                        <div>
-                          <span>Verified frames</span>
-                          <strong>
-                            {match.alignment.support}
-                            <em> / {report.query.sampledFrames}</em>
-                          </strong>
-                          <small>in temporal agreement</small>
-                        </div>
-                      </div>
-                      <div className="comparison-toolbar">
-                        <div>
-                          <Focus size={15} />
-                          <strong>Look at the evidence</strong>
-                        </div>
-                        <button
-                          className={showFeatures ? "toggle active" : "toggle"}
-                          aria-pressed={showFeatures}
-                          onClick={() => setShowFeatures(!showFeatures)}
-                        >
-                          <span className="toggle-track">
-                            <i />
-                          </span>
-                          Feature matches
-                        </button>
-                      </div>
-                      <EvidencePair
-                        evidence={evidence}
-                        base={base}
-                        showFeatures={showFeatures}
-                      />
-                      <div className="evidence-caption">
-                        <span>
-                          <span className="evidence-dot" />
-                          {evidence.inliers} geometrically consistent features
-                        </span>
-                        <span>
-                          Frame pair {activeEvidence + 1} /{" "}
-                          {match.evidence.length}
-                        </span>
-                      </div>
-                      <div className="filmstrip">
-                        {match.evidence.map((e, i) => (
+                      <div className="query-frames">
+                        {result.frames.map((frame, i) => (
                           <button
-                            key={i}
-                            className={
-                              i === activeEvidence
-                                ? "frame-thumb active"
-                                : "frame-thumb"
-                            }
-                            onClick={() => setActiveEvidence(i)}
-                            aria-label={`Inspect frame pair at ${time(e.queryTime)}`}
-                            aria-pressed={i === activeEvidence}
+                            key={frame.image}
+                            aria-label={`Jump to frame at ${timestamp(frame.time)}`}
+                            onClick={() => {
+                              if (video.current)
+                                video.current.currentTime = frame.time;
+                            }}
                           >
-                            <img src={base + e.sourceImage} alt="" />
-                            <span>{shortTime(e.queryTime)}</span>
+                            <img
+                              src={assetBase + frame.image}
+                              alt={`Sampled scene ${i + 1}`}
+                            />
+                            <span>{timestamp(frame.time)}</span>
                           </button>
                         ))}
                       </div>
-                      <Timeline
-                        match={match}
-                        duration={report.query.duration}
-                      />
-                      <div className="evidence-footer">
-                        <div>
-                          <ShieldCheck size={16} />
-                          <p>
-                            Shared imagery, backed by inspectable evidence.
-                            <br />
-                            <span>
-                              This does not establish ownership or infringement.
-                            </span>
-                          </p>
-                        </div>
-                        <button
-                          onClick={exportReport}
-                          disabled={exporting}
-                          aria-label="Download evidence packet"
-                        >
-                          <ArrowDownToLine size={18} />
-                        </button>
+                      <details className="search-refinement">
+                        <summary>
+                          <SlidersHorizontal size={14} /> Refine the description{" "}
+                          <ChevronDown size={14} />
+                        </summary>
+                        <p>
+                          Scene descriptions can miss details. Adjust the words
+                          to search again with the same clip.
+                        </p>
+                        <form onSubmit={refineSearch}>
+                          <label htmlFor="refine-query">
+                            Search description
+                          </label>
+                          <textarea
+                            id="refine-query"
+                            value={refine}
+                            maxLength={200}
+                            onChange={(e) => setRefine(e.target.value)}
+                          />
+                          <button
+                            className="button secondary"
+                            disabled={busy || refine.trim().length < 2}
+                          >
+                            Search again <ArrowRight size={14} />
+                          </button>
+                        </form>
+                      </details>
+                    </>
+                  )}
+                  <div className="query-note">
+                    <ShieldCheck size={16} />
+                    <p>
+                      Similar imagery is a lead. It doesn’t prove an original
+                      source or permission to reuse.
+                    </p>
+                  </div>
+                </aside>
+                <section
+                  className="search-output"
+                  aria-label="Internet video results"
+                >
+                  {busy ? (
+                    <div className="working-state" role="status">
+                      <div className="scan-orbit">
+                        <ScanLine size={35} />
                       </div>
+                      <span className="eyebrow">LIVE INTERNET SEARCH</span>
+                      <h2>{message}</h2>
+                      <p>
+                        Local AI work can take a few minutes on a CPU. The first
+                        run also downloads any missing models.
+                      </p>
+                      <ol className="working-steps">
+                        {STAGE_NAMES.map((title, i) => (
+                          <li
+                            key={title}
+                            className={
+                              i === activeStage
+                                ? "current"
+                                : i < activeStage
+                                  ? "complete"
+                                  : ""
+                            }
+                          >
+                            <span>
+                              {i < activeStage ? <Check size={13} /> : i + 1}
+                            </span>
+                            {title}
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  ) : result ? (
+                    <>
+                      <div className="results-heading">
+                        <div>
+                          <div className="eyebrow">
+                            <span className="live-dot" /> SEARCHED LIVE
+                          </div>
+                          <h2>
+                            {result.results.length
+                              ? "Similar videos to explore"
+                              : "No video candidates found"}
+                          </h2>
+                        </div>
+                        <span>{result.results.length} results</span>
+                      </div>
+                      <p className="search-terms">
+                        Searched for{" "}
+                        {result.queries.map((q) => `“${q}”`).join(" and ")}.
+                      </p>
+                      {result.warnings.map((w) => (
+                        <p className="search-warning" key={w}>
+                          <Info size={15} />
+                          {w}
+                        </p>
+                      ))}
+                      {result.results.length ? (
+                        <>
+                          <div className="result-controls">
+                            <div
+                              role="group"
+                              aria-label="Filter by video provider"
+                            >
+                              {["All", ...providers].map((p) => (
+                                <button
+                                  key={p}
+                                  aria-pressed={filter === p}
+                                  className={filter === p ? "active" : ""}
+                                  onClick={() => setFilter(p)}
+                                >
+                                  {p}
+                                </button>
+                              ))}
+                            </div>
+                            <span>
+                              <Sparkles size={13} /> Thumbnail similarity
+                            </span>
+                          </div>
+                          <div className="results-grid">
+                            {visible.map((c) =>
+                              card(
+                                c,
+                                c.thumbnail
+                                  ? assetBase + c.thumbnail
+                                  : undefined,
+                              ),
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="no-results">
+                          <Search size={32} />
+                          <p>
+                            Try a more specific description or a clip with a
+                            clearer subject. Unavailable services are listed
+                            below.
+                          </p>
+                          <a
+                            className="button secondary"
+                            href={`https://www.youtube.com/results?search_query=${encodeURIComponent(result.queries[0] || "")}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Continue on YouTube <ArrowUpRight size={15} />
+                          </a>
+                        </div>
+                      )}
+                      <details className="search-transparency">
+                        <summary>
+                          How these results were found <ChevronDown size={14} />
+                        </summary>
+                        <p>{result.limitation}</p>
+                        <ul>
+                          {result.providers.map((p, i) => (
+                            <li key={i}>
+                              {p.provider}:{" "}
+                              {p.status === "ok"
+                                ? `${p.count} candidates returned`
+                                : "unavailable"}{" "}
+                              for “{p.query}”
+                            </li>
+                          ))}
+                        </ul>
+                        <p>
+                          Descriptions: BLIP · visual ranking:
+                          Qwen3-VL-Embedding-2B ·{" "}
+                          {result.elapsedSeconds.toFixed(1)}s processing. A
+                          thumbnail score is not a probability of a match.
+                        </p>
+                      </details>
                     </>
                   ) : (
-                    <div className="no-match">
-                      <Search size={37} />
-                      <h3>No source verified.</h3>
+                    <div className="no-results">
+                      <Search size={30} />
+                      <h2>Your search will appear here</h2>
                       <p>
-                        We couldn’t find enough consistent visual and timestamp
-                        evidence in this library. That doesn’t mean the clip is
-                        original.
+                        Retry the upload or reopen the latest search if the
+                        connection was interrupted.
                       </p>
-                      <button
-                        className="button secondary"
-                        onClick={() => setPage("library")}
-                      >
-                        Explore the source library
-                        <ArrowRight size={16} />
-                      </button>
                     </div>
                   )}
                 </section>
               </div>
-              {report && (
-                <section className="run-details">
-                  <div>
-                    <span className="pill neutral">
-                      <Clock3 size={12} />
-                      {report.recorded
-                        ? "RECORDED RUN"
-                        : savedResult
-                          ? "SAVED LOCAL RUN"
-                          : "LIVE LOCAL RUN"}
-                    </span>
-                    <span>
-                      {report.elapsedSeconds.toFixed(1)}s actual processing
-                    </span>
-                    <span>
-                      {report.retrieval.engine === "visual-only"
-                        ? "Visual verification"
-                        : "Qwen3-VL-Embedding-2B"}
-                    </span>
-                    <button onClick={() => setPage("method")}>
-                      Inspect the method
-                      <ArrowUpRight size={13} />
-                    </button>
-                  </div>
-                  {health?.gemini && (
-                    <button
-                      className="button secondary small"
-                      onClick={explain}
-                      disabled={explaining}
-                      title="Send source titles and measured timing facts to Gemini. Video files stay local."
-                    >
-                      <Sparkles size={14} />
-                      Explain with Gemini
-                    </button>
-                  )}
-                </section>
-              )}
-              {explanation && (
-                <section className="explanation panel">
-                  <h3>
-                    <Sparkles size={17} />
-                    Grounded explanation
-                  </h3>
-                  <p>{explanation}</p>
-                </section>
-              )}
-              {report && report.results.length > 1 && (
-                <section
-                  className="source-map panel"
-                  aria-label="Verified source map"
-                >
-                  <header>
-                    <div>
-                      <span className="eyebrow">
-                        ONE CLIP, MULTIPLE ORIGINS
-                      </span>
-                      <h2>
-                        {report.results.length} sources, mapped to your edit.
-                      </h2>
-                    </div>
-                    <span>Select a source to inspect its evidence</span>
-                  </header>
-                  <div className="source-map-lanes">
-                    {[...report.results]
-                      .sort(
-                        (a, b) =>
-                          a.alignment.queryStart - b.alignment.queryStart,
-                      )
-                      .map((m) => {
-                        const index = report.results.indexOf(m);
-                        return (
-                          <div className="source-map-row" key={m.source.id}>
-                            <button
-                              className={activeMatch === index ? "active" : ""}
-                              onClick={() => {
-                                setActiveMatch(index);
-                                setActiveEvidence(0);
-                              }}
-                              aria-pressed={activeMatch === index}
-                            >
-                              {m.source.title}
-                              <small>
-                                {m.alignment.support} verified frames
-                              </small>
-                            </button>
-                            <div className="source-map-track">
-                              <button
-                                style={{
-                                  left: `${(100 * m.alignment.queryStart) / report.query.duration}%`,
-                                  width: `${Math.max(3, (100 * (m.alignment.queryEnd - m.alignment.queryStart)) / report.query.duration)}%`,
-                                }}
-                                className={
-                                  activeMatch === index ? "active" : ""
-                                }
-                                onClick={() => {
-                                  setActiveMatch(index);
-                                  setActiveEvidence(0);
-                                }}
-                                aria-label={`Inspect ${m.source.title} from ${time(m.alignment.queryStart)} to ${time(m.alignment.queryEnd)}`}
-                              >
-                                <span>
-                                  {time(m.alignment.queryStart)} —{" "}
-                                  {time(m.alignment.queryEnd)}
-                                </span>
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      })}
-                  </div>
+            )}
+            {!queryUrl && (
+              <div className="tool-intro">
+                <div>
+                  <span>01</span>
+                  <Film size={21} />
+                  <h3>Show, don’t describe</h3>
                   <p>
-                    Bars span visually verified query frames. Gaps are not
-                    evidence of original content. Sources can overlap.
+                    Start with the clip on your phone or computer. No keywords
+                    required.
                   </p>
-                </section>
-              )}
-              <footer className="page-footer">
-                <span>
-                  <ShieldCheck size={13} />
-                  Evidence over assertion.
-                </span>
-                <span>Made for Gator Hack V · Open source by design</span>
-              </footer>
-            </>
-          )}
-          {page === "library" && (
-            <Library
-              manifest={manifest}
-              health={health}
-              onInspect={openSource}
-              onSources={(sources) =>
-                setManifest((m) => (m ? { ...m, sources } : m))
-              }
-            />
-          )}
-          {page === "method" && <Method health={health} />}
-          {page === "packet" && <PacketReview />}
-        </div>
+                </div>
+                <div>
+                  <span>02</span>
+                  <Globe2 size={21} />
+                  <h3>Search beyond a library</h3>
+                  <p>
+                    Discover live video candidates on YouTube and Internet
+                    Archive.
+                  </p>
+                </div>
+                <div>
+                  <span>03</span>
+                  <Bookmark size={21} />
+                  <h3>Find your next reference</h3>
+                  <p>
+                    Compare previews, watch the videos, and save a shortlist of
+                    links.
+                  </p>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <section className="saved-page">
+            <div className="results-heading">
+              <div>
+                <div className="eyebrow">YOUR SHORTLIST</div>
+                <h1>Worth coming back to.</h1>
+                <p>Video links saved in this browser.</p>
+              </div>
+              <button
+                className="button secondary"
+                disabled={!saved.length}
+                onClick={exportSaved}
+              >
+                <ArrowDownToLine size={16} /> Export links
+              </button>
+            </div>
+            {saved.length ? (
+              <div className="results-grid saved-grid">
+                {saved.map((c) => card(c, c.imageUrl, true))}
+              </div>
+            ) : (
+              <div className="saved-empty">
+                <Bookmark size={36} />
+                <h2>Your next reference starts with a clip.</h2>
+                <p>
+                  Save videos from your search results to collect them here.
+                </p>
+                <button
+                  className="button primary"
+                  onClick={() => setView("search")}
+                >
+                  Find similar videos <ArrowRight size={16} />
+                </button>
+              </div>
+            )}
+          </section>
+        )}
       </main>
+      <footer className="app-footer">
+        <span>
+          <ScanLine size={14} /> Traceback · From a clip to a discovery.
+        </span>
+        <a
+          href="https://github.com/enteragoodusername/traceback-gatorhack"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Open source <ArrowUpRight size={13} />
+        </a>
+      </footer>
       {toast && (
         <div className="toast" role="status">
           <Check size={16} />
           {toast}
         </div>
       )}
-      {inspectSource && (
-        <div className="modal-backdrop" onClick={closeSource}>
-          <section
+      {compare && (
+        <div className="modal-backdrop" onClick={closeCompare}>
+          <div
+            className="compare-modal"
             ref={modal}
-            className="source-modal"
             role="dialog"
             aria-modal="true"
-            aria-label={inspectSource.title}
+            aria-label="Compare video candidate"
             onClick={(e) => e.stopPropagation()}
           >
-            <header>
+            <header role="presentation">
               <div>
-                <span className="eyebrow">INDEXED SOURCE</span>
-                <h2>{inspectSource.title}</h2>
+                <span className="eyebrow">SIDE BY SIDE</span>
+                <h2>Does it look like your clip?</h2>
               </div>
               <button
                 className="icon-button"
-                aria-label="Close source preview"
-                autoFocus
-                onClick={closeSource}
+                aria-label="Close comparison"
+                onClick={closeCompare}
               >
-                <X size={21} />
+                <X size={22} />
               </button>
             </header>
-            <video
-              src={inspectSource.url}
-              controls
-              autoPlay
-              muted
-              playsInline
-              onLoadedMetadata={(e) => {
-                e.currentTarget.currentTime = inspectTime;
-              }}
-            />
-            <div className="source-modal-body">
-              <p>{inspectSource.description}</p>
-              <dl>
-                <div>
-                  <dt>Original work</dt>
-                  <dd>{inspectSource.work}</dd>
-                </div>
-                <div>
-                  <dt>
-                    {inspectSource.userProvided
-                      ? "Source duration"
-                      : "Excerpt begins"}
-                  </dt>
-                  <dd>
-                    {inspectSource.userProvided
-                      ? time(inspectSource.duration)
-                      : `${time(inspectSource.originalOffset)} in original film`}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Attribution</dt>
-                  <dd>
-                    {inspectSource.creator}
-                    {inspectSource.sourceUrl && (
-                      <>
-                        {" "}
-                        ·{" "}
-                        <a
-                          href={inspectSource.sourceUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Source website <ExternalLink size={12} />
-                        </a>
-                      </>
-                    )}
-                  </dd>
-                </div>
-                <div>
-                  <dt>License</dt>
-                  <dd>
-                    {inspectSource.licenseUrl ? (
-                      <a
-                        href={inspectSource.licenseUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {inspectSource.license}
-                        <ExternalLink size={12} />
-                      </a>
-                    ) : (
-                      inspectSource.license
-                    )}
-                  </dd>
-                </div>
-              </dl>
-              <div className="hash-label">INDEXED SOURCE SHA-256</div>
-              <code>{inspectSource.sha256}</code>
-              {inspectSource.inputSha256 && (
-                <>
-                  <div className="hash-label">ORIGINAL UPLOAD SHA-256</div>
-                  <code>{inspectSource.inputSha256}</code>
-                </>
-              )}
-            </div>
-          </section>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function EvidencePair({
-  evidence: e,
-  base,
-  showFeatures,
-}: {
-  evidence: Evidence;
-  base: string;
-  showFeatures: boolean;
-}) {
-  return (
-    <div className="evidence-pair">
-      {(["query", "source"] as const).map((side) => (
-        <div key={side} className={`evidence-image ${side}`}>
-          <div className="image-label">
-            <span>{side === "query" ? "YOUR CLIP" : "SOURCE FRAME"}</span>
-            <span>{time(side === "query" ? e.queryTime : e.sourceTime)}</span>
-          </div>
-          <div className="evidence-image-inner">
-            <img
-              src={base + (side === "query" ? e.queryImage : e.sourceImage)}
-              alt={
-                side === "query"
-                  ? "Edited query frame"
-                  : "Matching source frame"
-              }
-            />
-            {showFeatures && (
-              <svg
-                className="feature-overlay"
-                viewBox="0 0 1 1"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                {e.points.map((p, i) => (
-                  <g key={i}>
-                    <circle
-                      cx={p[side][0]}
-                      cy={p[side][1]}
-                      r=".012"
-                      fill="#d4f281"
-                      fillOpacity=".16"
-                    />
-                    <circle
-                      cx={p[side][0]}
-                      cy={p[side][1]}
-                      r=".004"
-                      fill="#d4f281"
-                    />
-                  </g>
-                ))}
-                {side === "source" && (
-                  <polygon
-                    points={e.quad.map((p) => p.join(",")).join(" ")}
-                    fill="#d4f281"
-                    fillOpacity=".06"
-                    stroke="#d4f281"
-                    strokeWidth=".004"
-                    strokeDasharray=".018 .012"
+            <div className="compare-grid">
+              <section>
+                <h3>Your clip</h3>
+                <video
+                  src={queryUrl}
+                  controls
+                  playsInline
+                  onLoadedMetadata={(e) => {
+                    const frame = result?.frames[compare.matchedFrame ?? 0];
+                    if (frame) e.currentTarget.currentTime = frame.time;
+                  }}
+                />
+              </section>
+              <section>
+                <h3>{compare.title}</h3>
+                {embedUrl(compare.url) && (
+                  <iframe
+                    src={embedUrl(compare.url)}
+                    title={`Watch ${compare.title}`}
+                    allow="encrypted-media; fullscreen; picture-in-picture"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
                   />
                 )}
-              </svg>
-            )}
+              </section>
+            </div>
+            <footer role="presentation">
+              <p>
+                {compare.similarity === undefined
+                  ? "This is a live search candidate. Its thumbnail could not be visually ranked."
+                  : `Thumbnail cosine similarity: ${compare.similarity.toFixed(3)}. This compares a preview image, not the complete video.`}
+              </p>
+              <a
+                className="button primary"
+                href={watchUrl(compare.url)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Watch on {compare.provider} <ArrowUpRight size={15} />
+              </a>
+            </footer>
           </div>
         </div>
-      ))}
-    </div>
-  );
-}
-
-function Timeline({ match, duration }: { match: Match; duration: number }) {
-  const a = match.alignment;
-  return (
-    <div className="timeline">
-      <div className="timeline-heading">
-        <strong>
-          <GitBranch size={14} />
-          The edit, mapped back
-        </strong>
-        <span>
-          ±{(a.toleranceSeconds ?? 0.65).toFixed(2)}s consensus tolerance
-        </span>
-      </div>
-      <div className="timeline-row">
-        <label>Your clip</label>
-        <div className="timeline-track query-track">
-          <span
-            style={{
-              left: `${(a.queryStart / duration) * 100}%`,
-              width: `${Math.max(2, ((a.queryEnd - a.queryStart) / duration) * 100)}%`,
-            }}
-          />
-          {a.matches.map((m, i) => (
-            <i key={i} style={{ left: `${(m.queryTime / duration) * 100}%` }} />
-          ))}
-        </div>
-        <span>{shortTime(duration)}</span>
-      </div>
-      <div className="timeline-row">
-        <label>Source</label>
-        <div className="timeline-track source-track">
-          <span
-            style={{
-              left: `${(Math.max(0, a.sourceStart) / match.source.duration) * 100}%`,
-              width: `${Math.min(100, ((a.sourceEnd - a.sourceStart) / match.source.duration) * 100)}%`,
-            }}
-          />
-        </div>
-        <span>{shortTime(match.source.duration)}</span>
-      </div>
-      {a.timingAmbiguous && (
-        <p className="timing-warning">
-          More than one timing explanation fits these frame matches. Inspect the
-          frame pairs before choosing an interval.
-        </p>
       )}
-      <p>
-        {a.speedReliable === false
-          ? "Tentative fit: source time"
-          : "Source time"}{" "}
-        = {a.speed.toFixed(2)} × clip time + {a.offset.toFixed(2)}s{" "}
-        <span>·</span> Median timing residual {a.residual.toFixed(2)}s
-      </p>
     </div>
   );
 }
-
-function Method({ health }: { health: Health | null }) {
-  return (
-    <>
-      <section className="page-heading">
-        <div>
-          <div className="eyebrow">
-            <span className="tiny-line" />
-            NO BLACK-BOX VERDICTS
-          </div>
-          <h1>Trust the trail.</h1>
-          <p>
-            A recent retrieval model. Two independent checks. Evidence you can
-            reproduce.
-          </p>
-        </div>
-      </section>
-      <div className="method-hero">
-        <div>
-          <span className="pill lime">
-            FRESH OFF THE FRONTIER · JANUARY 2026
-          </span>
-          <h2>
-            Meaning finds the candidates.
-            <br />
-            Geometry earns the match.
-          </h2>
-          <p>
-            Qwen3-VL-Embedding places video frames and language in the same
-            vector space. Traceback uses it to rank source candidates, then
-            independently tests shared visual structure and consistent time.
-          </p>
-          <a
-            href="https://arxiv.org/abs/2601.04720"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Read the model’s research paper
-            <ArrowUpRight size={16} />
-          </a>
-        </div>
-        <div className="method-symbol">
-          <Layers3 size={80} />
-          <span>
-            2048-dimensional
-            <br />
-            multimodal embeddings
-          </span>
-        </div>
-      </div>
-      <div className="method-grid">
-        {[
-          {
-            n: "01",
-            icon: Sparkles,
-            title: "Retrieve by meaning",
-            text: "The January 2026 Qwen3-VL-Embedding-2B model embeds actual frame pixels. Cosine similarity ranks potential sources. With this small demo library, all candidates are retained to avoid hiding a true match.",
-          },
-          {
-            n: "02",
-            icon: Focus,
-            title: "Verify the pixels",
-            text: "ORB features find local visual correspondences. A ratio test and RANSAC homography reject inconsistent matches. The green points show actual inlier features; the outline maps the query’s field of view.",
-          },
-          {
-            n: "03",
-            icon: GitBranch,
-            title: "Reconstruct the edit",
-            text: "Timestamp consensus estimates playback speed and source offset. Multiple matching frames must agree on one temporal mapping. One similar frame is not enough to produce a source match.",
-          },
-        ].map((s) => (
-          <article className="method-card" key={s.n}>
-            <span>{s.n}</span>
-            <s.icon size={26} />
-            <h3>{s.title}</h3>
-            <p>{s.text}</p>
-          </article>
-        ))}
-      </div>
-      <Evaluation />
-      <Diagnostics />
-      <div className="method-bottom">
-        <section className="panel">
-          <h3>
-            <ShieldCheck size={19} />
-            What this can establish
-          </h3>
-          <ul>
-            <li>Shared imagery with a source in the indexed library.</li>
-            <li>Approximate source timestamps and playback changes.</li>
-            <li>Inspectable feature correspondences and file hashes.</li>
-          </ul>
-          <h3 className="limits-heading">
-            <Info size={19} />
-            What it cannot establish
-          </h3>
-          <ul>
-            <li>
-              Who owns the rights, whether reuse is lawful, or which copy was
-              published first.
-            </li>
-            <li>
-              That an unmatched clip is original or that a matched clip is
-              deceptive.
-            </li>
-            <li>
-              Internet-wide coverage. This demonstration searches four known
-              excerpts.
-            </li>
-          </ul>
-        </section>
-        <section className="panel integration-panel">
-          <h3>
-            <Layers3 size={19} />
-            Run transparency
-          </h3>
-          <div>
-            <span>Local retrieval engine</span>
-            <strong className={health ? "ready" : ""}>
-              {health ? "Connected" : "Hosted recorded demo"}
-            </strong>
-          </div>
-          <div>
-            <span>Gemini explanation</span>
-            <strong className={health?.gemini ? "ready" : ""}>
-              {health?.gemini ? "Configured" : "API key required"}
-            </strong>
-          </div>
-          <div>
-            <span>Twinly integration</span>
-            <strong className={health?.twinly ? "ready" : ""}>
-              {health?.twinly ? "Configured" : "API key required"}
-            </strong>
-          </div>
-          <p>
-            Recorded demos are generated by the real local pipeline. New uploads
-            run on your local server. Sponsor features are never represented as
-            live calls when credentials are missing. Optional explanations send
-            source titles and measured facts to the configured provider; video
-            files stay local.
-          </p>
-          <a href={asset("/manifest.json")} target="_blank" rel="noreferrer">
-            Inspect the media manifest
-            <ArrowUpRight size={14} />
-          </a>
-        </section>
-      </div>
-    </>
-  );
-}
-
-export default App;
