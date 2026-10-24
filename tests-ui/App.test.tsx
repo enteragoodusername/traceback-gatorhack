@@ -247,3 +247,93 @@ describe("single-input live internet search", () => {
     );
   });
 });
+
+it("holds a long upload for selection, then searches the chosen section without uploading again", async () => {
+  vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => {});
+  let selected = false;
+  const original = vi.mocked(fetch).getMockImplementation()!;
+  vi.mocked(fetch).mockImplementation(async (url, init) => {
+    if (url === `/api/search-video/${jobId}/segment`) {
+      selected = true;
+      return { ok: true, json: async () => ({ id: jobId }) } as Response;
+    }
+    if (url === `/api/jobs/${jobId}`)
+      return {
+        ok: true,
+        json: async () =>
+          selected
+            ? {
+                status: "complete",
+                result: {
+                  ...search,
+                  selection: {
+                    start: 60,
+                    end: 120,
+                    originalDuration: 120,
+                    originalFilename: "long.mp4",
+                  },
+                },
+              }
+            : { status: "needs_trim", duration: 120, filename: "long.mp4" },
+      } as Response;
+    return original(url, init);
+  });
+  const user = userEvent.setup();
+  const { container } = render(<App />);
+  await screen.findByText("Live engine connected");
+  await user.upload(
+    screen.getByLabelText("Choose a video file"),
+    new File(["video"], "long.mp4", { type: "video/mp4" }),
+  );
+  await screen.findByRole("heading", { name: "Choose the part to search" });
+  expect(selected).toBe(false);
+  expect(
+    screen.queryByText("Similar videos to explore"),
+  ).not.toBeInTheDocument();
+  fireEvent.change(screen.getByRole("slider"), { target: { value: "60" } });
+  await user.click(screen.getByRole("button", { name: "Search this clip" }));
+  await screen.findByText("Similar videos to explore");
+  expect(fetch).toHaveBeenCalledWith(
+    `/api/search-video/${jobId}/segment`,
+    expect.objectContaining({
+      body: JSON.stringify({ start: 60, duration: 60 }),
+    }),
+  );
+  expect(container.querySelector("video")).toHaveAttribute(
+    "src",
+    `/api/query/${jobId}`,
+  );
+  expect(screen.queryByRole("slider")).not.toBeInTheDocument();
+  expect(
+    vi.mocked(fetch).mock.calls.filter(([url]) => url === "/api/search-video"),
+  ).toHaveLength(1);
+});
+
+it("restores an unfinished clip selection after a page reload", async () => {
+  localStorage.setItem("traceback:internet:last-search", jobId);
+  const original = vi.mocked(fetch).getMockImplementation()!;
+  vi.mocked(fetch).mockImplementation(async (url, init) =>
+    url === `/api/jobs/${jobId}`
+      ? ({
+          ok: true,
+          json: async () => ({
+            status: "needs_trim",
+            duration: 123,
+            filename: "pending.mp4",
+          }),
+        } as Response)
+      : original(url, init),
+  );
+  const { container } = render(<App />);
+  await userEvent.click(
+    await screen.findByRole("button", { name: /Reopen latest search/ }),
+  );
+  await screen.findByRole("heading", { name: "Choose the part to search" });
+  expect(container.querySelector("video")).toHaveAttribute(
+    "src",
+    `/api/input/${jobId}`,
+  );
+  expect(
+    screen.getByRole("button", { name: "Search this clip" }),
+  ).toBeEnabled();
+});

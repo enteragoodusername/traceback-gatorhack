@@ -30,6 +30,8 @@ import {
   type VideoSearch,
 } from "./internet";
 
+import TrimClip from "./TrimClip";
+
 type Connection = "checking" | "ready" | "offline";
 const LAST_SEARCH = "traceback:internet:last-search";
 const SAVED_VIDEOS = "traceback:internet:saved-videos";
@@ -70,6 +72,11 @@ export default function App() {
   const [dragging, setDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [queryUrl, setQueryUrl] = useState("");
+  const [trim, setTrim] = useState<{
+    id: string;
+    duration: number;
+    filename: string;
+  } | null>(null);
   const [jobId, setJobId] = useState("");
   const [result, setResult] = useState<VideoSearch | null>(null);
   const [recent, setRecent] = useState("");
@@ -210,6 +217,12 @@ export default function App() {
       if (id !== requestId.current) return;
       setStage(data.stage || "frames");
       setMessage(data.message || "Searching…");
+      if (data.status === "needs_trim") {
+        setTrim({ id: job, duration: data.duration, filename: data.filename });
+        setFile(null);
+        setQueryUrl(`/api/input/${job}`);
+        return;
+      }
       if (data.status === "failed")
         throw Error(data.error || "Search failed. Try again.");
       if (data.status === "complete") {
@@ -217,6 +230,11 @@ export default function App() {
           throw Error(
             "This is not an internet video search. Choose a video to start a fresh search.",
           );
+        if (data.result.selection) {
+          setTrim(null);
+          setFile(null);
+          setQueryUrl(`/api/query/${job}`);
+        }
         setResult(data.result);
         setRefine(data.result.queries[0] || "");
         return;
@@ -241,8 +259,8 @@ export default function App() {
       );
       return;
     }
-    if (next.size > 100 * 1024 * 1024) {
-      setError("Choose a video smaller than 100 MB.");
+    if (next.size > 1024 * 1024 * 1024) {
+      setError("Choose a video smaller than 1 GB.");
       return;
     }
     if (!/\.(mp4|mov|webm|mkv|m4v)$/i.test(next.name)) {
@@ -251,6 +269,7 @@ export default function App() {
     }
     const id = begin();
     if (id === null) return;
+    setTrim(null);
     setFile(next);
     setJobId("");
     try {
@@ -261,7 +280,7 @@ export default function App() {
         body: form,
         signal: AbortSignal.any([
           controller.current!.signal,
-          AbortSignal.timeout(120000),
+          AbortSignal.timeout(600000),
         ]),
       });
       const data = await response.json();
@@ -269,6 +288,32 @@ export default function App() {
         throw Error(data.detail || "Could not start the video search.");
       if (id !== requestId.current) return;
       await poll(id, data.id);
+      finish(id);
+    } catch (problem) {
+      finish(id, problem);
+    }
+  }
+  async function selectClip(start: number, duration: number) {
+    if (!trim) return;
+    const id = begin();
+    if (id === null) return;
+    setStage("trim");
+    setMessage("Preparing your selected clip");
+    try {
+      const response = await fetch(`/api/search-video/${trim.id}/segment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ start, duration }),
+        signal: controller.current!.signal,
+      });
+      const data = await response.json();
+      if (!response.ok)
+        throw Error(
+          typeof data.detail === "string"
+            ? data.detail
+            : "Could not select that section. Check the start and end times.",
+        );
+      await poll(id, trim.id);
       finish(id);
     } catch (problem) {
       finish(id, problem);
@@ -563,9 +608,11 @@ export default function App() {
                 <p>
                   {busy
                     ? "You can leave this tab open while the engine works."
-                    : "Choose one file. The search starts automatically."}
+                    : "Choose one file. For longer videos, pick a clip before searching."}
                 </p>
-                <small>MP4, MOV, WebM, MKV · 2–60 seconds · up to 100 MB</small>
+                <small>
+                  MP4, MOV, WebM, MKV · up to 1 GB · select up to 60 seconds
+                </small>
               </div>
               <button
                 className="button primary"
@@ -598,7 +645,7 @@ export default function App() {
                 generated search text goes online.
               </p>
             )}
-            {recent && !busy && !result && connection === "ready" && (
+            {recent && !busy && !result && !trim && connection === "ready" && (
               <button className="reopen-button" onClick={() => void reopen()}>
                 <Clock3 size={15} /> Reopen latest search{" "}
                 <ArrowRight size={14} />
@@ -616,7 +663,25 @@ export default function App() {
                 </button>
               </div>
             )}
-            {queryUrl && (
+            {trim && (
+              <TrimClip
+                key={trim.id}
+                src={`/api/input/${trim.id}`}
+                duration={trim.duration}
+                filename={trim.filename}
+                busy={busy}
+                message={message}
+                onSubmit={(start, duration) => void selectClip(start, duration)}
+                onCancel={() => {
+                  setTrim(null);
+                  setFile(null);
+                  setQueryUrl("");
+                  setError("");
+                  input.current?.focus();
+                }}
+              />
+            )}
+            {queryUrl && !trim && (
               <div className="search-workspace">
                 <aside className="query-panel">
                   <div className="section-label">YOUR CLIP</div>
@@ -629,7 +694,14 @@ export default function App() {
                     preload="metadata"
                     aria-label="Your uploaded clip"
                   />
-                  <h2>{name}</h2>
+                  <h2>{result?.selection?.originalFilename || name}</h2>
+                  {result?.selection && (
+                    <p>
+                      Selected {timestamp(result.selection.start)}–
+                      {timestamp(result.selection.end)} of{" "}
+                      {timestamp(result.selection.originalDuration)}
+                    </p>
+                  )}
                   {result && (
                     <p>
                       {result.query.duration.toFixed(1)} seconds · searched{" "}

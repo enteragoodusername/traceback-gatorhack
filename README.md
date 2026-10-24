@@ -11,17 +11,17 @@ Drop **one video file** into Traceback. It describes sampled scenes on your comp
 ./start.sh
 ```
 
-Open **http://127.0.0.1:8000**, then drop a video. Selecting the file starts the search; there is no separate submit button.
+Open **http://127.0.0.1:8000**, then drop a video. Clips up to 60 seconds start searching automatically. Longer videos open a clip selector: move the 60-second window, preview it, then choose **Search this clip**. Start/end fields also let you select a shorter section.
 
 Requirements: Linux, Python 3.11+, Node.js 22+, FFmpeg, internet access, and enough RAM for the local models (16 GB recommended; tested on a 38 GB CPU machine). The first search downloads the pinned BLIP caption model (~1 GB) and Qwen embedding model (~4.4 GB) if they are not cached. Subsequent runs reuse those weights, not previous search answers. CPU searches can take a few minutes.
 
-Input: MP4, MOV, WebM, MKV or M4V; 2–60 seconds; up to 100 MB. For a longer recording, export a representative short clip first.
+Input: MP4, MOV, WebM, MKV or M4V; at least 2 seconds; up to 1 GB and 4K. Choose a 2–60 second section of longer recordings directly in the app. If your browser cannot preview the format, start/end controls still work.
 
 The [hosted interface](https://enteragoodusername.github.io/traceback-gatorhack/) explains how to open the local app. GitHub Pages and the private Sites copy host static files; they do not run the Python models. They show no substitute demo when the engine is unavailable.
 
 ## What you can do
 
-- Upload or drop one clip and automatically search online.
+- Upload or drop one video. Short clips search automatically; longer videos open an in-app clip selector.
 - Preview your upload and jump to its sampled moments.
 - Filter actual search candidates by provider.
 - Compare your clip with an embedded candidate, or open its original video page.
@@ -31,7 +31,7 @@ The [hosted interface](https://enteragoodusername.github.io/traceback-gatorhack/
 
 ## How search works
 
-1. FFmpeg/OpenCV validate the upload and sample three moments.
+1. FFmpeg/OpenCV validate the upload. For longer videos, FFmpeg extracts only the user-selected interval into a browser-compatible MP4 before any scene sampling, captions or search. Three moments are sampled from the resulting clip.
 2. Local BLIP captions the frames. Up to two distinct scene descriptions become search queries.
 3. The server reads YouTube's public search results and Internet Archive's live video search API. It interleaves multi-scene results, deduplicates links, and limits candidates to eight YouTube videos and four Archive items.
 4. It downloads bounded thumbnails from service-controlled image hosts. Local Qwen embeddings compare these images with the sampled query frames.
@@ -45,7 +45,7 @@ YouTube search is a public-page adapter, not an official YouTube API integration
 
 The uploaded video and sampled frames stay in `data/uploads/` on this computer. Generated scene descriptions (or your optional refined description) are sent to search services. Candidate thumbnails are downloaded for comparison. Opening a video or its embedded player connects your browser to that provider.
 
-Uploads and completed user searches persist locally so they can be reopened. They are not added to an indexed source library automatically. Saved links are stored in browser local storage. To remove local video data, stop the app and delete the relevant job directories in `data/uploads/`; the app's displayed job ID is available in its `/api/jobs/…` request. Keep any files you want to retain before deleting local data.
+Uploads, unfinished clip selections and completed user searches persist locally so they can be reopened. Long-video searches retain the original file plus the extracted clip; refining a description reuses that extracted section. They are not added to an indexed source library automatically. Saved links are stored in browser local storage. To remove local video data, stop the app and delete the relevant job directories in `data/uploads/`; the app's displayed job ID is available in its `/api/jobs/…` request. Keep any files you want to retain before deleting local data.
 
 The server binds to localhost. It rejects mutations from unrelated browser origins, validates file size/duration, caps active jobs at two, and restricts image fetches to service-controlled hosts with byte and redirect limits.
 
@@ -60,7 +60,8 @@ python3 scripts/check_internet_build.py dist
 
 For frontend development, `npm run dev` proxies `/api` to the local server on port 8000. Build before restarting the production-style local app after interface changes.
 
-- UI: `src/App.tsx`, `src/internet.ts`, `src/styles.css`.
+- UI: `src/App.tsx`, `src/TrimClip.tsx`, `src/internet.ts`, `src/styles.css`.
+- Local segment extraction: `server/clips.py`.
 - Live search: `server/internet.py`.
 - Upload queue, recovery and API: `server/app.py`.
 - Models: pinned BLIP revision `82a37760796d32b1411fe092ab5d4e227313294b`; pinned Qwen revision in `server/embedding.py`.

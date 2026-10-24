@@ -17,6 +17,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from .engine import analyze, semantic_search, sources, register_source, INDEX, ROOT
 from .media import MAX_SIZE, probe, sha256
+from .clips import MAX_UPLOAD_SIZE, trim_video
 from . import embedding, integrations
 
 app = FastAPI(
@@ -298,6 +299,9 @@ def internet_work(job_id: str, path: Path, query_override=None):
     try:
         result = search_video(path, UPLOADS / job_id / "web", progress, query_override)
         result["query"]["filename"] = jobs[job_id]["filename"]
+        clip_metadata = UPLOADS / job_id / "clip.json"
+        if clip_metadata.is_file():
+            result["selection"] = json.loads(clip_metadata.read_text())
         completed = {
             "id": job_id,
             "status": "complete",
@@ -362,11 +366,16 @@ async def receive_video(file: UploadFile, internet: bool):
         with path.open("wb") as out:
             while chunk := await file.read(1024 * 1024):
                 total += len(chunk)
-                if total > MAX_SIZE:
-                    raise HTTPException(413, "Video must be smaller than 100 MB.")
+                if total > (MAX_UPLOAD_SIZE if internet else MAX_SIZE):
+                    raise HTTPException(
+                        413,
+                        "Video must be smaller than 1 GB."
+                        if internet
+                        else "Video must be smaller than 100 MB.",
+                    )
                 out.write(chunk)
         info = probe(path)
-        if info["duration"] > 60.1:
+        if info["duration"] > 60.1 and not internet:
             raise HTTPException(400, "Video must be 60 seconds or shorter.")
         if info["duration"] < 2:
             raise HTTPException(400, "Video must be at least 2 seconds long.")
@@ -379,6 +388,19 @@ async def receive_video(file: UploadFile, internet: bool):
         raise HTTPException(400, str(exc)) from exc
     finally:
         await file.close()
+    if internet and info["duration"] > 60.1:
+        path.rename(directory / ("input" + suffix))
+        selection = {
+            "id": job_id,
+            "status": "needs_trim",
+            "duration": info["duration"],
+            "filename": Path(file.filename or "video").name[:200],
+            "message": "Choose a section of up to 60 seconds",
+        }
+        (directory / "selection.json").write_text(json.dumps(selection))
+        with jobs_lock:
+            jobs[job_id] = selection
+        return {"id": job_id, "status": "needs_trim"}
     with jobs_lock:
         jobs[job_id] = {
             "id": job_id,
@@ -409,6 +431,9 @@ def job(job_id: str):
                 search_result = UPLOADS / job_id / "search-result.json"
                 if search_result.is_file():
                     return json.loads(search_result.read_text())
+                selection = UPLOADS / job_id / "selection.json"
+                if selection.is_file():
+                    return json.loads(selection.read_text())
                 stored = UPLOADS / job_id / "evidence/report.json"
                 if stored.is_file():
                     report = json.loads(stored.read_text())
@@ -421,6 +446,99 @@ def job(job_id: str):
                     }
             raise HTTPException(404, "Analysis not found.")
         return dict(jobs[job_id])
+
+
+def input_path(job_id: str):
+    import re
+
+    if not re.fullmatch(r"[a-f0-9]{32}", job_id):
+        raise HTTPException(404, "Video not found.")
+    return next(
+        (
+            p
+            for p in (UPLOADS / job_id).glob("input.*")
+            if p.suffix in {".mp4", ".mov", ".webm", ".mkv", ".m4v"}
+        ),
+        None,
+    )
+
+
+@app.get("/api/input/{job_id}")
+def input_video(job_id: str):
+    path = input_path(job_id)
+    if not path:
+        raise HTTPException(404, "Video not found.")
+    return FileResponse(path)
+
+
+class SegmentRequest(BaseModel):
+    start: float = Field(ge=0, allow_inf_nan=False)
+    duration: float = Field(ge=2, le=60, allow_inf_nan=False)
+
+
+@app.post("/api/search-video/{job_id}/segment", status_code=202)
+def select_segment(job_id: str, request: SegmentRequest):
+    original = input_path(job_id)
+    selection_path = UPLOADS / job_id / "selection.json"
+    if not original or not selection_path.is_file():
+        raise HTTPException(404, "Upload a longer video before choosing a section.")
+    selection = json.loads(selection_path.read_text())
+    if request.start + request.duration > selection["duration"] + 0.01:
+        raise HTTPException(
+            400, "The selected section extends past the end of the video."
+        )
+    with jobs_lock:
+        current = jobs.get(job_id, selection)
+        if (
+            current["status"] not in {"needs_trim", "failed"}
+            or (UPLOADS / job_id / "search-result.json").exists()
+        ):
+            raise HTTPException(
+                409, "This video already has a search in progress or completed."
+            )
+        if (
+            sum(
+                j["status"] in ("uploading", "queued", "running") for j in jobs.values()
+            )
+            >= 2
+        ):
+            raise HTTPException(
+                429, "Two searches are already queued. Wait for one to finish."
+            )
+        jobs[job_id] = {
+            **selection,
+            "status": "queued",
+            "stage": "trim",
+            "message": "Preparing your selected clip",
+        }
+
+    def task():
+        with jobs_lock:
+            jobs[job_id].update(status="running", stage="trim")
+        try:
+            path = UPLOADS / job_id / "query.mp4"
+            trim_video(original, path, request.start, request.duration)
+            (UPLOADS / job_id / "clip.json").write_text(
+                json.dumps(
+                    {
+                        "start": request.start,
+                        "end": request.start + request.duration,
+                        "originalDuration": selection["duration"],
+                        "originalFilename": selection["filename"],
+                    }
+                )
+            )
+        except Exception:
+            with jobs_lock:
+                jobs[job_id].update(
+                    status="failed",
+                    error="Could not prepare that section. Choose another interval and try again.",
+                )
+            return
+        internet_work(job_id, path)
+
+    pool.submit(task)
+    return {"id": job_id, "status": "queued"}
 
 
 @app.get("/api/query/{job_id}")
@@ -523,6 +641,10 @@ def refine_video(previous_id: str, request: RefineRequest):
             with jobs_lock:
                 jobs.pop(job_id, None)
             raise HTTPException(500, "Could not prepare the previous video.")
+
+    clip_metadata = UPLOADS / previous_id / "clip.json"
+    if clip_metadata.is_file():
+        shutil.copy2(clip_metadata, directory / "clip.json")
 
     def task():
         with jobs_lock:

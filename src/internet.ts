@@ -14,6 +14,12 @@ export type VideoSearch = {
   schemaVersion: string;
   searchedAt: string;
   query: { filename: string; duration: number; sha256: string };
+  selection?: {
+    start: number;
+    end: number;
+    originalDuration: number;
+    originalFilename: string;
+  };
   queries: string[];
   captions: string[];
   frames: { time: number; image: string }[];

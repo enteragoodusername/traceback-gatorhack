@@ -1413,3 +1413,147 @@ h1 em {
     scroll-behavior: auto !important;
   }
 }
+
+/* The full upload stays local; this window chooses the actual search clip. */
+.clip-trimmer {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 32px;
+  margin: 28px 0;
+  padding: 28px;
+  border: 1px solid #dfe5d9;
+  border-radius: 20px;
+  background: #fffefa;
+}
+.trim-preview video {
+  width: 100%;
+  max-height: 480px;
+  border-radius: 12px;
+  background: #17251e;
+}
+.trim-preview p {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.trim-preview span {
+  color: #657369;
+}
+.trim-controls h2 {
+  font-size: 26px;
+  margin: 12px 0;
+}
+.trim-controls > p {
+  color: #657369;
+  line-height: 1.6;
+}
+.trim-controls .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.trim-controls fieldset {
+  padding: 0;
+  margin: 24px 0 0;
+  border: 0;
+  min-width: 0;
+}
+.trim-controls fieldset:disabled {
+  opacity: 0.6;
+}
+.trim-controls label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+}
+.trim-window {
+  position: relative;
+  height: 30px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #e7ebdf;
+}
+.trim-window span {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: #8cbba0;
+  border: 2px solid #295c46;
+  border-radius: 5px;
+  min-width: 3px;
+}
+.trim-controls input[type="range"] {
+  width: 100%;
+  height: 32px;
+  accent-color: #295c46;
+  cursor: pointer;
+}
+.trim-timeline {
+  display: flex;
+  justify-content: space-between;
+  color: #657369;
+  font-size: 12px;
+}
+.trim-times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 22px;
+}
+.trim-times input {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid #c7d2c7;
+  border-radius: 8px;
+  background: white;
+  color: #1e352d;
+  font: inherit;
+}
+.trim-selection {
+  font-size: 13px;
+  min-height: 36px;
+  color: #295c46;
+}
+.trim-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.trim-cancel {
+  display: block;
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  color: #657369;
+  margin-top: 18px;
+  cursor: pointer;
+  padding: 8px 0;
+}
+.trim-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  color: #295c46;
+}
+.trim-progress svg {
+  flex-shrink: 0;
+}
+.trim-progress small {
+  display: block;
+  margin-top: 6px;
+  color: #657369;
+  line-height: 1.5;
+}
+@media (max-width: 800px) {
+  .clip-trimmer {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 20px;
+  }
+  .trim-controls h2 {
+    font-size: 23px;
+  }
+}
