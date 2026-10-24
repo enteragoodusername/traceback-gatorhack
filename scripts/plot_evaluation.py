@@ -81,4 +81,6 @@ fig.text(
 fig.tight_layout(rect=(0, 0.07, 1, 1), w_pad=3)
 fig.savefig(ROOT / "public/evaluation-timing.svg", bbox_inches="tight")
 fig.savefig(ROOT / "docs/media/evaluation-timing.png", dpi=160, bbox_inches="tight")
+svg = ROOT / "public/evaluation-timing.svg"
+svg.write_text("\n".join(line.rstrip() for line in svg.read_text().splitlines()) + "\n")
 print("Saved timing-error figure from every recovered positive case.")
