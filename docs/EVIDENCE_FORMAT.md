@@ -7,6 +7,7 @@ the application. It is a record of measurements, not a signed attestation.
 | --- | --- |
 | `query.sha256` | SHA-256 of the exact query video analyzed |
 | `results[].source.sha256` | SHA-256 of the indexed source video; user uploads are normalized before indexing |
+| `results[].source.inputSha256` | For newly ingested user sources, SHA-256 of the uploaded bytes before normalization |
 | `retrieval.engine`, `revision` | Actual embedding model identifier and pinned model revision, or `visual-only` |
 | `retrieval.rankings` | Candidate ordering and uncalibrated cosine scores; not match probabilities |
 | `alignment.queryStart`, `queryEnd` | Earliest and latest query timestamps participating in the fitted consensus |
@@ -52,3 +53,13 @@ certificate, or legal conclusion is implied.
 specific indexed library. It does not mean the query is original, lawful,
 synthetic, or absent from the wider internet. A partial match can establish shared
 imagery for some sampled frames without explaining the entire edit.
+
+## Browser packet review
+
+The **Verify a packet** workspace checks ZIP structure and size limits, report
+SHA-256, inventory completeness, and every included JPEG hash before presenting
+reported measurements and frame pairs. It makes no analysis calls and sends no
+upload. Altered files, missing images, duplicate entries, and unknown files stop
+verification. A packet with data and checksums consistently replaced can still
+pass; integrity is not authentication. Original source/query videos are not in
+the packet and are not verified by this operation.

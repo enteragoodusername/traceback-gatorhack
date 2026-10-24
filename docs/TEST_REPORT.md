@@ -61,10 +61,10 @@ not eight additional “passes.”
 
 ## Automated checks
 
-- 31 Python tests cover geometric false matches and transformed positives,
+- 33 Python tests cover geometric false matches and transformed positives,
   temporal degeneracies, API validation and queue handling, provider failure
   behavior with mocked transports, and ZIP integrity.
-- 17 interface tests cover recorded and live API paths, multi-source selection,
+- 29 interface tests cover recorded and live API paths, multi-source selection,
   semantic search, source attribution, export checksums, keyboard behavior,
   and accessible DOM structure.
 - Strict TypeScript compilation and the Vite production build pass.
@@ -95,3 +95,33 @@ record, MP4, captions, and sample ZIP returned HTTP 200. The downloaded data and
 media matched local SHA-256 hashes. GitHub Actions completed successfully for
 the initial release. The owner-private Sites deployment also completed through
 the native publishing service.
+
+## Fresh checkout installation
+
+A separate shallow clone of the public repository installed the hash-pinned
+Python dependencies into a new virtual environment, installed the npm lockfile,
+built the application, and regenerated all four source indexes. This reused the
+already downloaded Hugging Face model cache; it did not reuse the project's
+virtual environment, node_modules, or source indexes. The CPU index resolver
+configuration was corrected before this successful check.
+
+The fresh checkout then ran the cropped query with `HF_HUB_OFFLINE=1`. Query
+metadata, retrieval values, complete geometric/temporal results, engine
+fingerprint, and every evidence image hash were identical to the shipped
+recorded run. Its independently exported ZIP also verified. The published
+record is `public/validation/reproducibility.json`. Runtime was profiled and is
+not compared as a latency benchmark.
+
+## Packet viewer and restart recovery
+
+The browser verifier passed the actual published packet and rejected modified
+reports, modified images, missing inventory entries, unexpected paths, excessive
+expanded sizes, and malformed measurements. A consistently rewritten report
+with its updated checksum passes, as expected: this is integrity checking, not
+authentication. The viewer sends no upload and clearly labels that analysis was
+not rerun.
+
+After restarting the actual local server, the earlier completed HTTP job was
+restored from disk. Its served original query bytes matched the SHA-256 in the
+report. Interface checks cover reopening that original query, clearing stale
+job IDs, and discarding delayed explanations after the selected clip changes.

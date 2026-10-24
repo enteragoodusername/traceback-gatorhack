@@ -37,3 +37,12 @@ approximated at sentence level from the narration lengths. Film audio is muted;
 only the synthetic narration is included. Opening and negative examples play
 the actual query videos; evidence frames and semantic retrieval examples use
 the exact measured images.
+
+## Devpost video field
+
+Upload the finished MP4 to YouTube or Vimeo, allow judges to view it, and paste
+that share URL into the video field. Devpost does not accept the direct MP4 URL
+in that field. The existing walkthrough page can still be a project link.
+Source: https://help.devpost.com/article/85-uploading-a-demo-video
+No upload to a personal video-hosting account or Devpost submission was made
+during this build.

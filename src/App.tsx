@@ -30,6 +30,7 @@ import type { Demo, Evidence, Manifest, Match, Report, Source } from "./types";
 import Library from "./Library";
 import Evaluation from "./Evaluation";
 import Diagnostics from "./Diagnostics";
+import PacketReview from "./PacketReview";
 import { createEvidencePacket, sourceAttribution } from "./evidence";
 import { asset } from "./paths";
 
@@ -43,7 +44,7 @@ const shortTime = (n: number) =>
     .padStart(2, "0")}:${Math.floor(Math.max(0, n) % 60)
     .toString()
     .padStart(2, "0")}`;
-type Page = "trace" | "library" | "method";
+type Page = "trace" | "library" | "packet" | "method";
 type Health = {
   status: string;
   semantic: boolean;
@@ -69,11 +70,23 @@ function App() {
   const [toast, setToast] = useState("");
   const [exporting, setExporting] = useState(false);
   const [liveRun, setLiveRun] = useState(false);
+  const [savedResult, setSavedResult] = useState(false);
+  const [recentJob, setRecentJob] = useState<{
+    id: string;
+    filename: string;
+    status: string;
+  } | null>(null);
+  const [restoredQuery, setRestoredQuery] = useState<{
+    url: string;
+    filename: string;
+  } | null>(null);
   const [inspectSource, setInspectSource] = useState<Source | null>(null);
   const [inspectTime, setInspectTime] = useState(0);
   const modal = useRef<HTMLElement>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
   const [explanation, setExplanation] = useState("");
+  const [explaining, setExplaining] = useState(false);
+  const explanationId = useRef(0);
   const input = useRef<HTMLInputElement>(null);
   const queryVideo = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -108,6 +121,29 @@ function App() {
           const h = r.ok ? await r.json() : null;
           if (active && h?.status === "ok") {
             setHealth(h);
+            try {
+              const saved = localStorage.getItem("traceback:last-analysis");
+              if (saved && /^[a-f0-9]{32}$/.test(saved)) {
+                const previous = await fetch(`/api/jobs/${saved}`, {
+                  signal: AbortSignal.timeout(3000),
+                });
+                if (previous.ok) {
+                  const job = await previous.json();
+                  if (active)
+                    setRecentJob({
+                      id: saved,
+                      filename:
+                        job.filename ||
+                        job.report?.query.filename ||
+                        "Previous clip",
+                      status: job.status,
+                    });
+                } else if (previous.status === 404)
+                  localStorage.removeItem("traceback:last-analysis");
+              }
+            } catch {
+              /* A blocked browser store never prevents analysis. */
+            }
             const lib = await fetch("/api/library");
             if (lib.ok) {
               const data = await lib.json();
@@ -176,6 +212,10 @@ function App() {
   }, [toast]);
   const clear = () => {
     requestId.current++;
+    explanationId.current++;
+    setExplaining(false);
+    setRestoredQuery(null);
+    setSavedResult(false);
     setReport(null);
     setActiveMatch(0);
     setActiveEvidence(0);
@@ -207,12 +247,15 @@ function App() {
   async function runTrace() {
     if (!demo && !upload) return;
     const id = ++requestId.current;
+    explanationId.current++;
+    setExplaining(false);
+    setSavedResult(false);
     setBusy(true);
     setError("");
     setExplanation("");
     setReport(null);
     try {
-      if (upload || (liveRun && health && demo)) {
+      if (upload || restoredQuery || (liveRun && health && demo)) {
         if (!health)
           throw Error(
             "New uploads need the local analysis server. Run ./start.sh in the project, then open its local URL. The hosted demo contains recorded, reproducible analyses.",
@@ -220,23 +263,43 @@ function App() {
         setStage("Uploading your clip");
         const form = new FormData();
         if (upload) form.append("file", upload);
-        else if (demo) {
-          const response = await fetch(demo.url);
+        else if (demo || restoredQuery) {
+          const response = await fetch(restoredQuery?.url || demo!.url);
           if (!response.ok)
             throw Error("Could not load the demo video for a live run.");
           form.append(
             "file",
-            new File([await response.blob()], demo.id + ".mp4", {
-              type: "video/mp4",
-            }),
+            new File(
+              [await response.blob()],
+              restoredQuery?.filename || demo!.id + ".mp4",
+              {
+                type: "video/mp4",
+              },
+            ),
           );
         }
         const res = await fetch("/api/analyze", { method: "POST", body: form });
         const data = await res.json();
         if (!res.ok) throw Error(data.detail || "Could not start analysis.");
+        try {
+          localStorage.setItem("traceback:last-analysis", data.id);
+        } catch {
+          /* Storage is optional. */
+        }
+        setRecentJob({
+          id: data.id,
+          filename:
+            upload?.name ||
+            restoredQuery?.filename ||
+            demo?.title ||
+            "Your clip",
+          status: "running",
+        });
         while (id === requestId.current) {
           await new Promise((resolve) => setTimeout(resolve, 1000));
-          const poll = await fetch(`/api/jobs/${data.id}`);
+          const poll = await fetch(`/api/jobs/${data.id}`, {
+            signal: AbortSignal.timeout(15000),
+          });
           if (!poll.ok) throw Error("Analysis session could not be read.");
           const job = await poll.json();
           setStage(job.message || "Analyzing your clip");
@@ -245,6 +308,9 @@ function App() {
           if (job.status === "complete") {
             setReport(job.report);
             setBase(`/api/evidence/${data.id}/`);
+            setRecentJob((j) =>
+              j && j.id === data.id ? { ...j, status: "complete" } : j,
+            );
             break;
           }
         }
@@ -277,6 +343,61 @@ function App() {
       if (id === requestId.current) setBusy(false);
     }
   }
+  async function reopenRecent() {
+    if (!recentJob || !health) return;
+    const id = ++requestId.current;
+    explanationId.current++;
+    setExplaining(false);
+    setSavedResult(false);
+    setBusy(true);
+    setReport(null);
+    setError("");
+    setExplanation("");
+    setUpload(null);
+    setRestoredQuery({
+      url: `/api/query/${recentJob.id}`,
+      filename: recentJob.filename,
+    });
+    setStage("Reopening the previous analysis");
+    try {
+      while (id === requestId.current) {
+        const response = await fetch(`/api/jobs/${recentJob.id}`, {
+          signal: AbortSignal.timeout(15000),
+        });
+        const job = await response.json();
+        if (!response.ok)
+          throw Error(
+            job.detail || "The previous analysis could not be reopened.",
+          );
+        if (job.status === "failed")
+          throw Error(job.error || "The previous analysis failed.");
+        setStage(job.message || "Waiting for the local engine");
+        if (job.status === "complete") {
+          setReport(job.report);
+          setSavedResult(true);
+          setBase(`/api/evidence/${recentJob.id}/`);
+          setActiveMatch(0);
+          setActiveEvidence(0);
+          setRestoredQuery({
+            url: `/api/query/${recentJob.id}`,
+            filename: job.report.query.filename,
+          });
+          setRecentJob((j) => (j ? { ...j, status: "complete" } : j));
+          break;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    } catch (e) {
+      if (id === requestId.current)
+        setError(
+          e instanceof Error
+            ? e.message
+            : "The previous analysis could not be reopened.",
+        );
+    } finally {
+      if (id === requestId.current) setBusy(false);
+    }
+  }
   async function exportReport() {
     if (!report || exporting) return;
     setExporting(true);
@@ -302,26 +423,32 @@ function App() {
     }
   }
   async function explain() {
-    if (!report || !health?.gemini) return;
+    if (!report || !health?.gemini || explaining) return;
+    const id = ++explanationId.current;
+    setExplaining(true);
     setExplanation("Preparing a grounded explanation…");
     try {
       const r = await fetch("/api/explain", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ report }),
+        signal: AbortSignal.timeout(45000),
       });
       const data = await r.json();
       if (!r.ok) throw Error(data.detail || "Explanation unavailable.");
-      setExplanation(data.text);
+      if (id === explanationId.current) setExplanation(data.text);
     } catch (e) {
-      setExplanation(
-        e instanceof Error ? e.message : "Explanation unavailable.",
-      );
+      if (id === explanationId.current)
+        setExplanation(
+          e instanceof Error ? e.message : "Explanation unavailable.",
+        );
+    } finally {
+      if (id === explanationId.current) setExplaining(false);
     }
   }
   const match = report?.results[activeMatch];
   const evidence = match?.evidence[activeEvidence];
-  const queryUrl = upload ? uploadUrl : demo?.url;
+  const queryUrl = restoredQuery?.url || (upload ? uploadUrl : demo?.url);
   return (
     <div className="app-shell">
       <a href="#main-content" className="skip-link">
@@ -360,6 +487,14 @@ function App() {
             <FolderOpen size={18} />
             Source library
             <span className="nav-count">{manifest?.sources.length || 0}</span>
+          </button>
+          <button
+            className={page === "packet" ? "nav-item active" : "nav-item"}
+            aria-current={page === "packet" ? "page" : undefined}
+            onClick={() => setPage("packet")}
+          >
+            <ShieldCheck size={18} />
+            Verify a packet
           </button>
           <button
             className={page === "method" ? "nav-item active" : "nav-item"}
@@ -412,7 +547,9 @@ function App() {
                 ? "Trace a clip"
                 : page === "library"
                   ? "Source library"
-                  : "Under the hood"}
+                  : page === "packet"
+                    ? "Verify a packet"
+                    : "Under the hood"}
             </span>
           </div>
           <div className="topbar-right">
@@ -460,6 +597,36 @@ function App() {
                   <span>{exporting ? "Packaging…" : "Export evidence"}</span>
                 </button>
               </section>
+              {health && recentJob && !busy && (
+                <div className="recent-analysis">
+                  <Clock3 size={16} />
+                  <div>
+                    <strong>Latest local analysis</strong>
+                    <span>
+                      {recentJob.filename} ·{" "}
+                      {recentJob.status === "complete"
+                        ? "saved on this computer"
+                        : "reopen to check progress"}
+                    </span>
+                  </div>
+                  <button onClick={reopenRecent}>
+                    Reopen analysis <ArrowUpRight size={14} />
+                  </button>
+                  <button
+                    aria-label="Dismiss recent analysis"
+                    onClick={() => {
+                      setRecentJob(null);
+                      try {
+                        localStorage.removeItem("traceback:last-analysis");
+                      } catch {
+                        /* Optional browser storage. */
+                      }
+                    }}
+                  >
+                    <X size={15} />
+                  </button>
+                </div>
+              )}
               <div className="workbench">
                 <section className="query-panel panel">
                   <div className="panel-heading">
@@ -482,7 +649,11 @@ function App() {
                         ref={queryVideo}
                         key={queryUrl}
                         src={queryUrl}
-                        poster={!upload ? demo?.thumbnail : undefined}
+                        poster={
+                          !upload && !restoredQuery
+                            ? demo?.thumbnail
+                            : undefined
+                        }
                         muted
                         loop
                         playsInline
@@ -493,7 +664,11 @@ function App() {
                     )}
                     <span className="video-badge">
                       <FileVideo size={12} />
-                      {upload ? "YOUR UPLOAD" : "EDITED EXCERPT"}
+                      {restoredQuery
+                        ? "SAVED LOCAL CLIP"
+                        : upload
+                          ? "YOUR UPLOAD"
+                          : "EDITED EXCERPT"}
                     </span>
                     <button
                       className="play-button"
@@ -522,11 +697,15 @@ function App() {
                       )}
                     </button>
                     <span className="video-duration">
-                      {upload
-                        ? "New clip"
-                        : demo
-                          ? `${(demo.length / demo.speed).toFixed(1)}s`
-                          : ""}
+                      {restoredQuery
+                        ? report
+                          ? `${report.query.duration.toFixed(1)}s`
+                          : "Saved clip"
+                        : upload
+                          ? "New clip"
+                          : demo
+                            ? `${(demo.length / demo.speed).toFixed(1)}s`
+                            : ""}
                     </span>
                   </div>
                   <div className="query-details">
@@ -535,17 +714,22 @@ function App() {
                     </div>
                     <div>
                       <h3>
-                        {upload ? upload.name : demo?.title || "Loading demo…"}
+                        {restoredQuery?.filename ||
+                          (upload
+                            ? upload.name
+                            : demo?.title || "Loading demo…")}
                       </h3>
                       <p>
-                        {upload
-                          ? `${(upload.size / 1024 / 1024).toFixed(1)} MB · Ready to analyze`
-                          : demo?.subtitle}
+                        {restoredQuery
+                          ? "Original upload and measured report restored locally"
+                          : upload
+                            ? `${(upload.size / 1024 / 1024).toFixed(1)} MB · Ready to analyze`
+                            : demo?.subtitle}
                       </p>
                     </div>
                   </div>
                   <div className="query-actions">
-                    {health && !upload && (
+                    {health && !upload && !restoredQuery && (
                       <label className="live-run-toggle">
                         <input
                           type="checkbox"
@@ -600,7 +784,7 @@ function App() {
                       <button
                         disabled={busy}
                         key={d.id}
-                        className={`demo-option ${!upload && demo?.id === d.id ? "selected" : ""}`}
+                        className={`demo-option ${!upload && !restoredQuery && demo?.id === d.id ? "selected" : ""}`}
                         onClick={() => chooseDemo(d)}
                       >
                         <img src={d.thumbnail} alt="" />
@@ -618,7 +802,7 @@ function App() {
                             }
                           </small>
                         </div>
-                        {!upload && demo?.id === d.id ? (
+                        {!upload && !restoredQuery && demo?.id === d.id ? (
                           <span className="selected-check">
                             <Check size={12} />
                           </span>
@@ -674,7 +858,7 @@ function App() {
                       </div>
                       <h3>{stage}</h3>
                       <p>
-                        {upload || (liveRun && health)
+                        {upload || restoredQuery || (liveRun && health)
                           ? "Reading actual pixels, retrieving candidates, and checking visual correspondence."
                           : "This is an actual saved pipeline output, not a simulated live inference."}
                       </p>
@@ -935,7 +1119,11 @@ function App() {
                   <div>
                     <span className="pill neutral">
                       <Clock3 size={12} />
-                      {report.recorded ? "RECORDED RUN" : "LIVE LOCAL RUN"}
+                      {report.recorded
+                        ? "RECORDED RUN"
+                        : savedResult
+                          ? "SAVED LOCAL RUN"
+                          : "LIVE LOCAL RUN"}
                     </span>
                     <span>
                       {report.elapsedSeconds.toFixed(1)}s actual processing
@@ -954,6 +1142,7 @@ function App() {
                     <button
                       className="button secondary small"
                       onClick={explain}
+                      disabled={explaining}
                     >
                       <Sparkles size={14} />
                       Explain with Gemini
@@ -1060,6 +1249,7 @@ function App() {
             />
           )}
           {page === "method" && <Method health={health} />}
+          {page === "packet" && <PacketReview />}
         </div>
       </main>
       {toast && (
@@ -1158,8 +1348,14 @@ function App() {
                   </dd>
                 </div>
               </dl>
-              <div className="hash-label">SOURCE SHA-256</div>
+              <div className="hash-label">INDEXED SOURCE SHA-256</div>
               <code>{inspectSource.sha256}</code>
+              {inspectSource.inputSha256 && (
+                <>
+                  <div className="hash-label">ORIGINAL UPLOAD SHA-256</div>
+                  <code>{inspectSource.inputSha256}</code>
+                </>
+              )}
             </div>
           </section>
         </div>
@@ -1279,8 +1475,8 @@ function Timeline({ match, duration }: { match: Match; duration: number }) {
       </div>
       {a.timingAmbiguous && (
         <p className="timing-warning">
-          Repeated imagery supports more than one timing explanation. Inspect
-          the frame pairs before choosing an interval.
+          More than one timing explanation fits these frame matches. Inspect the
+          frame pairs before choosing an interval.
         </p>
       )}
       <p>

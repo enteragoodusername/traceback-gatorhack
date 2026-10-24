@@ -116,3 +116,74 @@ def test_semantic_frame_uses_timestamp_not_assumed_position(monkeypatch, tmp_pat
     assert client.get("/api/frames/example/2").content == b"correct-frame"
     assert client.get("/api/frames/example/1").status_code == 404
     assert client.get("/api/frames/unknown/2").status_code == 404
+
+
+def test_source_normalization_preserves_original_upload_identity(monkeypatch, tmp_path):
+    import hashlib
+    import importlib
+    import subprocess
+
+    module = importlib.import_module("server.app")
+    source = tmp_path / "submitted.mp4"
+    subprocess.run(
+        [
+            "ffmpeg",
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-y",
+            "-f",
+            "lavfi",
+            "-i",
+            "testsrc2=size=320x180:rate=24:duration=2",
+            "-c:v",
+            "libx264",
+            "-crf",
+            "18",
+            str(source),
+        ],
+        check=True,
+    )
+    payload = source.read_bytes()
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+    monkeypatch.setattr(module, "jobs", {})
+    monkeypatch.setattr(module.embedding, "available", lambda: True)
+    registered = []
+    monkeypatch.setattr(
+        module, "register_source", lambda record: registered.append(record)
+    )
+
+    class Immediate:
+        def submit(self, callback):
+            callback()
+
+    monkeypatch.setattr(module, "pool", Immediate())
+    response = client.post(
+        "/api/sources",
+        data={"title": "Original test pattern", "creator": "   ", "license": "CC0"},
+        files={"file": ("submitted.mp4", payload, "video/mp4")},
+    )
+    assert response.status_code == 202
+    result = client.get("/api/jobs/" + response.json()["id"]).json()
+    assert result["status"] == "complete"
+    record = result["source"]
+    assert record["inputSha256"] == hashlib.sha256(payload).hexdigest()
+    normalized = tmp_path / "data/sources" / record["id"] / "video.mp4"
+    assert record["sha256"] == hashlib.sha256(normalized.read_bytes()).hexdigest()
+    assert record["creator"] == "User provided"
+    assert registered[0] == record
+
+
+def test_saved_query_endpoint_serves_only_the_original_video(monkeypatch, tmp_path):
+    import importlib
+
+    module = importlib.import_module("server.app")
+    monkeypatch.setattr(module, "UPLOADS", tmp_path)
+    job_id = "c" * 32
+    folder = tmp_path / job_id
+    folder.mkdir()
+    (folder / "query.mp4").write_bytes(b"original-query-video")
+    (folder / "private.txt").write_bytes(b"not-a-query")
+    assert client.get("/api/query/" + job_id).content == b"original-query-video"
+    assert client.get("/api/query/not-an-id").status_code == 404
+    assert client.get("/api/query/" + "d" * 32).status_code == 404

@@ -33,7 +33,8 @@ A useful evidence tool must separate shared imagery from ownership. Traceback ne
 - Real local multimodal inference and free-text source search.
 - New source ingestion and edited-query upload.
 - Geometric evidence, temporal alignment, and uncertainty indicators.
-- Downloadable, independently checksum-verifiable evidence packets.
+- Downloadable evidence packets with independent CLI and in-browser checksum
+  verification and frame-pair review.
 - A published controlled evaluation with every case, including failures.
 - A responsive hosted demonstration with explicit recorded-run labels.
 
@@ -58,7 +59,11 @@ The project is prepared, but this file is not a submitted Devpost entry.
 
 - Supply the real registered roster and actual contributions. Do not invent team members or affiliations.
 - Confirm the team's in-person eligibility and required interdisciplinary composition against the [rules](https://gatorhack2026.devpost.com/rules).
-- Attach the public GitHub repository and the under-three-minute demonstration.
+- Attach the public GitHub repository. Upload `public/demo/traceback-demo.mp4`
+  to YouTube or Vimeo with settings that let judges view it, then use that hosted
+  URL in Devpost's video field. The supplied MP4 and walkthrough page are ready,
+  but [Devpost requires a supported video host](https://help.devpost.com/article/85-uploading-a-demo-video);
+  a direct GitHub Pages MP4 URL is not accepted in that field.
 - Select overall, Vobile, and open-source consideration. Select API-specific categories only after a genuine successful integration demonstration and organizer eligibility confirmation.
 - Submit through [Devpost](https://gatorhack2026.devpost.com/) by **Sunday, October 25, 2026, 5:00 PM Eastern**.
 - Arrange an eligible teammate's presence at the **Monday, October 26, 10:15 AM Eastern finals at the Reitz Union**; attendance is necessary to win.

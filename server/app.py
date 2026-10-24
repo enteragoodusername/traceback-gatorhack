@@ -90,7 +90,7 @@ def add_source(
             503, "Enable the local semantic model before indexing a source."
         )
     title = title.strip()[:100]
-    creator = creator.strip()[:100]
+    creator = creator.strip()[:100] or "User provided"
     if not title:
         raise HTTPException(400, "A source title is required.")
     if license not in (
@@ -129,6 +129,7 @@ def add_source(
                 if total > MAX_SIZE:
                     raise HTTPException(413, "Source must be smaller than 100 MB.")
                 out.write(chunk)
+        input_sha256 = sha256(incoming)
         info = probe(incoming)
         if not 2 <= info["duration"] <= 60.1:
             raise HTTPException(400, "Use a source between 2 and 60 seconds long.")
@@ -189,6 +190,7 @@ def add_source(
         url=f"/api/sources/{sid}/video.mp4",
         thumbnail=f"/api/sources/{sid}/thumbnail.jpg",
         sha256=sha256(path),
+        inputSha256=input_sha256,
         creator=creator,
         work=title,
         license=license,
@@ -259,9 +261,10 @@ def work(job_id: str, path: Path):
         )
         report["query"]["filename"] = jobs[job_id]["filename"]
         report["recorded"] = False
-        (UPLOADS / job_id / "evidence/report.json").write_text(
-            json.dumps(report, indent=2)
-        )
+        stored = UPLOADS / job_id / "evidence/report.json"
+        temporary = stored.with_suffix(".tmp")
+        temporary.write_text(json.dumps(report, indent=2))
+        temporary.replace(stored)
         with jobs_lock:
             jobs[job_id].update(
                 status="complete",
@@ -367,6 +370,18 @@ def job(job_id: str):
                     }
             raise HTTPException(404, "Analysis not found.")
         return dict(jobs[job_id])
+
+
+@app.get("/api/query/{job_id}")
+def original_query(job_id: str):
+    if len(job_id) != 32 or not all(c in "0123456789abcdef" for c in job_id):
+        raise HTTPException(404, "Query not found.")
+    directory = UPLOADS / job_id
+    for suffix in (".mp4", ".mov", ".webm", ".mkv", ".m4v"):
+        path = directory / ("query" + suffix)
+        if path.is_file():
+            return FileResponse(path)
+    raise HTTPException(404, "Query not found.")
 
 
 @app.get("/api/evidence/{job_id}/{filename}")

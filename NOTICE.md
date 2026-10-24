@@ -61,3 +61,18 @@ The model wrapper, frameworks, and media above are pre-existing permitted
 dependencies; the Traceback application code was created for this project.
 Team members should accurately disclose their own contributions in the final
 submission and confirm any additional organizer guidance on AI assistance.
+
+## Additional-film validation
+
+Big Buck Bunny excerpts used in optional extended validation are CC BY 3.0.
+Credit: (c) copyright 2008, Blender Foundation / www.bigbuckbunny.org.
+License and required attribution: https://peach.blender.org/about/
+The original and intermediate edits are not included in the repository.
+Construction and checksums are documented in docs/EXTENDED_VALIDATION.md.
+
+## Demo narration
+
+The optional demo video uses synthetic narration generated with Piper and the
+`en_US-ljspeech-medium` voice. It is not a team member's voice. Runtime and
+voice provenance, including their separate licenses, are documented in
+`docs/DEMO_VIDEO.md`; runtime code and voice weights are not bundled.

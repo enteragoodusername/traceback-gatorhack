@@ -14,6 +14,7 @@ export type Source = {
   licenseUrl: string;
   sourceUrl: string;
   userProvided?: boolean;
+  inputSha256?: string;
 };
 export type Demo = {
   id: string;

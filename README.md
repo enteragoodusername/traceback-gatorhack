@@ -56,7 +56,8 @@ model outputs.
 1. Select **The cropped repost** and choose **Find the source**.
 2. Inspect the recovered source, timing estimate, and matching green features.
 3. Select different frame pairs and inspect the source video.
-4. Export the evidence ZIP with checksums and the actual inspected images.
+4. Export the evidence ZIP, then open **Verify a packet** to check every included
+   checksum and inspect its frame pairs locally in the browser.
 5. Try the unrelated clip. The system should abstain when it cannot verify a
    source in this library.
 6. In **Source library**, search a visual description. On the local server,
@@ -66,6 +67,12 @@ When connected locally, **Run this demo live on my computer** sends the
 selected example through the same upload endpoint used for new clips. CPU
 processing can take roughly a minute or longer, depending on clip length and
 concurrent work. Progress messages report the actual processing stage.
+
+Completed uploads and evidence remain in `data/uploads/`. The local interface
+can reopen its latest analysis after a refresh, including a still-running job.
+The browser stores only the job ID. Dismissing the link does not delete files;
+local data stays until you remove it. A server restart preserves completed
+reports, but does not resume an interrupted computation.
 
 ## Command-line workflow
 
@@ -181,6 +188,14 @@ or automate takedown requests. Sponsor award eligibility requires a genuine
 working demonstration of the relevant API.
 
 ## Evidence packet verification
+
+Choose **Verify a packet** in the app and drop an exported ZIP, or use
+**Verify sample packet**. The browser checks the report and all included image
+checksums before showing the evidence. It does not upload the packet or rerun
+the model. The browser viewer accepts schema 1.1 packets up to 32 MB compressed
+and 64 MB expanded.
+
+For a separate command-line check:
 
 ```bash
 python3 scripts/verify_packet.py path/to/traceback-evidence.zip

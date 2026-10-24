@@ -26,3 +26,6 @@ artifacts/live-smoke/
 artifacts/traceback-demo.*
 artifacts/stress-cases/
 artifacts/public-http-check.json
+artifacts/performance/
+artifacts/cross-work-*/
+artifacts/retrieval-scale-*/

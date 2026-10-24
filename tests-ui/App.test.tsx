@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, it, expect, vi } from "vitest";
 import App from "../src/App";
@@ -21,6 +21,54 @@ beforeEach(() => {
 });
 
 describe("judge demo workflow", () => {
+  it("discards a delayed explanation after the selected query changes", async () => {
+    const user = userEvent.setup();
+    let finish!: (value: Response) => void;
+    const pending = new Promise<Response>((resolve) => {
+      finish = resolve;
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) => {
+        if (url === "/manifest.json")
+          return { ok: true, json: async () => manifest };
+        if (url === "/api/health")
+          return {
+            ok: true,
+            json: async () => ({ status: "ok", gemini: true }),
+          };
+        if (url === "/api/library")
+          return {
+            ok: true,
+            json: async () => ({ sources: manifest.sources }),
+          };
+        if (url.includes("/report.json"))
+          return { ok: true, json: async () => actualReport };
+        if (url === "/api/explain") return pending;
+        throw Error(`Unexpected fetch ${url}`);
+      }),
+    );
+    render(<App />);
+    await user.click(
+      await screen.findByRole("button", { name: "Find the source" }),
+    );
+    const explain = await screen.findByRole("button", {
+      name: "Explain with Gemini",
+    });
+    await user.click(explain);
+    expect(explain).toBeDisabled();
+    await user.click(screen.getByRole("button", { name: /A different look/ }));
+    await act(async () => {
+      finish({
+        ok: true,
+        json: async () => ({ text: "Explanation of the old clip" }),
+      } as Response);
+      await pending;
+    });
+    expect(
+      screen.queryByText("Explanation of the old clip"),
+    ).not.toBeInTheDocument();
+  });
   it("loads real fixture analysis, exposes uncertainty, and changes evidence frames", async () => {
     const user = userEvent.setup();
     render(<App />);
@@ -254,5 +302,106 @@ describe("user-provided source attribution", () => {
     expect(within(dialog).getByText("Test Archivist")).toBeInTheDocument();
     expect(within(dialog).getByText("Source duration")).toBeInTheDocument();
     expect(within(dialog).queryByText(/Blender/)).not.toBeInTheDocument();
+  });
+});
+
+describe("saved local analysis recovery", () => {
+  it("reopens the measured report with its original query video after a refresh", async () => {
+    const user = userEvent.setup();
+    const id = "a".repeat(32);
+    localStorage.setItem("traceback:last-analysis", id);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) => {
+        if (url === "/manifest.json")
+          return { ok: true, json: async () => manifest };
+        if (url === "/api/health")
+          return {
+            ok: true,
+            json: async () => ({
+              status: "ok",
+              semantic: true,
+              gemini: false,
+              twinly: false,
+            }),
+          };
+        if (url === "/api/library")
+          return {
+            ok: true,
+            json: async () => ({ sources: manifest.sources }),
+          };
+        if (url === `/api/jobs/${id}`)
+          return {
+            ok: true,
+            json: async () => ({
+              status: "complete",
+              report: {
+                ...actualReport,
+                recorded: false,
+                query: { ...actualReport.query, filename: "my-saved-clip.mp4" },
+              },
+            }),
+          };
+        return { ok: false };
+      }),
+    );
+    const { container } = render(<App />);
+    await user.click(
+      await screen.findByRole("button", { name: "Reopen analysis" }),
+    );
+    expect(await screen.findByText("Match verified")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "my-saved-clip.mp4" }),
+    ).toBeInTheDocument();
+    expect(container.querySelector(".query-video-wrap video")).toHaveAttribute(
+      "src",
+      `/api/query/${id}`,
+    );
+    expect(screen.getByText("SAVED LOCAL RUN")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /A different look/ }));
+    expect(container.querySelector(".query-video-wrap video")).toHaveAttribute(
+      "src",
+      manifest.demos[1].url,
+    );
+    expect(screen.queryByText("Match verified")).not.toBeInTheDocument();
+  });
+
+  it("clears a stale saved ID without blocking the recorded examples", async () => {
+    const id = "b".repeat(32);
+    localStorage.setItem("traceback:last-analysis", id);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) => {
+        if (url === "/manifest.json")
+          return { ok: true, json: async () => manifest };
+        if (url === "/api/health")
+          return {
+            ok: true,
+            json: async () => ({
+              status: "ok",
+              semantic: true,
+              gemini: false,
+              twinly: false,
+            }),
+          };
+        if (url === `/api/jobs/${id}`) return { ok: false, status: 404 };
+        if (url === "/api/library")
+          return {
+            ok: true,
+            json: async () => ({ sources: manifest.sources }),
+          };
+        return { ok: false };
+      }),
+    );
+    render(<App />);
+    await waitFor(() =>
+      expect(localStorage.getItem("traceback:last-analysis")).toBeNull(),
+    );
+    expect(
+      screen.queryByRole("button", { name: "Reopen analysis" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Find the source" }),
+    ).toBeEnabled();
   });
 });
