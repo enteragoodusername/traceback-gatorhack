@@ -1,0 +1,188 @@
+{
+  "engine": "Qwen/Qwen3-VL-Embedding-2B",
+  "revision": "9f2f7e710d6d81056aa5c0a4f04764fec6bb7bda",
+  "recorded": true,
+  "inputs": "Text queries and source frame pixels only; no titles or captions.",
+  "searches": [
+    {
+      "query": "Two people talking on a bridge",
+      "results": [
+        {
+          "sourceId": "bridge",
+          "time": 36.0,
+          "similarity": 0.3493
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 16.0,
+          "similarity": 0.3489
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 12.0,
+          "similarity": 0.3392
+        },
+        {
+          "sourceId": "observatory",
+          "time": 4.0,
+          "similarity": 0.3104
+        },
+        {
+          "sourceId": "bridge",
+          "time": 12.0,
+          "similarity": 0.3093
+        },
+        {
+          "sourceId": "bridge",
+          "time": 0.0,
+          "similarity": 0.309
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 28.0,
+          "similarity": 0.3068
+        },
+        {
+          "sourceId": "observatory",
+          "time": 0.0,
+          "similarity": 0.3013
+        }
+      ]
+    },
+    {
+      "query": "A scientist with computer screens",
+      "results": [
+        {
+          "sourceId": "machines",
+          "time": 0.0,
+          "similarity": 0.3945
+        },
+        {
+          "sourceId": "observatory",
+          "time": 12.0,
+          "similarity": 0.3826
+        },
+        {
+          "sourceId": "observatory",
+          "time": 4.0,
+          "similarity": 0.3745
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 0.0,
+          "similarity": 0.3727
+        },
+        {
+          "sourceId": "machines",
+          "time": 4.0,
+          "similarity": 0.359
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 20.0,
+          "similarity": 0.3551
+        },
+        {
+          "sourceId": "observatory",
+          "time": 0.0,
+          "similarity": 0.3486
+        },
+        {
+          "sourceId": "bridge",
+          "time": 32.0,
+          "similarity": 0.3471
+        }
+      ]
+    },
+    {
+      "query": "Giant robots in a city",
+      "results": [
+        {
+          "sourceId": "bridge",
+          "time": 0.0,
+          "similarity": 0.6075
+        },
+        {
+          "sourceId": "machines",
+          "time": 20.0,
+          "similarity": 0.5578
+        },
+        {
+          "sourceId": "machines",
+          "time": 16.0,
+          "similarity": 0.5398
+        },
+        {
+          "sourceId": "observatory",
+          "time": 16.0,
+          "similarity": 0.5072
+        },
+        {
+          "sourceId": "machines",
+          "time": 28.0,
+          "similarity": 0.4951
+        },
+        {
+          "sourceId": "observatory",
+          "time": 28.0,
+          "similarity": 0.4891
+        },
+        {
+          "sourceId": "observatory",
+          "time": 32.0,
+          "similarity": 0.4832
+        },
+        {
+          "sourceId": "bridge",
+          "time": 32.0,
+          "similarity": 0.435
+        }
+      ]
+    },
+    {
+      "query": "A man wearing glasses",
+      "results": [
+        {
+          "sourceId": "laboratory",
+          "time": 20.0,
+          "similarity": 0.3314
+        },
+        {
+          "sourceId": "laboratory",
+          "time": 0.0,
+          "similarity": 0.3304
+        },
+        {
+          "sourceId": "machines",
+          "time": 0.0,
+          "similarity": 0.3254
+        },
+        {
+          "sourceId": "observatory",
+          "time": 12.0,
+          "similarity": 0.298
+        },
+        {
+          "sourceId": "machines",
+          "time": 4.0,
+          "similarity": 0.2937
+        },
+        {
+          "sourceId": "bridge",
+          "time": 8.0,
+          "similarity": 0.2875
+        },
+        {
+          "sourceId": "bridge",
+          "time": 28.0,
+          "similarity": 0.2847
+        },
+        {
+          "sourceId": "bridge",
+          "time": 36.0,
+          "similarity": 0.284
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+# Keep checks focused on errors rather than imposing a different API style.
+target-version = "py311"
+exclude = ["vendor", ".venv", "artifacts"]
+[lint]
+select = ["E4", "E7", "E9", "F"]
+[lint.per-file-ignores]
+"scripts/*.py" = ["E402"] # Direct CLI scripts add the project root to sys.path.

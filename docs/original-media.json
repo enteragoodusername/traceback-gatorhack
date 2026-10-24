@@ -1,0 +1,16 @@
+[
+  {
+    "file": "tears-of-steel.mov",
+    "url": "https://download.blender.org/demo/movies/ToS/tears_of_steel_720p.mov",
+    "sha256": "efa9062d9cdb7a338e40ad530dfdf234806743f29ae6a1a136b97ece4e588e8f",
+    "bytes": 372178639,
+    "license": "CC BY 3.0"
+  },
+  {
+    "file": "sintel-trailer.mp4",
+    "url": "https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4",
+    "sha256": "b670602fa00934ca27c4351bb0efe7ea7a07fae57284e44226025eeed7c51254",
+    "bytes": 4372373,
+    "license": "CC BY 3.0"
+  }
+]

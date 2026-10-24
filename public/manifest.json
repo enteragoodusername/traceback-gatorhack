@@ -1,0 +1,152 @@
+{
+  "sources": [
+    {
+      "id": "bridge",
+      "title": "The bridge",
+      "description": "An encounter above the Amsterdam canals.",
+      "category": "Exterior \u00b7 People",
+      "duration": 40,
+      "originalOffset": 225,
+      "url": "/media/bridge.mp4",
+      "thumbnail": "/media/bridge.jpg",
+      "sha256": "5604595ebc020df75e5b800731598dc3f551d80a3fa83c01e0ea301e2156323f",
+      "creator": "Blender Foundation",
+      "work": "Tears of Steel (2012)",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "sourceUrl": "https://mango.blender.org/"
+    },
+    {
+      "id": "laboratory",
+      "title": "The laboratory",
+      "description": "A team prepares an experiment inside the lab.",
+      "category": "Interior \u00b7 Science",
+      "duration": 40,
+      "originalOffset": 165,
+      "url": "/media/laboratory.mp4",
+      "thumbnail": "/media/laboratory.jpg",
+      "sha256": "84b26d384af6e8ef6947edc4dce624c6d84a5141f5db79125733a8b73a5090f5",
+      "creator": "Blender Foundation",
+      "work": "Tears of Steel (2012)",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "sourceUrl": "https://mango.blender.org/"
+    },
+    {
+      "id": "observatory",
+      "title": "The observatory",
+      "description": "A quiet conversation overlooking the city.",
+      "category": "Interior \u00b7 City",
+      "duration": 40,
+      "originalOffset": 75,
+      "url": "/media/observatory.mp4",
+      "thumbnail": "/media/observatory.jpg",
+      "sha256": "8a2d6e09c1b0596a28c9ba50fc212a2ed7935ac9c6480139bd2e075e44800a09",
+      "creator": "Blender Foundation",
+      "work": "Tears of Steel (2012)",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "sourceUrl": "https://mango.blender.org/"
+    },
+    {
+      "id": "machines",
+      "title": "The machines",
+      "description": "Mechanical creatures move through the city.",
+      "category": "Exterior \u00b7 Action",
+      "duration": 40,
+      "originalOffset": 450,
+      "url": "/media/machines.mp4",
+      "thumbnail": "/media/machines.jpg",
+      "sha256": "77c2c3406417db1482e812fc78742ea810fab6ae43d153b508802da42e32b6ec",
+      "creator": "Blender Foundation",
+      "work": "Tears of Steel (2012)",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "sourceUrl": "https://mango.blender.org/"
+    }
+  ],
+  "demos": [
+    {
+      "id": "vertical",
+      "title": "The cropped repost",
+      "subtitle": "Vertical crop \u00b7 color grade \u00b7 1.25\u00d7 speed",
+      "source": "bridge",
+      "start": 8,
+      "length": 12,
+      "speed": 1.25,
+      "filters": "crop=ih*0.62:ih,scale=360:-2,eq=saturation=0.65:contrast=1.12:brightness=0.015",
+      "overlay": true,
+      "url": "/media/query-vertical.mp4",
+      "thumbnail": "/media/query-vertical.jpg",
+      "sha256": "b9548c0c53986155f1575e3d69d66b7ecb47c5880928469e4e9d135b26ddb7a9"
+    },
+    {
+      "id": "graded",
+      "title": "A different look",
+      "subtitle": "Color grade \u00b7 compression \u00b7 text overlay",
+      "source": "laboratory",
+      "start": 9,
+      "length": 12,
+      "speed": 1,
+      "filters": "scale=640:-2,eq=saturation=0.2:contrast=1.18",
+      "overlay": true,
+      "url": "/media/query-graded.mp4",
+      "thumbnail": "/media/query-graded.jpg",
+      "sha256": "2515fb2a03fd8f1e18cd2d0a151653e11f87f10e6a20ff903433309fa28a1cfe"
+    },
+    {
+      "id": "reframed",
+      "title": "Hidden in plain sight",
+      "subtitle": "Zoom \u00b7 horizontal flip \u00b7 0.8\u00d7 speed",
+      "source": "machines",
+      "start": 7,
+      "length": 10,
+      "speed": 0.8,
+      "filters": "crop=iw*0.78:ih*0.78,hflip,scale=640:-2",
+      "overlay": false,
+      "url": "/media/query-reframed.mp4",
+      "thumbnail": "/media/query-reframed.jpg",
+      "sha256": "f18b3f2905939f355bff826ae39d8bba59e763ea061f5ae840a7a314885fe3d6"
+    },
+    {
+      "id": "unrelated",
+      "title": "A different story",
+      "subtitle": "Unrelated footage \u00b7 no indexed source",
+      "source": null,
+      "start": 25,
+      "length": 10,
+      "speed": 1,
+      "url": "/media/query-unrelated.mp4",
+      "thumbnail": "/media/query-unrelated.jpg",
+      "sha256": "3cfb1ca267a874c4fc5b681a2c528fb9d61e9db9070d498ea88537a55c58e99d"
+    },
+    {
+      "id": "montage",
+      "title": "Two stories, one edit",
+      "subtitle": "Two sources \u00b7 scene cut \u00b7 color changes",
+      "source": null,
+      "start": 0,
+      "length": 14,
+      "speed": 1,
+      "segments": [
+        {
+          "source": "bridge",
+          "queryStart": 0,
+          "sourceStart": 8,
+          "length": 7
+        },
+        {
+          "source": "laboratory",
+          "queryStart": 7,
+          "sourceStart": 9,
+          "length": 7
+        }
+      ],
+      "url": "/media/query-montage.mp4",
+      "thumbnail": "/media/query-montage.jpg",
+      "sha256": "a87ad795674311fb97b0a388cf82fe7839d08704bcd1274921d7738155914f4e"
+    }
+  ],
+  "attribution": "Tears of Steel \u2014 (CC) Blender Foundation | mango.blender.org; Sintel trailer \u2014 (CC) Blender Foundation | durian.blender.org. Both CC BY 3.0. Excerpts trimmed, resized, muted, and deliberately transformed for this demonstration.",
+  "originalUrl": "https://download.blender.org/demo/movies/ToS/tears_of_steel_720p.mov"
+}

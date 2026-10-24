@@ -1,0 +1,37 @@
+[
+  {
+    "id": "opening",
+    "title": "Different edit. Same source.",
+    "text": "This clip was cropped, recolored, captioned, and played faster. Where did it come from? Traceback reconnects edited video with an indexed source, and makes the evidence visible. This walkthrough uses actual recorded pipeline outputs."
+  },
+  {
+    "id": "retrieval",
+    "title": "Find moments by meaning.",
+    "text": "The frontier technology is Qwen three V L Embedding, released in January twenty twenty six. It searches actual frame pixels and natural language in the same space. Describe a scene, inspect the retrieved moment, or submit an edited clip. The local application accepts new sources and new queries."
+  },
+  {
+    "id": "evidence",
+    "title": "Similarity starts the search. Evidence earns the match.",
+    "text": "Similarity alone is not a verdict. Traceback checks unique visual correspondences, consistent geometry, and aligned image appearance. These green points are measured matches, not an illustration of what the model might have seen. Multiple frames then support a source interval and a playback estimate. Weak or ambiguous timing stays explicit."
+  },
+  {
+    "id": "montage",
+    "title": "One edit can have several origins.",
+    "text": "A montage can contain more than one source. Here, the first part comes from the bridge excerpt, and the second from the laboratory. Each source has its own matching frames and query interval. Selecting a source opens its evidence. Unmatched gaps are not proof of original content."
+  },
+  {
+    "id": "negative",
+    "title": "A useful system can say no match.",
+    "text": "This unrelated clip has no verified source in the indexed library. Traceback does not force a match. The evaluation page publishes every controlled test case, including failures, and states the small scope of the experiment. It is not an internet scale accuracy claim."
+  },
+  {
+    "id": "packet",
+    "title": "Take the evidence with you.",
+    "text": "Export the inspected frames, measured correspondences, media hashes, pinned model revision, and engine fingerprint in one evidence packet. An independent verifier checks its checksums. Those checksums protect file integrity, not authorship. Shared imagery does not establish ownership, infringement, or first publication."
+  },
+  {
+    "id": "closing",
+    "title": "Follow the evidence.",
+    "text": "Traceback runs locally on a laptop CPU and is open source. The hosted demo lets you inspect real saved results immediately. Start the local service for new inference. Find the source behind the edit, and see exactly what supports the connection."
+  }
+]

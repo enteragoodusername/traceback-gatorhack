@@ -1,0 +1,23 @@
+{
+  "sourceId": "user-447747c80e4540e1b7737764365fe3ff",
+  "jobId": "986d2090238745f4a9f5155c22ab8331",
+  "newSourceRecovered": true,
+  "falseMatches": 0,
+  "sourceStart": 4.458,
+  "speed": 1.2052,
+  "offsetError": 0.14480000000000004,
+  "speedError": 0.0052000000000000934,
+  "verifiedFrames": 10,
+  "retrievalTop1": true,
+  "evidenceChecksumsVerified": 12,
+  "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614",
+  "model": "Qwen/Qwen3-VL-Embedding-2B",
+  "modelRevision": "9f2f7e710d6d81056aa5c0a4f04764fec6bb7bda",
+  "querySha256": "d29c773766e2d40f4ea1ca4b39f450dc66394e9b84eee42c5ec4581eef20c209",
+  "sourceSha256": "51e5ccb0bfbacaa770acdad530df7256369ff6929b790417b6500d0ceccf5589",
+  "scope": "One additional source from the Sintel trailer, not part of the four-source controlled evaluation. Source begins at 8s and lasts 16s; query begins at source 4s, lasts 8s before 1.2x playback, with 90% crop and horizontal reflection.",
+  "sourceLicense": "CC BY 3.0",
+  "sourceCredit": "(CC) Blender Foundation | durian.blender.org",
+  "sourceUrl": "https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4",
+  "sourceRemovedAfterTest": true
+}

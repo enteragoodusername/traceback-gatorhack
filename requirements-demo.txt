@@ -1,0 +1,4 @@
+# Optional tools for rebuilding the narrated video and scientific timing figure.
+# The web application and local engine do not require these packages.
+piper-tts==1.8.0
+matplotlib==3.11.2

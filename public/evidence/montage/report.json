@@ -1,0 +1,5244 @@
+{
+  "schemaVersion": "1.1",
+  "engineFingerprint": "328f842cbcff435236c57e1760716de6caae3728d2e9499e2dee5371e5a65614",
+  "evidenceAssets": [
+    {
+      "file": "bridge-0-query.jpg",
+      "sha256": "d0cbbf1a998e5da023a834be7747171c8e9b17839df374cce4fa38539846aa9e"
+    },
+    {
+      "file": "bridge-0-source.jpg",
+      "sha256": "849dbadbba0341152da0ca6ef97a74cdad8cc5014ea47e4d9e1ac181c18e2561"
+    },
+    {
+      "file": "bridge-1-query.jpg",
+      "sha256": "78399a5f87d169bd8b77b2052991b1937e898b9d6af68273678b9daf8ebc5a64"
+    },
+    {
+      "file": "bridge-1-source.jpg",
+      "sha256": "64c34ed585264ac927f81163621e380f38ce443c8ddb8e5164a239a7de1a0563"
+    },
+    {
+      "file": "bridge-2-query.jpg",
+      "sha256": "74f24f3718b256486f6ca50a5ff2725e79556c3a42602e2cb426d2e57ce0ec19"
+    },
+    {
+      "file": "bridge-2-source.jpg",
+      "sha256": "241c05f5ebf1c45d7fbbf2e609a6060e6074d090c36afc243b33935398207cd0"
+    },
+    {
+      "file": "bridge-3-query.jpg",
+      "sha256": "2201a8c217d2ae01610af990727c40346b32b3542a014c44da650217596b7d8c"
+    },
+    {
+      "file": "bridge-3-source.jpg",
+      "sha256": "13ebb54962ca92c432049440d89da9a542c4aaba5ce848bfaa5bad0129542155"
+    },
+    {
+      "file": "bridge-4-query.jpg",
+      "sha256": "373000405e08a41905caecb7d3ee8481b33cb1c732e915ea68995749c1be6639"
+    },
+    {
+      "file": "bridge-4-source.jpg",
+      "sha256": "76d084b32498030b5a27129c1ee8b1ebebdcefc14f0e1dc62f2e5087cd29b45a"
+    },
+    {
+      "file": "bridge-5-query.jpg",
+      "sha256": "8df8b6656b2e63ebe6496ea6539ca7160095cb46e29238f963bf1bf5c1a1cced"
+    },
+    {
+      "file": "bridge-5-source.jpg",
+      "sha256": "442a4ed7963332b5099727379d21cdc3dae799b4e8d3dfc3b287a1098f30bd84"
+    },
+    {
+      "file": "laboratory-0-query.jpg",
+      "sha256": "0c8b2d8238b103c00b7d7aa53add4dd37f291f4ed8ec3f14b04e495f71d71872"
+    },
+    {
+      "file": "laboratory-0-source.jpg",
+      "sha256": "3d41e733889f4449378a22226d76071ba462af364d9290ab0acfa11a9c4f7dd3"
+    },
+    {
+      "file": "laboratory-1-query.jpg",
+      "sha256": "412b3535bef071a4c969856df2d2746c73340fae0f4facbc17dbc2b3a90d48ac"
+    },
+    {
+      "file": "laboratory-1-source.jpg",
+      "sha256": "c37e75c3ebc9476ae7e263a60a126fdb639e95e3deb8092a1f3f62ed2702d2c0"
+    },
+    {
+      "file": "laboratory-2-query.jpg",
+      "sha256": "7c30a7327afbfdc2f9728423c01d0a9c032d64593ecc000027dc74417747c0f5"
+    },
+    {
+      "file": "laboratory-2-source.jpg",
+      "sha256": "dc5ee3228c961ce2b76b5ef954a4f0f86e95a5f44cf6104d1db270bd5a732164"
+    },
+    {
+      "file": "laboratory-3-query.jpg",
+      "sha256": "752861c4bcd72fb278218eacf7069c3abb66af7c34d45b0cd98d163768e436f9"
+    },
+    {
+      "file": "laboratory-3-source.jpg",
+      "sha256": "565b49e322aa0404869c1bcf860c7bdcd9afa5e3bf77dc09a82deb7b97cac3db"
+    },
+    {
+      "file": "laboratory-4-query.jpg",
+      "sha256": "bbf173fe3946a85c119ca970a88ff3ce23d2f76298037203681f96681de0fbe9"
+    },
+    {
+      "file": "laboratory-4-source.jpg",
+      "sha256": "0d0674aa0017d876f86cadf0728f66a1652bf074f6f785aa6691a878bb1e4623"
+    },
+    {
+      "file": "laboratory-5-query.jpg",
+      "sha256": "4d2f16358abd6afcecf266be15b2a8cd0b349b3da43e161dac899ea0e0ebd4ce"
+    },
+    {
+      "file": "laboratory-5-source.jpg",
+      "sha256": "5e67628537dee847a3d98db246ec24625d768180ddd83472e763219f3af681af"
+    }
+  ],
+  "query": {
+    "filename": "query-montage.mp4",
+    "sha256": "a87ad795674311fb97b0a388cf82fe7839d08704bcd1274921d7738155914f4e",
+    "duration": 14.0,
+    "width": 640,
+    "height": 266,
+    "sampledFrames": 28
+  },
+  "retrieval": {
+    "engine": "Qwen/Qwen3-VL-Embedding-2B",
+    "revision": "9f2f7e710d6d81056aa5c0a4f04764fec6bb7bda",
+    "rankings": [
+      {
+        "sourceId": "bridge",
+        "similarity": 0.8619,
+        "moments": [
+          8.0,
+          16.0,
+          20.0,
+          24.0
+        ]
+      },
+      {
+        "sourceId": "laboratory",
+        "similarity": 0.8434,
+        "moments": [
+          16.0,
+          12.0,
+          32.0,
+          28.0
+        ]
+      },
+      {
+        "sourceId": "machines",
+        "similarity": 0.576,
+        "moments": [
+          28.0,
+          24.0,
+          0.0,
+          4.0
+        ]
+      },
+      {
+        "sourceId": "observatory",
+        "similarity": 0.5195,
+        "moments": [
+          8.0,
+          4.0,
+          24.0,
+          12.0
+        ]
+      }
+    ]
+  },
+  "results": [
+    {
+      "source": {
+        "id": "laboratory",
+        "title": "The laboratory",
+        "description": "A team prepares an experiment inside the lab.",
+        "category": "Interior \u00b7 Science",
+        "duration": 40,
+        "originalOffset": 165,
+        "url": "/media/laboratory.mp4",
+        "thumbnail": "/media/laboratory.jpg",
+        "sha256": "84b26d384af6e8ef6947edc4dce624c6d84a5141f5db79125733a8b73a5090f5",
+        "creator": "Blender Foundation",
+        "work": "Tears of Steel (2012)",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+        "sourceUrl": "https://mango.blender.org/"
+      },
+      "alignment": {
+        "speed": 1.0,
+        "speedRange": [
+          0.9385,
+          1.0615
+        ],
+        "speedReliable": true,
+        "timingAmbiguous": false,
+        "toleranceSeconds": 0.2,
+        "offset": 2.0,
+        "queryStart": 7.0,
+        "queryEnd": 13.5,
+        "sourceStart": 9.0,
+        "sourceEnd": 15.5,
+        "support": 14,
+        "residual": 0.0,
+        "matches": [
+          {
+            "queryTime": 7.0,
+            "sourceTime": 9.0,
+            "inliers": 706,
+            "tentative": 707,
+            "inlierRatio": 0.9986,
+            "coverage": 0.5014,
+            "photometricCorrelation": 0.9997,
+            "mirrored": false
+          },
+          {
+            "queryTime": 7.5,
+            "sourceTime": 9.5,
+            "inliers": 682,
+            "tentative": 685,
+            "inlierRatio": 0.9956,
+            "coverage": 0.4958,
+            "photometricCorrelation": 0.9994,
+            "mirrored": false
+          },
+          {
+            "queryTime": 8.0,
+            "sourceTime": 10.0,
+            "inliers": 675,
+            "tentative": 679,
+            "inlierRatio": 0.9941,
+            "coverage": 0.3995,
+            "photometricCorrelation": 0.9995,
+            "mirrored": false
+          },
+          {
+            "queryTime": 8.5,
+            "sourceTime": 10.5,
+            "inliers": 682,
+            "tentative": 688,
+            "inlierRatio": 0.9913,
+            "coverage": 0.4261,
+            "photometricCorrelation": 0.9988,
+            "mirrored": false
+          },
+          {
+            "queryTime": 9.0,
+            "sourceTime": 11.0,
+            "inliers": 692,
+            "tentative": 694,
+            "inlierRatio": 0.9971,
+            "coverage": 0.4431,
+            "photometricCorrelation": 0.9995,
+            "mirrored": false
+          },
+          {
+            "queryTime": 9.5,
+            "sourceTime": 11.5,
+            "inliers": 694,
+            "tentative": 694,
+            "inlierRatio": 1.0,
+            "coverage": 0.5254,
+            "photometricCorrelation": 0.9994,
+            "mirrored": false
+          },
+          {
+            "queryTime": 10.0,
+            "sourceTime": 12.0,
+            "inliers": 704,
+            "tentative": 706,
+            "inlierRatio": 0.9972,
+            "coverage": 0.6118,
+            "photometricCorrelation": 0.9994,
+            "mirrored": false
+          },
+          {
+            "queryTime": 10.5,
+            "sourceTime": 12.5,
+            "inliers": 698,
+            "tentative": 701,
+            "inlierRatio": 0.9957,
+            "coverage": 0.6047,
+            "photometricCorrelation": 0.9993,
+            "mirrored": false
+          },
+          {
+            "queryTime": 11.0,
+            "sourceTime": 13.0,
+            "inliers": 688,
+            "tentative": 691,
+            "inlierRatio": 0.9957,
+            "coverage": 0.551,
+            "photometricCorrelation": 0.9995,
+            "mirrored": false
+          },
+          {
+            "queryTime": 11.5,
+            "sourceTime": 13.5,
+            "inliers": 710,
+            "tentative": 712,
+            "inlierRatio": 0.9972,
+            "coverage": 0.5771,
+            "photometricCorrelation": 0.9993,
+            "mirrored": false
+          },
+          {
+            "queryTime": 12.0,
+            "sourceTime": 14.0,
+            "inliers": 699,
+            "tentative": 701,
+            "inlierRatio": 0.9971,
+            "coverage": 0.5626,
+            "photometricCorrelation": 0.9993,
+            "mirrored": false
+          },
+          {
+            "queryTime": 12.5,
+            "sourceTime": 14.5,
+            "inliers": 697,
+            "tentative": 699,
+            "inlierRatio": 0.9971,
+            "coverage": 0.4898,
+            "photometricCorrelation": 0.999,
+            "mirrored": false
+          },
+          {
+            "queryTime": 13.0,
+            "sourceTime": 15.0,
+            "inliers": 711,
+            "tentative": 712,
+            "inlierRatio": 0.9986,
+            "coverage": 0.5039,
+            "photometricCorrelation": 0.9993,
+            "mirrored": false
+          },
+          {
+            "queryTime": 13.5,
+            "sourceTime": 15.5,
+            "inliers": 675,
+            "tentative": 676,
+            "inlierRatio": 0.9985,
+            "coverage": 0.4737,
+            "photometricCorrelation": 0.9992,
+            "mirrored": false
+          }
+        ]
+      },
+      "coverage": 0.5,
+      "medianInliers": 695,
+      "evidence": [
+        {
+          "queryTime": 13.0,
+          "sourceTime": 15.0,
+          "inliers": 711,
+          "tentative": 712,
+          "inlierRatio": 0.9986,
+          "coverage": 0.5039,
+          "photometricCorrelation": 0.9993,
+          "points": [
+            {
+              "query": [
+                0.43125,
+                0.43609
+              ],
+              "source": [
+                0.43125,
+                0.4382
+              ]
+            },
+            {
+              "query": [
+                0.20312,
+                0.69925
+              ],
+              "source": [
+                0.20312,
+                0.70037
+              ]
+            },
+            {
+              "query": [
+                0.33594,
+                0.69925
+              ],
+              "source": [
+                0.33437,
+                0.69663
+              ]
+            },
+            {
+              "query": [
+                0.16406,
+                0.39098
+              ],
+              "source": [
+                0.16406,
+                0.39326
+              ]
+            },
+            {
+              "query": [
+                0.66562,
+                0.37218
+              ],
+              "source": [
+                0.66562,
+                0.37453
+              ]
+            },
+            {
+              "query": [
+                0.3375,
+                0.70677
+              ],
+              "source": [
+                0.3375,
+                0.70787
+              ]
+            },
+            {
+              "query": [
+                0.50781,
+                0.40977
+              ],
+              "source": [
+                0.50781,
+                0.41199
+              ]
+            },
+            {
+              "query": [
+                0.68125,
+                0.40977
+              ],
+              "source": [
+                0.68125,
+                0.40824
+              ]
+            },
+            {
+              "query": [
+                0.09844,
+                0.92105
+              ],
+              "source": [
+                0.09844,
+                0.92135
+              ]
+            },
+            {
+              "query": [
+                0.34531,
+                0.46241
+              ],
+              "source": [
+                0.34531,
+                0.46067
+              ]
+            },
+            {
+              "query": [
+                0.14531,
+                0.34211
+              ],
+              "source": [
+                0.14531,
+                0.34082
+              ]
+            },
+            {
+              "query": [
+                0.48125,
+                0.33083
+              ],
+              "source": [
+                0.48125,
+                0.32959
+              ]
+            },
+            {
+              "query": [
+                0.36875,
+                0.67669
+              ],
+              "source": [
+                0.36875,
+                0.67416
+              ]
+            },
+            {
+              "query": [
+                0.49219,
+                0.31579
+              ],
+              "source": [
+                0.49219,
+                0.31835
+              ]
+            },
+            {
+              "query": [
+                0.35,
+                0.67669
+              ],
+              "source": [
+                0.35,
+                0.6779
+              ]
+            },
+            {
+              "query": [
+                0.33281,
+                0.64286
+              ],
+              "source": [
+                0.33281,
+                0.64419
+              ]
+            },
+            {
+              "query": [
+                0.35,
+                0.6015
+              ],
+              "source": [
+                0.35,
+                0.59925
+              ]
+            },
+            {
+              "query": [
+                0.47969,
+                0.30827
+              ],
+              "source": [
+                0.47969,
+                0.31086
+              ]
+            },
+            {
+              "query": [
+                0.35938,
+                0.30827
+              ],
+              "source": [
+                0.35938,
+                0.30712
+              ]
+            },
+            {
+              "query": [
+                0.42344,
+                0.66917
+              ],
+              "source": [
+                0.42344,
+                0.66667
+              ]
+            },
+            {
+              "query": [
+                0.41875,
+                0.66917
+              ],
+              "source": [
+                0.41875,
+                0.66667
+              ]
+            },
+            {
+              "query": [
+                0.47969,
+                0.74812
+              ],
+              "source": [
+                0.47969,
+                0.74906
+              ]
+            },
+            {
+              "query": [
+                0.63594,
+                0.2782
+              ],
+              "source": [
+                0.63594,
+                0.27715
+              ]
+            },
+            {
+              "query": [
+                0.64219,
+                0.27444
+              ],
+              "source": [
+                0.64219,
+                0.27341
+              ]
+            },
+            {
+              "query": [
+                0.48125,
+                0.25564
+              ],
+              "source": [
+                0.48125,
+                0.25468
+              ]
+            },
+            {
+              "query": [
+                0.34844,
+                0.45865
+              ],
+              "source": [
+                0.35,
+                0.45318
+              ]
+            },
+            {
+              "query": [
+                0.09063,
+                0.78947
+              ],
+              "source": [
+                0.09063,
+                0.79026
+              ]
+            },
+            {
+              "query": [
+                0.42344,
+                0.64662
+              ],
+              "source": [
+                0.42344,
+                0.64794
+              ]
+            },
+            {
+              "query": [
+                0.225,
+                0.78947
+              ],
+              "source": [
+                0.22344,
+                0.79026
+              ]
+            },
+            {
+              "query": [
+                0.48281,
+                0.23684
+              ],
+              "source": [
+                0.48281,
+                0.23596
+              ]
+            },
+            {
+              "query": [
+                0.14844,
+                0.80451
+              ],
+              "source": [
+                0.14844,
+                0.8015
+              ]
+            },
+            {
+              "query": [
+                0.49062,
+                0.21429
+              ],
+              "source": [
+                0.49062,
+                0.21348
+              ]
+            },
+            {
+              "query": [
+                0.45156,
+                0.21429
+              ],
+              "source": [
+                0.45156,
+                0.21348
+              ]
+            },
+            {
+              "query": [
+                0.43906,
+                0.21429
+              ],
+              "source": [
+                0.43906,
+                0.21348
+              ]
+            },
+            {
+              "query": [
+                0.165,
+                0.50075
+              ],
+              "source": [
+                0.16563,
+                0.49813
+              ]
+            },
+            {
+              "query": [
+                0.49844,
+                0.20301
+              ],
+              "source": [
+                0.49844,
+                0.20599
+              ]
+            }
+          ],
+          "quad": [
+            [
+              -0.0,
+              -0.001
+            ],
+            [
+              1.0,
+              0.001
+            ],
+            [
+              0.9999,
+              1.0006
+            ],
+            [
+              0.0001,
+              0.9988
+            ]
+          ],
+          "mirrored": false,
+          "queryImage": "laboratory-0-query.jpg",
+          "sourceImage": "laboratory-0-source.jpg"
+        },
+        {
+          "queryTime": 11.5,
+          "sourceTime": 13.5,
+          "inliers": 710,
+          "tentative": 712,
+          "inlierRatio": 0.9972,
+          "coverage": 0.5771,
+          "photometricCorrelation": 0.9993,
+          "points": [
+            {
+              "query": [
+                0.375,
+                0.60902
+              ],
+              "source": [
+                0.375,
+                0.61049
+              ]
+            },
+            {
+              "query": [
+                0.84844,
+                0.45113
+              ],
+              "source": [
+                0.84844,
+                0.44944
+              ]
+            },
+            {
+              "query": [
+                0.47344,
+                0.2594
+              ],
+              "source": [
+                0.47344,
+                0.25843
+              ]
+            },
+            {
+              "query": [
+                0.475,
+                0.75188
+              ],
+              "source": [
+                0.475,
+                0.74906
+              ]
+            },
+            {
+              "query": [
+                0.8875,
+                0.61654
+              ],
+              "source": [
+                0.8875,
+                0.61423
+              ]
+            },
+            {
+              "query": [
+                0.37031,
+                0.60902
+              ],
+              "source": [
+                0.37031,
+                0.60674
+              ]
+            },
+            {
+              "query": [
+                0.325,
+                0.71429
+              ],
+              "source": [
+                0.32656,
+                0.71161
+              ]
+            },
+            {
+              "query": [
+                0.32188,
+                0.64662
+              ],
+              "source": [
+                0.32344,
+                0.64794
+              ]
+            },
+            {
+              "query": [
+                0.50469,
+                0.41353
+              ],
+              "source": [
+                0.50313,
+                0.41199
+              ]
+            },
+            {
+              "query": [
+                0.55,
+                0.40226
+              ],
+              "source": [
+                0.55,
+                0.40075
+              ]
+            },
+            {
+              "query": [
+                0.32344,
+                0.6391
+              ],
+              "source": [
+                0.32344,
+                0.6367
+              ]
+            },
+            {
+              "query": [
+                0.81938,
+                0.38346
+              ],
+              "source": [
+                0.81938,
+                0.38202
+              ]
+            },
+            {
+              "query": [
+                0.44688,
+                0.3985
+              ],
+              "source": [
+                0.44688,
+                0.397
+              ]
+            },
+            {
+              "query": [
+                0.50313,
+                0.3985
+              ],
+              "source": [
+                0.50313,
+                0.397
+              ]
+            },
+            {
+              "query": [
+                0.30625,
+                0.63158
+              ],
+              "source": [
+                0.30625,
+                0.62921
+              ]
+            },
+            {
+              "query": [
+                0.50781,
+                0.38722
+              ],
+              "source": [
+                0.50781,
+                0.38577
+              ]
+            },
+            {
+              "query": [
+                0.44688,
+                0.22556
+              ],
+              "source": [
+                0.44688,
+                0.22472
+              ]
+            },
+            {
+              "query": [
+                0.84688,
+                0.46992
+              ],
+              "source": [
+                0.84688,
+                0.46816
+              ]
+            },
+            {
+              "query": [
+                0.82031,
+                0.36842
+              ],
+              "source": [
+                0.82031,
+                0.36704
+              ]
+            },
+            {
+              "query": [
+                0.84844,
+                0.48872
+              ],
+              "source": [
+                0.84844,
+                0.49064
+              ]
+            },
+            {
+              "query": [
+                0.84375,
+                0.45113
+              ],
+              "source": [
+                0.84375,
+                0.44944
+              ]
+            },
+            {
+              "query": [
+                0.08125,
+                0.79323
+              ],
+              "source": [
+                0.08125,
+                0.79401
+              ]
+            },
+            {
+              "query": [
+                0.475,
+                0.69173
+              ],
+              "source": [
+                0.475,
+                0.68914
+              ]
+            },
+            {
+              "query": [
+                0.47344,
+                0.34586
+              ],
+              "source": [
+                0.47344,
+                0.34831
+              ]
+            },
+            {
+              "query": [
+                0.34062,
+                0.46241
+              ],
+              "source": [
+                0.34062,
+                0.46442
+              ]
+            },
+            {
+              "query": [
+                0.78281,
+                0.14662
+              ],
+              "source": [
+                0.78281,
+                0.14607
+              ]
+            },
+            {
+              "query": [
+                0.45,
+                0.20677
+              ],
+              "source": [
+                0.45,
+                0.20599
+              ]
+            },
+            {
+              "query": [
+                0.1375,
+                0.33459
+              ],
+              "source": [
+                0.1375,
+                0.33708
+              ]
+            },
+            {
+              "query": [
+                0.43437,
+                0.21429
+              ],
+              "source": [
+                0.43437,
+                0.21723
+              ]
+            },
+            {
+              "query": [
+                0.47656,
+                0.33083
+              ],
+              "source": [
+                0.47656,
+                0.33333
+              ]
+            },
+            {
+              "query": [
+                0.44688,
+                0.21429
+              ],
+              "source": [
+                0.44688,
+                0.21348
+              ]
+            },
+            {
+              "query": [
+                0.13281,
+                0.33083
+              ],
+              "source": [
+                0.13281,
+                0.32959
+              ]
+            },
+            {
+              "query": [
+                0.8,
+                0.32331
+              ],
+              "source": [
+                0.8,
+                0.32584
+              ]
+            },
+            {
+              "query": [
+                0.48594,
+                0.21429
+              ],
+              "source": [
+                0.48594,
+                0.21348
+              ]
+            },
+            {
+              "query": [
+                0.36406,
+                0.67669
+              ],
+              "source": [
+                0.36406,
+                0.6779
+              ]
+            },
+            {
+              "query": [
+                0.4875,
+                0.31955
+              ],
+              "source": [
+                0.48906,
+                0.31835
+              ]
+            }
+          ],
+          "quad": [
+            [
+              -0.0007,
+              -0.0003
+            ],
+            [
+              0.9999,
+              -0.001
+            ],
+            [
+              0.9993,
+              0.9983
+            ],
+            [
+              -0.0,
+              1.0003
+            ]
+          ],
+          "mirrored": false,
+          "queryImage": "laboratory-1-query.jpg",
+          "sourceImage": "laboratory-1-source.jpg"
+        },
+        {
+          "queryTime": 7.0,
+          "sourceTime": 9.0,
+          "inliers": 706,
+          "tentative": 707,
+          "inlierRatio": 0.9986,
+          "coverage": 0.5014,
+          "photometricCorrelation": 0.9997,
+          "points": [
+            {
+              "query": [
+                0.075,
+                0.28947
+              ],
+              "source": [
+                0.075,
+                0.28839
+              ]
+            },
+            {
+              "query": [
+                0.10938,
+                0.30451
+              ],
+              "source": [
+                0.10938,
+                0.30712
+              ]
+            },
+            {
+              "query": [
+                0.07812,
+                0.07519
+              ],
+              "source": [
+                0.07812,
+                0.07491
+              ]
+            },
+            {
+              "query": [
+                0.03594,
+                0.62406
+              ],
+              "source": [
+                0.0375,
+                0.62472
+              ]
+            },
+            {
+              "query": [
+                0.03438,
+                0.45489
+              ],
+              "source": [
+                0.03281,
+                0.45693
+              ]
+            },
+            {
+              "query": [
+                0.0875,
+                0.07895
+              ],
+              "source": [
+                0.08906,
+                0.07865
+              ]
+            },
+            {
+              "query": [
+                0.17344,
+                0.45489
+              ],
+              "source": [
+                0.17344,
+                0.45318
+              ]
+            },
+            {
+              "query": [
+                0.06719,
+                0.08271
+              ],
+              "source": [
+                0.06719,
+                0.0824
+              ]
+            },
+            {
+              "query": [
+                0.08125,
+                0.08271
+              ],
+              "source": [
+                0.08125,
+                0.0824
+              ]
+            },
+            {
+              "query": [
+                0.11719,
+                0.08271
+              ],
+              "source": [
+                0.11719,
+                0.0824
+              ]
+            },
+            {
+              "query": [
+                0.17656,
+                0.45489
+              ],
+              "source": [
+                0.17656,
+                0.45693
+              ]
+            },
+            {
+              "query": [
+                0.05625,
+                0.45865
+              ],
+              "source": [
+                0.05625,
+                0.46067
+              ]
+            },
+            {
+              "query": [
+                0.06562,
+                0.45865
+              ],
+              "source": [
+                0.06562,
+                0.46067
+              ]
+            },
+            {
+              "query": [
+                0.08906,
+                0.36842
+              ],
+              "source": [
+                0.08906,
+                0.36704
+              ]
+            },
+            {
+              "query": [
+                0.1125,
+                0.25564
+              ],
+              "source": [
+                0.10938,
+                0.25468
+              ]
+            },
+            {
+              "query": [
+                0.09219,
+                0.46241
+              ],
+              "source": [
+                0.09219,
+                0.46067
+              ]
+            },
+            {
+              "query": [
+                0.02969,
+                0.46241
+              ],
+              "source": [
+                0.02969,
+                0.46067
+              ]
+            },
+            {
+              "query": [
+                0.07656,
+                0.46617
+              ],
+              "source": [
+                0.07656,
+                0.46442
+              ]
+            },
+            {
+              "query": [
+                0.18281,
+                0.46241
+              ],
+              "source": [
+                0.18281,
+                0.46442
+              ]
+            },
+            {
+              "query": [
+                0.04844,
+                0.3609
+              ],
+              "source": [
+                0.04844,
+                0.35955
+              ]
+            },
+            {
+              "query": [
+                0.125,
+                0.32707
+              ],
+              "source": [
+                0.125,
+                0.32584
+              ]
+            },
+            {
+              "query": [
+                0.09687,
+                0.46617
+              ],
+              "source": [
+                0.09687,
+                0.46442
+              ]
+            },
+            {
+              "query": [
+                0.1,
+                0.46617
+              ],
+              "source": [
+                0.1,
+                0.46442
+              ]
+            },
+            {
+              "query": [
+                0.10781,
+                0.46617
+              ],
+              "source": [
+                0.10781,
+                0.46816
+              ]
+            },
+            {
+              "query": [
+                0.11875,
+                0.46617
+              ],
+              "source": [
+                0.11875,
+                0.46442
+              ]
+            },
+            {
+              "query": [
+                0.08906,
+                0.66165
+              ],
+              "source": [
+                0.08906,
+                0.66292
+              ]
+            },
+            {
+              "query": [
+                0.075,
+                0.21805
+              ],
+              "source": [
+                0.075,
+                0.22097
+              ]
+            },
+            {
+              "query": [
+                0.04531,
+                0.42105
+              ],
+              "source": [
+                0.04531,
+                0.42322
+              ]
+            },
+            {
+              "query": [
+                0.49219,
+                0.1015
+              ],
+              "source": [
+                0.49219,
+                0.10112
+              ]
+            },
+            {
+              "query": [
+                0.04219,
+                0.41353
+              ],
+              "source": [
+                0.04219,
+                0.41199
+              ]
+            },
+            {
+              "query": [
+                0.08906,
+                0.40602
+              ],
+              "source": [
+                0.08906,
+                0.40824
+              ]
+            },
+            {
+              "query": [
+                0.04219,
+                0.40226
+              ],
+              "source": [
+                0.04219,
+                0.40075
+              ]
+            },
+            {
+              "query": [
+                0.04531,
+                0.45865
+              ],
+              "source": [
+                0.04531,
+                0.45693
+              ]
+            },
+            {
+              "query": [
+                0.07344,
+                0.34962
+              ],
+              "source": [
+                0.07344,
+                0.35206
+              ]
+            },
+            {
+              "query": [
+                0.07187,
+                0.46992
+              ],
+              "source": [
+                0.07187,
+                0.46816
+              ]
+            },
+            {
+              "query": [
+                0.10625,
+                0.21805
+              ],
+              "source": [
+                0.10625,
+                0.21723
+              ]
+            }
+          ],
+          "quad": [
+            [
+              0.0001,
+              -0.0007
+            ],
+            [
+              1.0004,
+              -0.0009
+            ],
+            [
+              1.0008,
+              1.0016
+            ],
+            [
+              0.0001,
+              1.0002
+            ]
+          ],
+          "mirrored": false,
+          "queryImage": "laboratory-2-query.jpg",
+          "sourceImage": "laboratory-2-source.jpg"
+        },
+        {
+          "queryTime": 10.0,
+          "sourceTime": 12.0,
+          "inliers": 704,
+          "tentative": 706,
+          "inlierRatio": 0.9972,
+          "coverage": 0.6118,
+          "photometricCorrelation": 0.9994,
+          "points": [
+            {
+              "query": [
+                0.47438,
+                0.26617
+              ],
+              "source": [
+                0.47438,
+                0.26517
+              ]
+            },
+            {
+              "query": [
+                0.37187,
+                0.66541
+              ],
+              "source": [
+                0.37187,
+                0.66667
+              ]
+            },
+            {
+              "query": [
+                0.39219,
+                0.43985
+              ],
+              "source": [
+                0.39219,
+                0.44195
+              ]
+            },
+            {
+              "query": [
+                0.4375,
+                0.2594
+              ],
+              "source": [
+                0.4375,
+                0.26217
+              ]
+            },
+            {
+              "query": [
+                0.45781,
+                0.19925
+              ],
+              "source": [
+                0.45781,
+                0.1985
+              ]
+            },
+            {
+              "query": [
+                0.10625,
+                0.60902
+              ],
+              "source": [
+                0.10781,
+                0.60674
+              ]
+            },
+            {
+              "query": [
+                0.40938,
+                0.40602
+              ],
+              "source": [
+                0.40938,
+                0.40449
+              ]
+            },
+            {
+              "query": [
+                0.44688,
+                0.19549
+              ],
+              "source": [
+                0.44688,
+                0.19476
+              ]
+            },
+            {
+              "query": [
+                0.45,
+                0.51128
+              ],
+              "source": [
+                0.45,
+                0.50936
+              ]
+            },
+            {
+              "query": [
+                0.27656,
+                0.4812
+              ],
+              "source": [
+                0.275,
+                0.48315
+              ]
+            },
+            {
+              "query": [
+                0.43906,
+                0.34962
+              ],
+              "source": [
+                0.43906,
+                0.35206
+              ]
+            },
+            {
+              "query": [
+                0.4625,
+                0.40602
+              ],
+              "source": [
+                0.46094,
+                0.40824
+              ]
+            },
+            {
+              "query": [
+                0.44063,
+                0.69173
+              ],
+              "source": [
+                0.44063,
+                0.69288
+              ]
+            },
+            {
+              "query": [
+                0.37344,
+                0.69173
+              ],
+              "source": [
+                0.37187,
+                0.68914
+              ]
+            },
+            {
+              "query": [
+                0.81719,
+                0.43609
+              ],
+              "source": [
+                0.81719,
+                0.43446
+              ]
+            },
+            {
+              "query": [
+                0.38906,
+                0.49624
+              ],
+              "source": [
+                0.38906,
+                0.49438
+              ]
+            },
+            {
+              "query": [
+                0.51562,
+                0.40226
+              ],
+              "source": [
+                0.51562,
+                0.40449
+              ]
+            },
+            {
+              "query": [
+                0.33125,
+                0.66917
+              ],
+              "source": [
+                0.33125,
+                0.67041
+              ]
+            },
+            {
+              "query": [
+                0.125,
+                0.88722
+              ],
+              "source": [
+                0.125,
+                0.88764
+              ]
+            },
+            {
+              "query": [
+                0.41563,
+                0.20677
+              ],
+              "source": [
+                0.41563,
+                0.20599
+              ]
+            },
+            {
+              "query": [
+                0.4125,
+                0.40226
+              ],
+              "source": [
+                0.4125,
+                0.40075
+              ]
+            },
+            {
+              "query": [
+                0.44063,
+                0.75188
+              ],
+              "source": [
+                0.44063,
+                0.75281
+              ]
+            },
+            {
+              "query": [
+                0.12344,
+                0.91729
+              ],
+              "source": [
+                0.12344,
+                0.9176
+              ]
+            },
+            {
+              "query": [
+                0.49062,
+                0.40602
+              ],
+              "source": [
+                0.49062,
+                0.40449
+              ]
+            },
+            {
+              "query": [
+                0.44063,
+                0.50752
+              ],
+              "source": [
+                0.43906,
+                0.50562
+              ]
+            },
+            {
+              "query": [
+                0.40156,
+                0.18421
+              ],
+              "source": [
+                0.40156,
+                0.18352
+              ]
+            },
+            {
+              "query": [
+                0.31094,
+                0.45865
+              ],
+              "source": [
+                0.31094,
+                0.45693
+              ]
+            },
+            {
+              "query": [
+                0.44219,
+                0.33459
+              ],
+              "source": [
+                0.44219,
+                0.33333
+              ]
+            },
+            {
+              "query": [
+                0.4,
+                0.21805
+              ],
+              "source": [
+                0.4,
+                0.21723
+              ]
+            },
+            {
+              "query": [
+                0.46562,
+                0.39474
+              ],
+              "source": [
+                0.46719,
+                0.39326
+              ]
+            },
+            {
+              "query": [
+                0.4125,
+                0.21805
+              ],
+              "source": [
+                0.4125,
+                0.21723
+              ]
+            },
+            {
+              "query": [
+                0.30625,
+                0.46617
+              ],
+              "source": [
+                0.30625,
+                0.46442
+              ]
+            },
+            {
+              "query": [
+                0.45156,
+                0.21805
+              ],
+              "source": [
+                0.45156,
+                0.21723
+              ]
+            },
+            {
+              "query": [
+                0.44063,
+                0.39474
+              ],
+              "source": [
+                0.44063,
+                0.397
+              ]
+            },
+            {
+              "query": [
+                0.81875,
+                0.46241
+              ],
+              "source": [
+                0.81875,
+                0.45693
+              ]
+            },
+            {
+              "query": [
+                0.81563,
+                0.46617
+              ],
+              "source": [
+                0.81563,
+                0.46816
+              ]
+            }
+          ],
+          "quad": [
+            [
+              0.0001,
+              0.0001
+            ],
+            [
+              1.0004,
+              -0.0011
+            ],
+            [
+              1.0001,
+              0.9992
+            ],
+            [
+              0.0002,
+              0.9993
+            ]
+          ],
+          "mirrored": false,
+          "queryImage": "laboratory-3-query.jpg",
+          "sourceImage": "laboratory-3-source.jpg"
+        },
+        {
+          "queryTime": 12.0,
+          "sourceTime": 14.0,
+          "inliers": 699,
+          "tentative": 701,
+          "inlierRatio": 0.9971,
+          "coverage": 0.5626,
+          "photometricCorrelation": 0.9993,
+          "points": [
+            {
+              "query": [
+                0.30625,
+                0.60902
+              ],
+              "source": [
+                0.30625,
+                0.61049
+              ]
+            },
+            {
+              "query": [
+                0.09219,
+                0.92481
+              ],
+              "source": [
+                0.09219,
+                0.92509
+              ]
+            },
+            {
+              "query": [
+                0.5,
+                0.39474
+              ],
+              "source": [
+                0.5,
+                0.39326
+              ]
+            },
+            {
+              "query": [
+                0.82656,
+                0.48872
+              ],
+              "source": [
+                0.82656,
+                0.48689
+              ]
+            },
+            {
+              "query": [
+                0.52344,
+                0.40602
+              ],
+              "source": [
+                0.52344,
+                0.40824
+              ]
+            },
+            {
+              "query": [
+                0.82187,
+                0.50752
+              ],
+              "source": [
+                0.82187,
+                0.50936
+              ]
+            },
+            {
+              "query": [
+                0.55,
+                0.40226
+              ],
+              "source": [
+                0.55,
+                0.40075
+              ]
+            },
+            {
+              "query": [
+                0.49687,
+                0.40602
+              ],
+              "source": [
+                0.49687,
+                0.40449
+              ]
+            },
+            {
+              "query": [
+                0.50313,
+                0.3985
+              ],
+              "source": [
+                0.50313,
+                0.397
+              ]
+            },
+            {
+              "query": [
+                0.50781,
+                0.38722
+              ],
+              "source": [
+                0.50781,
+                0.38577
+              ]
+            },
+            {
+              "query": [
+                0.37031,
+                0.60902
+              ],
+              "source": [
+                0.37031,
+                0.60674
+              ]
+            },
+            {
+              "query": [
+                0.13906,
+                0.33835
+              ],
+              "source": [
+                0.13906,
+                0.33708
+              ]
+            },
+            {
+              "query": [
+                0.47656,
+                0.33083
+              ],
+              "source": [
+                0.47656,
+                0.33333
+              ]
+            },
+            {
+              "query": [
+                0.3125,
+                0.62782
+              ],
+              "source": [
+                0.3125,
+                0.62921
+              ]
+            },
+            {
+              "query": [
+                0.4875,
+                0.31955
+              ],
+              "source": [
+                0.48906,
+                0.31835
+              ]
+            },
+            {
+              "query": [
+                0.475,
+                0.31203
+              ],
+              "source": [
+                0.475,
+                0.31086
+              ]
+            },
+            {
+              "query": [
+                0.34219,
+                0.68797
+              ],
+              "source": [
+                0.34219,
+                0.68539
+              ]
+            },
+            {
+              "query": [
+                0.41406,
+                0.66917
+              ],
+              "source": [
+                0.41406,
+                0.67041
+              ]
+            },
+            {
+              "query": [
+                0.34531,
+                0.67669
+              ],
+              "source": [
+                0.34531,
+                0.6779
+              ]
+            },
+            {
+              "query": [
+                0.36406,
+                0.67669
+              ],
+              "source": [
+                0.36406,
+                0.6779
+              ]
+            },
+            {
+              "query": [
+                0.47813,
+                0.2594
+              ],
+              "source": [
+                0.47813,
+                0.25843
+              ]
+            },
+            {
+              "query": [
+                0.32812,
+                0.69549
+              ],
+              "source": [
+                0.32812,
+                0.69663
+              ]
+            },
+            {
+              "query": [
+                0.44688,
+                0.22556
+              ],
+              "source": [
+                0.44688,
+                0.22472
+              ]
+            },
+            {
+              "query": [
+                0.33437,
+                0.71053
+              ],
+              "source": [
+                0.33437,
+                0.71161
+              ]
+            },
+            {
+              "query": [
+                0.37969,
+                0.61654
+              ],
+              "source": [
+                0.37969,
+                0.61423
+              ]
+            },
+            {
+              "query": [
+                0.48594,
+                0.21429
+              ],
+              "source": [
+                0.48594,
+                0.21348
+              ]
+            },
+            {
+              "query": [
+                0.44688,
+                0.21429
+              ],
+              "source": [
+                0.44688,
+                0.21348
+              ]
+            },
+            {
+              "query": [
+                0.43594,
+                0.21429
+              ],
+              "source": [
+                0.43437,
+                0.21723
+              ]
+            },
+            {
+              "query": [
+                0.32969,
+                0.70677
+              ],
+              "source": [
+                0.32969,
+                0.70787
+              ]
+            },
+            {
+              "query": [
+                0.45,
+                0.20677
+              ],
+              "source": [
+                0.45,
+                0.20599
+              ]
+            },
+            {
+              "query": [
+                0.3375,
+                0.68797
+              ],
+              "source": [
+                0.3375,
+                0.68914
+              ]
+            },
+            {
+              "query": [
+                0.3875,
+                0.66541
+              ],
+              "source": [
+                0.38594,
+                0.66667
+              ]
+            },
+            {
+              "query": [
+                0.34375,
+                0.66541
+              ],
+              "source": [
+                0.34375,
+                0.66292
+              ]
+            },
+            {
+              "query": [
+                0.475,
+                0.75188
+              ],
+              "source": [
+                0.475,
+                0.74906
+              ]
+            },
+            {
+              "query": [
+                0.48125,
+                0.19173
+              ],
+              "source": [
+                0.48125,
+                0.19101
+              ]
+            },
+            {
+              "query": [
+                0.39375,
+                0.66165
+              ],
+              "source": [
+                0.39375,
+                0.66292
+              ]
+            }
+          ],
+          "quad": [
+            [
+              -0.0001,
+              -0.0
+            ],
+            [
+              1.0002,
+              -0.0009
+            ],
+            [
+              0.9996,
+              0.9987
+            ],
+            [
+              0.0001,
+              0.9994
+            ]
+          ],
+          "mirrored": false,
+          "queryImage": "laboratory-4-query.jpg",
+          "sourceImage": "laboratory-4-source.jpg"
+        },
+        {
+          "queryTime": 10.5,
+          "sourceTime": 12.5,
+          "inliers": 698,
+          "tentative": 701,
+          "inlierRatio": 0.9957,
+          "coverage": 0.6047,
+          "photometricCorrelation": 0.9993,
+          "points": [
+            {
+              "query": [
+                0.43437,
+                0.31203
+              ],
+              "source": [
+                0.43437,
+                0.31461
+              ]
+            },
+            {
+              "query": [
+                0.47969,
+                0.31955
+              ],
+              "source": [
+                0.47969,
+                0.31835
+              ]
+            },
+            {
+              "query": [
+                0.13281,
+                0.59398
+              ],
+              "source": [
+                0.13281,
+                0.59176
+              ]
+            },
+            {
+              "query": [
+                0.49219,
+                0.39098
+              ],
+              "source": [
+                0.49219,
+                0.39326
+              ]
+            },
+            {
+              "query": [
+                0.49062,
+                0.31955
+              ],
+              "source": [
+                0.49062,
+                0.31835
+              ]
+            },
+            {
+              "query": [
+                0.1375,
+                0.59774
+              ],
+              "source": [
+                0.1375,
+                0.59925
+              ]
+            },
+            {
+              "query": [
+                0.80156,
+                0.31955
+              ],
+              "source": [
+                0.80156,
+                0.3221
+              ]
+            },
+            {
+              "query": [
+                0.20625,
+                0.69549
+              ],
+              "source": [
+                0.20625,
+                0.69663
+              ]
+            },
+            {
+              "query": [
+                0.425,
+                0.32331
+              ],
+              "source": [
+                0.425,
+                0.3221
+              ]
+            },
+            {
+              "query": [
+                0.43281,
+                0.32331
+              ],
+              "source": [
+                0.43281,
+                0.3221
+              ]
+            },
+            {
+              "query": [
+                0.33594,
+                0.6015
+              ],
+              "source": [
+                0.3375,
+                0.603
+              ]
+            },
+            {
+              "query": [
+                0.29531,
+                0.56767
+              ],
+              "source": [
+                0.29531,
+                0.56929
+              ]
+            },
+            {
+              "query": [
+                0.48125,
+                0.26316
+              ],
+              "source": [
+                0.48125,
+                0.26217
+              ]
+            },
+            {
+              "query": [
+                0.09063,
+                0.92105
+              ],
+              "source": [
+                0.09063,
+                0.92135
+              ]
+            },
+            {
+              "query": [
+                0.13281,
+                0.60526
+              ],
+              "source": [
+                0.13438,
+                0.60674
+              ]
+            },
+            {
+              "query": [
+                0.14844,
+                0.80075
+              ],
+              "source": [
+                0.14844,
+                0.8015
+              ]
+            },
+            {
+              "query": [
+                0.43906,
+                0.22556
+              ],
+              "source": [
+                0.43906,
+                0.22472
+              ]
+            },
+            {
+              "query": [
+                0.14375,
+                0.91353
+              ],
+              "source": [
+                0.14219,
+                0.91386
+              ]
+            },
+            {
+              "query": [
+                0.46562,
+                0.39474
+              ],
+              "source": [
+                0.46562,
+                0.39326
+              ]
+            },
+            {
+              "query": [
+                0.51094,
+                0.39474
+              ],
+              "source": [
+                0.51094,
+                0.397
+              ]
+            },
+            {
+              "query": [
+                0.43906,
+                0.3985
+              ],
+              "source": [
+                0.44063,
+                0.397
+              ]
+            },
+            {
+              "query": [
+                0.36094,
+                0.60902
+              ],
+              "source": [
+                0.36094,
+                0.60674
+              ]
+            },
+            {
+              "query": [
+                0.11875,
+                0.55263
+              ],
+              "source": [
+                0.11875,
+                0.55431
+              ]
+            },
+            {
+              "query": [
+                0.36562,
+                0.60902
+              ],
+              "source": [
+                0.36562,
+                0.61049
+              ]
+            },
+            {
+              "query": [
+                0.88594,
+                0.60902
+              ],
+              "source": [
+                0.88594,
+                0.60674
+              ]
+            },
+            {
+              "query": [
+                0.87969,
+                0.90977
+              ],
+              "source": [
+                0.87969,
+                0.91011
+              ]
+            },
+            {
+              "query": [
+                0.3375,
+                0.61278
+              ],
+              "source": [
+                0.3375,
+                0.61423
+              ]
+            },
+            {
+              "query": [
+                0.37031,
+                0.68421
+              ],
+              "source": [
+                0.37031,
+                0.68539
+              ]
+            },
+            {
+              "query": [
+                0.6625,
+                0.09398
+              ],
+              "source": [
+                0.6625,
+                0.09363
+              ]
+            },
+            {
+              "query": [
+                0.39844,
+                0.66541
+              ],
+              "source": [
+                0.39844,
+                0.66292
+              ]
+            },
+            {
+              "query": [
+                0.37031,
+                0.61654
+              ],
+              "source": [
+                0.37031,
+                0.61049
+              ]
+            },
+            {
+              "query": [
+                0.76406,
+                0.11278
+              ],
+              "source": [
+                0.76562,
+                0.1161
+              ]
+            },
+            {
+              "query": [
+                0.45625,
+                0.1015
+              ],
+              "source": [
+                0.45625,
+                0.10112
+              ]
+            },
+            {
+              "query": [
+                0.31719,
+                0.6203
+              ],
+              "source": [
+                0.31719,
+                0.62547
+              ]
+            },
+            {
+              "query": [
+                0.49531,
+                0.3985
+              ],
+              "source": [
+                0.49531,
+                0.397
+              ]
+            },
+            {
+              "query": [
+                0.44844,
+                0.26316
+              ],
+              "source": [
+                0.44844,
+                0.26217
+              ]
+            }
+          ],
+          "quad": [
+            [
+              -0.0004,
+              0.0003
+            ],
+            [
+              1.0005,
+              -0.0005
+            ],
+            [
+              0.9993,
+              0.9984
+            ],
+            [
+              0.0002,
+              0.9996
+            ]
+          ],
+          "mirrored": false,
+          "queryImage": "laboratory-5-query.jpg",
+          "sourceImage": "laboratory-5-source.jpg"
+        }
+      ],
+      "verdict": "strong"
+    },
+    {
+      "source": {
+        "id": "bridge",
+        "title": "The bridge",
+        "description": "An encounter above the Amsterdam canals.",
+        "category": "Exterior \u00b7 People",
+        "duration": 40,
+        "originalOffset": 225,
+        "url": "/media/bridge.mp4",
+        "thumbnail": "/media/bridge.jpg",
+        "sha256": "5604595ebc020df75e5b800731598dc3f551d80a3fa83c01e0ea301e2156323f",
+        "creator": "Blender Foundation",
+        "work": "Tears of Steel (2012)",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+        "sourceUrl": "https://mango.blender.org/"
+      },
+      "alignment": {
+        "speed": 1.0,
+        "speedRange": [
+          0.9385,
+          1.0615
+        ],
+        "speedReliable": true,
+        "timingAmbiguous": false,
+        "toleranceSeconds": 0.2,
+        "offset": 8.0,
+        "queryStart": 0.0,
+        "queryEnd": 6.5,
+        "sourceStart": 8.0,
+        "sourceEnd": 14.5,
+        "support": 14,
+        "residual": 0.0,
+        "matches": [
+          {
+            "queryTime": 0.0,
+            "sourceTime": 8.0,
+            "inliers": 685,
+            "tentative": 688,
+            "inlierRatio": 0.9956,
+            "coverage": 0.5656,
+            "photometricCorrelation": 0.9992,
+            "mirrored": false
+          },
+          {
+            "queryTime": 0.5,
+            "sourceTime": 8.5,
+            "inliers": 671,
+            "tentative": 675,
+            "inlierRatio": 0.9941,
+            "coverage": 0.5719,
+            "photometricCorrelation": 0.9991,
+            "mirrored": false
+          },
+          {
+            "queryTime": 1.0,
+            "sourceTime": 9.0,
+            "inliers": 678,
+            "tentative": 679,
+            "inlierRatio": 0.9985,
+            "coverage": 0.5774,
+            "photometricCorrelation": 0.999,
+            "mirrored": false
+          },
+          {
+            "queryTime": 1.5,
+            "sourceTime": 9.5,
+            "inliers": 669,
+            "tentative": 673,
+            "inlierRatio": 0.9941,
+            "coverage": 0.5715,
+            "photometricCorrelation": 0.9986,
+            "mirrored": false
+          },
+          {
+            "queryTime": 2.0,
+            "sourceTime": 10.0,
+            "inliers": 688,
+            "tentative": 692,
+            "inlierRatio": 0.9942,
+            "coverage": 0.5184,
+            "photometricCorrelation": 0.9992,
+            "mirrored": false
+          },
+          {
+            "queryTime": 2.5,
+            "sourceTime": 10.5,
+            "inliers": 647,
+            "tentative": 652,
+            "inlierRatio": 0.9923,
+            "coverage": 0.5261,
+            "photometricCorrelation": 0.999,
+            "mirrored": false
+          },
+          {
+            "queryTime": 3.0,
+            "sourceTime": 11.0,
+            "inliers": 661,
+            "tentative": 664,
+            "inlierRatio": 0.9955,
+            "coverage": 0.5291,
+            "photometricCorrelation": 0.9989,
+            "mirrored": false
+          },
+          {
+            "queryTime": 3.5,
+            "sourceTime": 11.5,
+            "inliers": 680,
+            "tentative": 682,
+            "inlierRatio": 0.9971,
+            "coverage": 0.5905,
+            "photometricCorrelation": 0.999,
+            "mirrored": false
+          },
+          {
+            "queryTime": 4.0,
+            "sourceTime": 12.0,
+            "inliers": 670,
+            "tentative": 671,
+            "inlierRatio": 0.9985,
+            "coverage": 0.5938,
+            "photometricCorrelation": 0.9989,
+            "mirrored": false
+          },
+          {
+            "queryTime": 4.5,
+            "sourceTime": 12.5,
+            "inliers": 646,
+            "tentative": 651,
+            "inlierRatio": 0.9923,
+            "coverage": 0.5187,
+            "photometricCorrelation": 0.9992,
+            "mirrored": false
+          },
+          {
+            "queryTime": 5.0,
+            "sourceTime": 13.0,
+            "inliers": 671,
+            "tentative": 675,
+            "inlierRatio": 0.9941,
+            "coverage": 0.5604,
+            "photometricCorrelation": 0.9991,
+            "mirrored": false
+          },
+          {
+            "queryTime": 5.5,
+            "sourceTime": 13.5,
+            "inliers": 626,
+            "tentative": 632,
+            "inlierRatio": 0.9905,
+            "coverage": 0.5976,
+            "photometricCorrelation": 0.9987,
+            "mirrored": false
+          },
+          {
+            "queryTime": 6.0,
+            "sourceTime": 14.0,
+            "inliers": 676,
+            "tentative": 680,
+            "inlierRatio": 0.9941,
+            "coverage": 0.5479,
+            "photometricCorrelation": 0.9991,
+            "mirrored": false
+          },
+          {
+            "queryTime": 6.5,
+            "sourceTime": 14.5,
+            "inliers": 663,
+            "tentative": 667,
+            "inlierRatio": 0.994,
+            "coverage": 0.5597,
+            "photometricCorrelation": 0.999,
+            "mirrored": false
+          }
+        ]
+      },
+      "coverage": 0.5,
+      "medianInliers": 670,
+      "evidence": [
+        {
+          "queryTime": 2.0,
+          "sourceTime": 10.0,
+          "inliers": 688,
+          "tentative": 692,
+          "inlierRatio": 0.9942,
+          "coverage": 0.5184,
+          "photometricCorrelation": 0.9992,
+          "points": [
+            {
+              "query": [
+                0.64688,
+                0.5188
+              ],
+              "source": [
+                0.64688,
+                0.5206
+              ]
+            },
+            {
+              "query": [
+                0.09844,
+                0.5
+              ],
+              "source": [
+                0.09844,
+                0.50187
+              ]
+            },
+            {
+              "query": [
+                0.55313,
+                0.5
+              ],
+              "source": [
+                0.55313,
+                0.49813
+              ]
+            },
+            {
+              "query": [
+                0.45625,
+                0.82707
+              ],
+              "source": [
+                0.45625,
+                0.82772
+              ]
+            },
+            {
+              "query": [
+                0.49062,
+                0.2782
+              ],
+              "source": [
+                0.48906,
+                0.27715
+              ]
+            },
+            {
+              "query": [
+                0.55,
+                0.52256
+              ],
+              "source": [
+                0.55,
+                0.52434
+              ]
+            },
+            {
+              "query": [
+                0.6125,
+                0.52256
+              ],
+              "source": [
+                0.6125,
+                0.52434
+              ]
+            },
+            {
+              "query": [
+                0.34688,
+                0.53383
+              ],
+              "source": [
+                0.34688,
+                0.53184
+              ]
+            },
+            {
+              "query": [
+                0.45625,
+                0.53383
+              ],
+              "source": [
+                0.45625,
+                0.53558
+              ]
+            },
+            {
+              "query": [
+                0.55313,
+                0.31579
+              ],
+              "source": [
+                0.55313,
+                0.31461
+              ]
+            },
+            {
+              "query": [
+                0.44531,
+                0.56015
+              ],
+              "source": [
+                0.44531,
+                0.55805
+              ]
+            },
+            {
+              "query": [
+                0.55156,
+                0.57519
+              ],
+              "source": [
+                0.55156,
+                0.57678
+              ]
+            },
+            {
+              "query": [
+                0.42031,
+                0.65038
+              ],
+              "source": [
+                0.42031,
+                0.65169
+              ]
+            },
+            {
+              "query": [
+                0.58438,
+                0.50752
+              ],
+              "source": [
+                0.58438,
+                0.50936
+              ]
+            },
+            {
+              "query": [
+                0.52344,
+                0.2594
+              ],
+              "source": [
+                0.52344,
+                0.25468
+              ]
+            },
+            {
+              "query": [
+                0.45,
+                0.56391
+              ],
+              "source": [
+                0.45156,
+                0.5618
+              ]
+            },
+            {
+              "query": [
+                0.65469,
+                0.6203
+              ],
+              "source": [
+                0.65625,
+                0.61798
+              ]
+            },
+            {
+              "query": [
+                0.45781,
+                0.3609
+              ],
+              "source": [
+                0.45781,
+                0.3633
+              ]
+            },
+            {
+              "query": [
+                0.44844,
+                0.35714
+              ],
+              "source": [
+                0.44844,
+                0.35581
+              ]
+            },
+            {
+              "query": [
+                0.49531,
+                0.25564
+              ],
+              "source": [
+                0.49687,
+                0.25468
+              ]
+            },
+            {
+              "query": [
+                0.55,
+                0.30451
+              ],
+              "source": [
+                0.55156,
+                0.29963
+              ]
+            },
+            {
+              "query": [
+                0.4625,
+                0.65789
+              ],
+              "source": [
+                0.4625,
+                0.65918
+              ]
+            },
+            {
+              "query": [
+                0.65469,
+                0.65789
+              ],
+              "source": [
+                0.65469,
+                0.65918
+              ]
+            },
+            {
+              "query": [
+                0.56094,
+                0.31579
+              ],
+              "source": [
+                0.56094,
+                0.31461
+              ]
+            },
+            {
+              "query": [
+                0.35469,
+                0.66541
+              ],
+              "source": [
+                0.35469,
+                0.66667
+              ]
+            },
+            {
+              "query": [
+                0.42969,
+                0.66541
+              ],
+              "source": [
+                0.42969,
+                0.66667
+              ]
+            },
+            {
+              "query": [
+                0.56406,
+                0.30827
+              ],
+              "source": [
+                0.56563,
+                0.31086
+              ]
+            },
+            {
+              "query": [
+                0.55781,
+                0.30827
+              ],
+              "source": [
+                0.55781,
+                0.31086
+              ]
+            },
+            {
+              "query": [
+                0.62969,
+                0.30075
+              ],
+              "source": [
+                0.62969,
+                0.29963
+              ]
+            },
+            {
+              "query": [
+                0.43437,
+                0.66917
+              ],
+              "source": [
+                0.43281,
+                0.66667
+              ]
+            },
+            {
+              "query": [
+                0.31719,
+                0.67293
+              ],
+              "source": [
+                0.31719,
+                0.67041
+              ]
+            },
+            {
+              "query": [
+                0.58281,
+                0.29323
+              ],
+              "source": [
+                0.58281,
+                0.29213
+              ]
+            },
+            {
+              "query": [
+                0.54688,
+                0.29323
+              ],
+              "source": [
+                0.54688,
+                0.29213
+              ]
+            },
+            {
+              "query": [
+                0.5625,
+                0.67293
+              ],
+              "source": [
+                0.5625,
+                0.67416
+              ]
+            },
+            {
+              "query": [
+                0.57812,
+                0.28947
+              ],
+              "source": [
+                0.57812,
+                0.28839
+              ]
+            },
+            {
+              "query": [
+                0.57812,
+                0.2782
+              ],
+              "source": [
+                0.57812,
+                0.2809
+              ]
+            }
+          ],
+          "quad": [
+            [
+              0.0004,
+              -0.0003
+            ],
+            [
+              1.0003,
+              -0.0005
+            ],
+            [
+              1.0008,
+              1.001
+            ],
+            [
+              -0.0002,
+              0.9998
+            ]
+          ],
+          "mirrored": false,
+          "queryImage": "bridge-0-query.jpg",
+          "sourceImage": "bridge-0-source.jpg"
+        },
+        {
+          "queryTime": 0.0,
+          "sourceTime": 8.0,
+          "inliers": 685,
+          "tentative": 688,
+          "inlierRatio": 0.9956,
+          "coverage": 0.5656,
+          "photometricCorrelation": 0.9992,
+          "points": [
+            {
+              "query": [
+                0.41719,
+                0.77068
+              ],
+              "source": [
+                0.41719,
+                0.76779
+              ]
+            },
+            {
+              "query": [
+                0.06875,
+                0.80451
+              ],
+              "source": [
+                0.06875,
+                0.80524
+              ]
+            },
+            {
+              "query": [
+                0.05625,
+                0.44361
+              ],
+              "source": [
+                0.05625,
+                0.44195
+              ]
+            },
+            {
+              "query": [
+                0.8,
+                0.57895
+              ],
+              "source": [
+                0.8,
+                0.57678
+              ]
+            },
+            {
+              "query": [
+                0.14687,
+                0.71429
+              ],
+              "source": [
+                0.14687,
+                0.7191
+              ]
+            },
+            {
+              "query": [
+                0.76094,
+                0.57895
+              ],
+              "source": [
+                0.76094,
+                0.58052
+              ]
+            },
+            {
+              "query": [
+                0.37969,
+                0.71053
+              ],
+              "source": [
+                0.37969,
+                0.71161
+              ]
+            },
+            {
+              "query": [
+                0.03125,
+                0.76692
+              ],
+              "source": [
+                0.03125,
+                0.76779
+              ]
+            },
+            {
+              "query": [
+                0.06406,
+                0.43233
+              ],
+              "source": [
+                0.06406,
+                0.43071
+              ]
+            },
+            {
+              "query": [
+                0.02969,
+                0.77444
+              ],
+              "source": [
+                0.02969,
+                0.77528
+              ]
+            },
+            {
+              "query": [
+                0.02969,
+                0.70677
+              ],
+              "source": [
+                0.02969,
+                0.70787
+              ]
+            },
+            {
+              "query": [
+                0.13125,
+                0.66541
+              ],
+              "source": [
+                0.13125,
+                0.66667
+              ]
+            },
+            {
+              "query": [
+                0.03281,
+                0.7218
+              ],
+              "source": [
+                0.03281,
+                0.72285
+              ]
+            },
+            {
+              "query": [
+                0.14844,
+                0.42857
+              ],
+              "source": [
+                0.14687,
+                0.42697
+              ]
+            },
+            {
+              "query": [
+                0.03906,
+                0.71429
+              ],
+              "source": [
+                0.03906,
+                0.71536
+              ]
+            },
+            {
+              "query": [
+                0.13438,
+                0.63158
+              ],
+              "source": [
+                0.13438,
+                0.6367
+              ]
+            },
+            {
+              "query": [
+                0.42812,
+                0.7782
+              ],
+              "source": [
+                0.42812,
+                0.77903
+              ]
+            },
+            {
+              "query": [
+                0.60156,
+                0.63158
+              ],
+              "source": [
+                0.60156,
+                0.63296
+              ]
+            },
+            {
+              "query": [
+                0.75156,
+                0.57143
+              ],
+              "source": [
+                0.75156,
+                0.57303
+              ]
+            },
+            {
+              "query": [
+                0.13125,
+                0.62406
+              ],
+              "source": [
+                0.13438,
+                0.62172
+              ]
+            },
+            {
+              "query": [
+                0.40312,
+                0.75188
+              ],
+              "source": [
+                0.40312,
+                0.75281
+              ]
+            },
+            {
+              "query": [
+                0.3825,
+                0.72632
+              ],
+              "source": [
+                0.3825,
+                0.7191
+              ]
+            },
+            {
+              "query": [
+                0.76094,
+                0.67293
+              ],
+              "source": [
+                0.7625,
+                0.67416
+              ]
+            },
+            {
+              "query": [
+                0.1625,
+                0.74812
+              ],
+              "source": [
+                0.1625,
+                0.74906
+              ]
+            },
+            {
+              "query": [
+                0.22656,
+                0.46241
+              ],
+              "source": [
+                0.22813,
+                0.46067
+              ]
+            },
+            {
+              "query": [
+                0.03438,
+                0.77444
+              ],
+              "source": [
+                0.03438,
+                0.77154
+              ]
+            },
+            {
+              "query": [
+                0.39375,
+                0.12406
+              ],
+              "source": [
+                0.39375,
+                0.12734
+              ]
+            },
+            {
+              "query": [
+                0.44219,
+                0.39098
+              ],
+              "source": [
+                0.44063,
+                0.39101
+              ]
+            },
+            {
+              "query": [
+                0.15,
+                0.7218
+              ],
+              "source": [
+                0.15,
+                0.7191
+              ]
+            },
+            {
+              "query": [
+                0.37813,
+                0.39098
+              ],
+              "source": [
+                0.37813,
+                0.38951
+              ]
+            },
+            {
+              "query": [
+                0.16719,
+                0.39098
+              ],
+              "source": [
+                0.16719,
+                0.38951
+              ]
+            },
+            {
+              "query": [
+                0.35469,
+                0.70301
+              ],
+              "source": [
+                0.35469,
+                0.70037
+              ]
+            },
+            {
+              "query": [
+                0.62656,
+                0.38722
+              ],
+              "source": [
+                0.625,
+                0.38577
+              ]
+            },
+            {
+              "query": [
+                0.39844,
+                0.13158
+              ],
+              "source": [
+                0.39844,
+                0.13109
+              ]
+            },
+            {
+              "query": [
+                0.44688,
+                0.38346
+              ],
+              "source": [
+                0.44688,
+                0.38577
+              ]
+            },
+            {
+              "query": [
+                0.25781,
+                0.3985
+              ],
+              "source": [
+                0.25781,
+                0.397
+              ]
+            }
+          ],
+          "quad": [
+            [
+              0.0002,
+              0.0004
+            ],
+            [
+              0.9993,
+              0.0006
+            ],
+            [
+              1.0001,
+              0.9991
+            ],
+            [
+              -0.0001,
+              0.9994
+            ]
+          ],
+          "mirrored": false,
+          "queryImage": "bridge-1-query.jpg",
+          "sourceImage": "bridge-1-source.jpg"
+        },
+        {
+          "queryTime": 3.5,
+          "sourceTime": 11.5,
+          "inliers": 680,
+          "tentative": 682,
+          "inlierRatio": 0.9971,
+          "coverage": 0.5905,
+          "photometricCorrelation": 0.999,
+          "points": [
+            {
+              "query": [
+                0.825,
+                0.58271
+              ],
+              "source": [
+                0.82656,
+                0.58427
+              ]
+            },
+            {
+              "query": [
+                0.59375,
+                0.17293
+              ],
+              "source": [
+                0.59375,
+                0.17228
+              ]
+            },
+            {
+              "query": [
+                0.10469,
+                0.17293
+              ],
+              "source": [
+                0.10469,
+                0.17228
+              ]
+            },
+            {
+              "query": [
+                0.52188,
+                0.19549
+              ],
+              "source": [
+                0.52188,
+                0.19476
+              ]
+            },
+            {
+              "query": [
+                0.41563,
+                0.22932
+              ],
+              "source": [
+                0.41563,
+                0.22846
+              ]
+            },
+            {
+              "query": [
+                0.51562,
+                0.2594
+              ],
+              "source": [
+                0.51562,
+                0.25843
+              ]
+            },
+            {
+              "query": [
+                0.60156,
+                0.86842
+              ],
+              "source": [
+                0.60156,
+                0.86891
+              ]
+            },
+            {
+              "query": [
+                0.53125,
+                0.2594
+              ],
+              "source": [
+                0.53125,
+                0.26217
+              ]
+            },
+            {
+              "query": [
+                0.56875,
+                0.85338
+              ],
+              "source": [
+                0.56875,
+                0.85393
+              ]
+            },
+            {
+              "query": [
+                0.6125,
+                0.84962
+              ],
+              "source": [
+                0.6125,
+                0.85393
+              ]
+            },
+            {
+              "query": [
+                0.52031,
+                0.26692
+              ],
+              "source": [
+                0.52031,
+                0.26592
+              ]
+            },
+            {
+              "query": [
+                0.5125,
+                0.27068
+              ],
+              "source": [
+                0.5125,
+                0.26966
+              ]
+            },
+            {
+              "query": [
+                0.60156,
+                0.2782
+              ],
+              "source": [
+                0.60156,
+                0.27715
+              ]
+            },
+            {
+              "query": [
+                0.59531,
+                0.28571
+              ],
+              "source": [
+                0.59531,
+                0.28464
+              ]
+            },
+            {
+              "query": [
+                0.60938,
+                0.83835
+              ],
+              "source": [
+                0.60938,
+                0.83521
+              ]
+            },
+            {
+              "query": [
+                0.60156,
+                0.83459
+              ],
+              "source": [
+                0.60156,
+                0.83521
+              ]
+            },
+            {
+              "query": [
+                0.54219,
+                0.30075
+              ],
+              "source": [
+                0.54219,
+                0.29963
+              ]
+            },
+            {
+              "query": [
+                0.61875,
+                0.30075
+              ],
+              "source": [
+                0.62031,
+                0.29963
+              ]
+            },
+            {
+              "query": [
+                0.62344,
+                0.83083
+              ],
+              "source": [
+                0.62344,
+                0.83146
+              ]
+            },
+            {
+              "query": [
+                0.54062,
+                0.30827
+              ],
+              "source": [
+                0.54062,
+                0.30712
+              ]
+            },
+            {
+              "query": [
+                0.56813,
+                0.83008
+              ],
+              "source": [
+                0.56813,
+                0.82697
+              ]
+            },
+            {
+              "query": [
+                0.55,
+                0.31955
+              ],
+              "source": [
+                0.55,
+                0.31835
+              ]
+            },
+            {
+              "query": [
+                0.41719,
+                0.32331
+              ],
+              "source": [
+                0.41719,
+                0.3221
+              ]
+            },
+            {
+              "query": [
+                0.63906,
+                0.82331
+              ],
+              "source": [
+                0.63906,
+                0.82397
+              ]
+            },
+            {
+              "query": [
+                0.60781,
+                0.82331
+              ],
+              "source": [
+                0.60781,
+                0.82397
+              ]
+            },
+            {
+              "query": [
+                0.50156,
+                0.80451
+              ],
+              "source": [
+                0.50156,
+                0.80524
+              ]
+            },
+            {
+              "query": [
+                0.1375,
+                0.81579
+              ],
+              "source": [
+                0.1375,
+                0.81273
+              ]
+            },
+            {
+              "query": [
+                0.58125,
+                0.33459
+              ],
+              "source": [
+                0.58125,
+                0.33333
+              ]
+            },
+            {
+              "query": [
+                0.55937,
+                0.80451
+              ],
+              "source": [
+                0.56094,
+                0.80899
+              ]
+            },
+            {
+              "query": [
+                0.57375,
+                0.35188
+              ],
+              "source": [
+                0.57375,
+                0.35056
+              ]
+            },
+            {
+              "query": [
+                0.49687,
+                0.7782
+              ],
+              "source": [
+                0.49687,
+                0.77903
+              ]
+            },
+            {
+              "query": [
+                0.60312,
+                0.77444
+              ],
+              "source": [
+                0.60312,
+                0.77154
+              ]
+            },
+            {
+              "query": [
+                0.60156,
+                0.76316
+              ],
+              "source": [
+                0.60156,
+                0.76404
+              ]
+            },
+            {
+              "query": [
+                0.54219,
+                0.43985
+              ],
+              "source": [
+                0.54062,
+                0.4382
+              ]
+            },
+            {
+              "query": [
+                0.43125,
+                0.47368
+              ],
+              "source": [
+                0.43125,
+                0.47566
+              ]
+            },
+            {
+              "query": [
+                0.425,
+                0.12782
+              ],
+              "source": [
+                0.425,
+                0.12734
+              ]
+            }
+          ],
+          "quad": [
+            [
+              -0.0001,
+              -0.0011
+            ],
+            [
+              1.0003,
+              -0.0004
+            ],
+            [
+              0.9996,
+              0.9998
+            ],
+            [
+              0.0003,
+              0.9991
+            ]
+          ],
+          "mirrored": false,
+          "queryImage": "bridge-2-query.jpg",
+          "sourceImage": "bridge-2-source.jpg"
+        },
+        {
+          "queryTime": 1.0,
+          "sourceTime": 9.0,
+          "inliers": 678,
+          "tentative": 679,
+          "inlierRatio": 0.9985,
+          "coverage": 0.5774,
+          "photometricCorrelation": 0.999,
+          "points": [
+            {
+              "query": [
+                0.06562,
+                0.72932
+              ],
+              "source": [
+                0.06562,
+                0.7236
+              ]
+            },
+            {
+              "query": [
+                0.675,
+                0.60902
+              ],
+              "source": [
+                0.675,
+                0.60674
+              ]
+            },
+            {
+              "query": [
+                0.64531,
+                0.61278
+              ],
+              "source": [
+                0.64531,
+                0.61423
+              ]
+            },
+            {
+              "query": [
+                0.65938,
+                0.61278
+              ],
+              "source": [
+                0.65938,
+                0.61049
+              ]
+            },
+            {
+              "query": [
+                0.67188,
+                0.61278
+              ],
+              "source": [
+                0.67125,
+                0.61124
+              ]
+            },
+            {
+              "query": [
+                0.58438,
+                0.66541
+              ],
+              "source": [
+                0.58438,
+                0.66667
+              ]
+            },
+            {
+              "query": [
+                0.07812,
+                0.81579
+              ],
+              "source": [
+                0.07812,
+                0.81648
+              ]
+            },
+            {
+              "query": [
+                0.09063,
+                0.81203
+              ],
+              "source": [
+                0.09063,
+                0.81273
+              ]
+            },
+            {
+              "query": [
+                0.0875,
+                0.81203
+              ],
+              "source": [
+                0.0875,
+                0.81648
+              ]
+            },
+            {
+              "query": [
+                0.62344,
+                0.61654
+              ],
+              "source": [
+                0.62344,
+                0.61423
+              ]
+            },
+            {
+              "query": [
+                0.08438,
+                0.91353
+              ],
+              "source": [
+                0.08438,
+                0.91386
+              ]
+            },
+            {
+              "query": [
+                0.83594,
+                0.59398
+              ],
+              "source": [
+                0.83594,
+                0.59551
+              ]
+            },
+            {
+              "query": [
+                0.67656,
+                0.59398
+              ],
+              "source": [
+                0.67656,
+                0.59551
+              ]
+            },
+            {
+              "query": [
+                0.09531,
+                0.80451
+              ],
+              "source": [
+                0.09531,
+                0.8015
+              ]
+            },
+            {
+              "query": [
+                0.07344,
+                0.80075
+              ],
+              "source": [
+                0.07344,
+                0.8015
+              ]
+            },
+            {
+              "query": [
+                0.44219,
+                0.42105
+              ],
+              "source": [
+                0.44219,
+                0.42322
+              ]
+            },
+            {
+              "query": [
+                0.94375,
+                0.90602
+              ],
+              "source": [
+                0.94375,
+                0.90637
+              ]
+            },
+            {
+              "query": [
+                0.81563,
+                0.59023
+              ],
+              "source": [
+                0.81563,
+                0.59176
+              ]
+            },
+            {
+              "query": [
+                0.0625,
+                0.7406
+              ],
+              "source": [
+                0.0625,
+                0.74157
+              ]
+            },
+            {
+              "query": [
+                0.79062,
+                0.59023
+              ],
+              "source": [
+                0.79062,
+                0.58801
+              ]
+            },
+            {
+              "query": [
+                0.2125,
+                0.7406
+              ],
+              "source": [
+                0.21094,
+                0.74157
+              ]
+            },
+            {
+              "query": [
+                0.81875,
+                0.58271
+              ],
+              "source": [
+                0.81875,
+                0.58427
+              ]
+            },
+            {
+              "query": [
+                0.59062,
+                0.67669
+              ],
+              "source": [
+                0.59062,
+                0.68165
+              ]
+            },
+            {
+              "query": [
+                0.66562,
+                0.58271
+              ],
+              "source": [
+                0.66562,
+                0.58427
+              ]
+            },
+            {
+              "query": [
+                0.94063,
+                0.90226
+              ],
+              "source": [
+                0.94063,
+                0.90262
+              ]
+            },
+            {
+              "query": [
+                0.45469,
+                0.3797
+              ],
+              "source": [
+                0.45469,
+                0.37828
+              ]
+            },
+            {
+              "query": [
+                0.05781,
+                0.75188
+              ],
+              "source": [
+                0.05625,
+                0.75056
+              ]
+            },
+            {
+              "query": [
+                0.24531,
+                0.33459
+              ],
+              "source": [
+                0.24531,
+                0.33708
+              ]
+            },
+            {
+              "query": [
+                0.40938,
+                0.12406
+              ],
+              "source": [
+                0.40938,
+                0.1236
+              ]
+            },
+            {
+              "query": [
+                0.08594,
+                0.8985
+              ],
+              "source": [
+                0.08594,
+                0.89888
+              ]
+            },
+            {
+              "query": [
+                0.41094,
+                0.13158
+              ],
+              "source": [
+                0.4125,
+                0.13109
+              ]
+            },
+            {
+              "query": [
+                0.19219,
+                0.62782
+              ],
+              "source": [
+                0.19219,
+                0.62547
+              ]
+            },
+            {
+              "query": [
+                0.03281,
+                0.75564
+              ],
+              "source": [
+                0.03281,
+                0.75655
+              ]
+            },
+            {
+              "query": [
+                0.61875,
+                0.63158
+              ],
+              "source": [
+                0.61875,
+                0.63296
+              ]
+            },
+            {
+              "query": [
+                0.175,
+                0.63534
+              ],
+              "source": [
+                0.175,
+                0.6367
+              ]
+            },
+            {
+              "query": [
+                0.09687,
+                0.55639
+              ],
+              "source": [
+                0.09687,
+                0.55431
+              ]
+            }
+          ],
+          "quad": [
+            [
+              -0.0005,
+              -0.0001
+            ],
+            [
+              0.9993,
+              0.0012
+            ],
+            [
+              0.9994,
+              0.9989
+            ],
+            [
+              0.0001,
+              0.9994
+            ]
+          ],
+          "mirrored": false,
+          "queryImage": "bridge-3-query.jpg",
+          "sourceImage": "bridge-3-source.jpg"
+        },
+        {
+          "queryTime": 6.0,
+          "sourceTime": 14.0,
+          "inliers": 676,
+          "tentative": 680,
+          "inlierRatio": 0.9941,
+          "coverage": 0.5479,
+          "photometricCorrelation": 0.9991,
+          "points": [
+            {
+              "query": [
+                0.64688,
+                0.73308
+              ],
+              "source": [
+                0.64688,
+                0.73034
+              ]
+            },
+            {
+              "query": [
+                0.59375,
+                0.73684
+              ],
+              "source": [
+                0.59375,
+                0.73408
+              ]
+            },
+            {
+              "query": [
+                0.19688,
+                0.72932
+              ],
+              "source": [
+                0.19688,
+                0.73034
+              ]
+            },
+            {
+              "query": [
+                0.04062,
+                0.72932
+              ],
+              "source": [
+                0.04062,
+                0.73034
+              ]
+            },
+            {
+              "query": [
+                0.325,
+                0.72556
+              ],
+              "source": [
+                0.325,
+                0.72659
+              ]
+            },
+            {
+              "query": [
+                0.20781,
+                0.71805
+              ],
+              "source": [
+                0.20781,
+                0.7191
+              ]
+            },
+            {
+              "query": [
+                0.70781,
+                0.7218
+              ],
+              "source": [
+                0.70781,
+                0.72285
+              ]
+            },
+            {
+              "query": [
+                0.0875,
+                0.83835
+              ],
+              "source": [
+                0.0875,
+                0.83895
+              ]
+            },
+            {
+              "query": [
+                0.08125,
+                0.77068
+              ],
+              "source": [
+                0.08125,
+                0.77154
+              ]
+            },
+            {
+              "query": [
+                0.67656,
+                0.84211
+              ],
+              "source": [
+                0.67656,
+                0.8427
+              ]
+            },
+            {
+              "query": [
+                0.19219,
+                0.34962
+              ],
+              "source": [
+                0.19219,
+                0.34831
+              ]
+            },
+            {
+              "query": [
+                0.44688,
+                0.32331
+              ],
+              "source": [
+                0.44688,
+                0.31835
+              ]
+            },
+            {
+              "query": [
+                0.2,
+                0.71053
+              ],
+              "source": [
+                0.20156,
+                0.71161
+              ]
+            },
+            {
+              "query": [
+                0.64062,
+                0.70677
+              ],
+              "source": [
+                0.64062,
+                0.70787
+              ]
+            },
+            {
+              "query": [
+                0.64688,
+                0.70301
+              ],
+              "source": [
+                0.64688,
+                0.70412
+              ]
+            },
+            {
+              "query": [
+                0.20156,
+                0.70301
+              ],
+              "source": [
+                0.20156,
+                0.70037
+              ]
+            },
+            {
+              "query": [
+                0.34531,
+                0.6015
+              ],
+              "source": [
+                0.34531,
+                0.603
+              ]
+            },
+            {
+              "query": [
+                0.42188,
+                0.47368
+              ],
+              "source": [
+                0.42344,
+                0.47191
+              ]
+            },
+            {
+              "query": [
+                0.7,
+                0.69549
+              ],
+              "source": [
+                0.69844,
+                0.69663
+              ]
+            },
+            {
+              "query": [
+                0.69219,
+                0.82707
+              ],
+              "source": [
+                0.69375,
+                0.82697
+              ]
+            },
+            {
+              "query": [
+                0.23438,
+                0.33459
+              ],
+              "source": [
+                0.23438,
+                0.33333
+              ]
+            },
+            {
+              "query": [
+                0.64844,
+                0.68421
+              ],
+              "source": [
+                0.64844,
+                0.68165
+              ]
+            },
+            {
+              "query": [
+                0.09219,
+                0.84962
+              ],
+              "source": [
+                0.09375,
+                0.85019
+              ]
+            },
+            {
+              "query": [
+                0.11875,
+                0.84962
+              ],
+              "source": [
+                0.11875,
+                0.85019
+              ]
+            },
+            {
+              "query": [
+                0.20625,
+                0.74812
+              ],
+              "source": [
+                0.20625,
+                0.74906
+              ]
+            },
+            {
+              "query": [
+                0.44688,
+                0.29323
+              ],
+              "source": [
+                0.44688,
+                0.29213
+              ]
+            },
+            {
+              "query": [
+                0.68906,
+                0.8609
+              ],
+              "source": [
+                0.68906,
+                0.86142
+              ]
+            },
+            {
+              "query": [
+                0.38438,
+                0.68045
+              ],
+              "source": [
+                0.38438,
+                0.68165
+              ]
+            },
+            {
+              "query": [
+                0.25625,
+                0.31955
+              ],
+              "source": [
+                0.25781,
+                0.3221
+              ]
+            },
+            {
+              "query": [
+                0.6875,
+                0.84962
+              ],
+              "source": [
+                0.68906,
+                0.85019
+              ]
+            },
+            {
+              "query": [
+                0.06562,
+                0.67669
+              ],
+              "source": [
+                0.06562,
+                0.6779
+              ]
+            },
+            {
+              "query": [
+                0.55313,
+                0.85338
+              ],
+              "source": [
+                0.55313,
+                0.85393
+              ]
+            },
+            {
+              "query": [
+                0.64844,
+                0.67293
+              ],
+              "source": [
+                0.64844,
+                0.67416
+              ]
+            },
+            {
+              "query": [
+                0.80313,
+                0.66165
+              ],
+              "source": [
+                0.80313,
+                0.66292
+              ]
+            },
+            {
+              "query": [
+                0.16406,
+                0.59398
+              ],
+              "source": [
+                0.16406,
+                0.59551
+              ]
+            },
+            {
+              "query": [
+                0.17812,
+                0.66165
+              ],
+              "source": [
+                0.17812,
+                0.65918
+              ]
+            }
+          ],
+          "quad": [
+            [
+              -0.0003,
+              0.0002
+            ],
+            [
+              0.9997,
+              0.0002
+            ],
+            [
+              0.9999,
+              0.999
+            ],
+            [
+              0.0001,
+              0.9998
+            ]
+          ],
+          "mirrored": false,
+          "queryImage": "bridge-4-query.jpg",
+          "sourceImage": "bridge-4-source.jpg"
+        },
+        {
+          "queryTime": 0.5,
+          "sourceTime": 8.5,
+          "inliers": 671,
+          "tentative": 675,
+          "inlierRatio": 0.9941,
+          "coverage": 0.5719,
+          "photometricCorrelation": 0.9991,
+          "points": [
+            {
+              "query": [
+                0.04688,
+                0.7594
+              ],
+              "source": [
+                0.04688,
+                0.75655
+              ]
+            },
+            {
+              "query": [
+                0.07812,
+                0.92105
+              ],
+              "source": [
+                0.07812,
+                0.92135
+              ]
+            },
+            {
+              "query": [
+                0.16719,
+                0.62406
+              ],
+              "source": [
+                0.16719,
+                0.62547
+              ]
+            },
+            {
+              "query": [
+                0.43437,
+                0.72556
+              ],
+              "source": [
+                0.43437,
+                0.72659
+              ]
+            },
+            {
+              "query": [
+                0.11094,
+                0.69925
+              ],
+              "source": [
+                0.11094,
+                0.69663
+              ]
+            },
+            {
+              "query": [
+                0.775,
+                0.72556
+              ],
+              "source": [
+                0.775,
+                0.72659
+              ]
+            },
+            {
+              "query": [
+                0.71562,
+                0.69925
+              ],
+              "source": [
+                0.71562,
+                0.70037
+              ]
+            },
+            {
+              "query": [
+                0.16563,
+                0.65414
+              ],
+              "source": [
+                0.16563,
+                0.65169
+              ]
+            },
+            {
+              "query": [
+                0.06562,
+                0.44361
+              ],
+              "source": [
+                0.06562,
+                0.44195
+              ]
+            },
+            {
+              "query": [
+                0.61406,
+                0.61654
+              ],
+              "source": [
+                0.61406,
+                0.61798
+              ]
+            },
+            {
+              "query": [
+                0.38906,
+                0.65414
+              ],
+              "source": [
+                0.38906,
+                0.65543
+              ]
+            },
+            {
+              "query": [
+                0.67656,
+                0.65038
+              ],
+              "source": [
+                0.67656,
+                0.65169
+              ]
+            },
+            {
+              "query": [
+                0.1,
+                0.80827
+              ],
+              "source": [
+                0.09844,
+                0.80899
+              ]
+            },
+            {
+              "query": [
+                0.18438,
+                0.61654
+              ],
+              "source": [
+                0.18281,
+                0.61798
+              ]
+            },
+            {
+              "query": [
+                0.0875,
+                0.79699
+              ],
+              "source": [
+                0.0875,
+                0.8015
+              ]
+            },
+            {
+              "query": [
+                0.08125,
+                0.80451
+              ],
+              "source": [
+                0.08125,
+                0.80899
+              ]
+            },
+            {
+              "query": [
+                0.26719,
+                0.41353
+              ],
+              "source": [
+                0.26562,
+                0.41199
+              ]
+            },
+            {
+              "query": [
+                0.38125,
+                0.40977
+              ],
+              "source": [
+                0.38125,
+                0.41199
+              ]
+            },
+            {
+              "query": [
+                0.92813,
+                0.8985
+              ],
+              "source": [
+                0.92969,
+                0.89888
+              ]
+            },
+            {
+              "query": [
+                0.02969,
+                0.73308
+              ],
+              "source": [
+                0.02969,
+                0.73408
+              ]
+            },
+            {
+              "query": [
+                0.54844,
+                0.46241
+              ],
+              "source": [
+                0.54844,
+                0.46067
+              ]
+            },
+            {
+              "query": [
+                0.16406,
+                0.46617
+              ],
+              "source": [
+                0.16406,
+                0.46442
+              ]
+            },
+            {
+              "query": [
+                0.21375,
+                0.47368
+              ],
+              "source": [
+                0.21375,
+                0.4764
+              ]
+            },
+            {
+              "query": [
+                0.46094,
+                0.40226
+              ],
+              "source": [
+                0.46094,
+                0.40075
+              ]
+            },
+            {
+              "query": [
+                0.4125,
+                0.12406
+              ],
+              "source": [
+                0.4125,
+                0.1236
+              ]
+            },
+            {
+              "query": [
+                0.07812,
+                0.90226
+              ],
+              "source": [
+                0.07812,
+                0.90637
+              ]
+            },
+            {
+              "query": [
+                0.25625,
+                0.46992
+              ],
+              "source": [
+                0.25625,
+                0.46816
+              ]
+            },
+            {
+              "query": [
+                0.40156,
+                0.13158
+              ],
+              "source": [
+                0.40312,
+                0.13109
+              ]
+            },
+            {
+              "query": [
+                0.2875,
+                0.39474
+              ],
+              "source": [
+                0.2875,
+                0.397
+              ]
+            },
+            {
+              "query": [
+                0.27031,
+                0.39474
+              ],
+              "source": [
+                0.26875,
+                0.39326
+              ]
+            },
+            {
+              "query": [
+                0.11406,
+                0.68797
+              ],
+              "source": [
+                0.11406,
+                0.68914
+              ]
+            },
+            {
+              "query": [
+                0.16406,
+                0.60902
+              ],
+              "source": [
+                0.1625,
+                0.60674
+              ]
+            },
+            {
+              "query": [
+                0.06562,
+                0.73684
+              ],
+              "source": [
+                0.06562,
+                0.73783
+              ]
+            },
+            {
+              "query": [
+                0.075,
+                0.80075
+              ],
+              "source": [
+                0.075,
+                0.8015
+              ]
+            },
+            {
+              "query": [
+                0.39844,
+                0.39098
+              ],
+              "source": [
+                0.39844,
+                0.38951
+              ]
+            },
+            {
+              "query": [
+                0.35313,
+                0.39098
+              ],
+              "source": [
+                0.35313,
+                0.39326
+              ]
+            }
+          ],
+          "quad": [
+            [
+              0.0002,
+              -0.0008
+            ],
+            [
+              0.9998,
+              -0.0007
+            ],
+            [
+              1.0002,
+              1.0006
+            ],
+            [
+              -0.0001,
+              1.0
+            ]
+          ],
+          "mirrored": false,
+          "queryImage": "bridge-5-query.jpg",
+          "sourceImage": "bridge-5-source.jpg"
+        }
+      ],
+      "verdict": "strong"
+    }
+  ],
+  "elapsedSeconds": 221.8,
+  "method": {
+    "visual": "ORB + unique ratio matches + RANSAC homography + aligned appearance correlation",
+    "temporal": "Weighted linear timestamp consensus",
+    "sourceSampleFps": 1,
+    "querySampleFps": 2,
+    "refinementFps": 4,
+    "toleranceSeconds": 0.65
+  },
+  "limitations": [
+    "Search is limited to the indexed source library.",
+    "A visual match is evidence of shared imagery, not proof of ownership, infringement, or first publication.",
+    "Source frames are sampled at 1 fps, then verified candidates are refined at 4 fps. Per-alignment tolerances are not guaranteed error bounds or statistical confidence intervals.",
+    "Semantic similarities are uncalibrated retrieval scores, not probabilities.",
+    "The playback speed range is a deterministic consistency interval under the timestamp tolerance, not a calibrated confidence interval."
+  ],
+  "recorded": true,
+  "fixtureId": "montage"
+}
